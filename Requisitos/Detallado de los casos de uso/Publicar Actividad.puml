@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+  (Publicar actividad) as PA
+
+  Logopeda --> PA
+}
+
+note right of PA
+Precondición:
+- Actividad en estado borrador
+
+Flujo principal:
+1. Revisar actividad
+2. Validar contenido
+3. Publicar actividad
+4. Sistema cambia estado a disponible
+
+Postcondición:
+- Actividad visible para usuarios
+
+Flujos alternativos:
+- Actividad incompleta
+- Error de validación
+end note
+
+@enduml

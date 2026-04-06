@@ -1,0 +1,33 @@
+@startuml
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+  (Asignar actividad) as AA
+
+  Logopeda --> AA
+}
+
+note right of AA
+Precondición:
+- Paciente y actividad existentes
+
+Flujo principal:
+1. Seleccionar paciente
+2. Seleccionar actividad
+3. Configurar parámetros
+4. Confirmar asignación
+5. Sistema guarda relación
+
+Postcondición:
+- Actividad asignada al paciente
+
+Flujos alternativos:
+- Paciente no válido
+- Actividad no disponible
+- Cancelación del proceso
+end note
+
+@enduml

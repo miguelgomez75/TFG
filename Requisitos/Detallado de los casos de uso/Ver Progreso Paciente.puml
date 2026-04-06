@@ -1,0 +1,33 @@
+@startuml
+left to right direction
+
+actor Logopeda
+actor Familia
+
+rectangle Sistema_CAA {
+
+  (Ver progreso paciente) as VP
+
+  Logopeda --> VP
+  Familia --> VP
+}
+
+note right of VP
+Precondición:
+- Paciente existente
+
+Flujo principal:
+1. Seleccionar paciente
+2. Sistema carga métricas
+3. Mostrar evolución
+4. Mostrar estadísticas
+
+Postcondición:
+- Datos mostrados correctamente
+
+Flujos alternativos:
+- Sin datos disponibles
+- Paciente no encontrado
+end note
+
+@enduml

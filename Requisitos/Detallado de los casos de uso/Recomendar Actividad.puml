@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+  (Recomendar actividad) as RE
+
+  Logopeda --> RE
+}
+
+note right of RE
+Precondición:
+- Actividad existente
+
+Flujo principal:
+1. Seleccionar paciente
+2. Seleccionar actividad
+3. Añadir recomendación
+4. Definir instrucciones
+5. Guardar recomendación
+
+Postcondición:
+- Actividad visible para familia
+
+Flujos alternativos:
+- Actividad archivada
+- Paciente sin acceso activo
+end note
+
+@enduml

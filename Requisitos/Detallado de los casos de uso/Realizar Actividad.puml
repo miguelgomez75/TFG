@@ -1,0 +1,33 @@
+@startuml
+left to right direction
+
+actor Familia
+
+rectangle Sistema_CAA {
+
+  (Realizar actividad) as RA
+
+  Familia --> RA
+}
+
+note right of RA
+Precondición:
+- Actividad asignada y disponible
+
+Flujo principal:
+1. Acceder a actividad
+2. Iniciar sesión de práctica
+3. Completar ejercicios
+4. Sistema registra respuestas
+5. Mostrar resultados
+
+Postcondición:
+- Progreso actualizado
+
+Flujos alternativos:
+- Interrupción del usuario
+- Pérdida de conexión
+- Actividad no completada
+end note
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+  (Registrar sesión) as RS
+
+  Logopeda --> RS
+}
+
+note right of RS
+Precondición:
+- Paciente activo
+
+Flujo principal:
+1. Seleccionar paciente
+2. Abrir registro de sesión
+3. Introducir observaciones
+4. Guardar sesión
+
+Postcondición:
+- Sesión almacenada en historial
+
+Flujos alternativos:
+- Datos incompletos
+- Cancelación
+end note
+
+@enduml

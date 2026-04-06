@@ -1,0 +1,26 @@
+@startuml
+
+left to right direction
+
+actor Familia
+
+rectangle Sistema_CAA {
+
+  ' AUTENTICACIÓN (implícito en contexto)
+  Familia -- (Login / Sign in)
+
+  ' SEGUIMIENTO
+  Familia -- (Ver progreso paciente)
+  Familia -- (Consultar sesiones)
+
+  ' COMUNICACIÓN
+  Familia -- (Ver registros)
+
+  ' ACTIVIDADES
+  Familia -- (Ver actividades recomendadas)
+  Familia -- (Realizar actividad)
+  Familia -- (Ver resultados)
+
+}
+
+@enduml

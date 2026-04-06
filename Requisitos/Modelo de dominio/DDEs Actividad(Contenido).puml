@@ -1,0 +1,9 @@
+@startuml
+
+[*] --> Borrador : logopeda crea actividad
+
+Borrador --> Disponible : logopeda publica
+Borrador --> [*] : logopeda elimina
+
+Disponible --> Archivada : logopeda archiva
+Archivada --> Disponible : logopeda reactiva

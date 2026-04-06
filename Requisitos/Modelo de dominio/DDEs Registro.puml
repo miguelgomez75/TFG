@@ -1,0 +1,15 @@
+@startuml
+
+[*] --> Activo : registro creado
+
+Activo --> RecordatorioPendiente : tiene fecha futura
+
+RecordatorioPendiente --> RecordatorioVisto : usuario marca como visto
+RecordatorioPendiente --> RecordatorioVencido : fecha superada
+
+RecordatorioVisto --> Activo
+RecordatorioVencido --> Activo
+
+Activo --> Eliminado : logopeda elimina
+
+@enduml

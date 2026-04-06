@@ -1,0 +1,26 @@
+Glosario:
+
+	Paciente: Usuario final que realiza actividades terapéuticas.
+	Logopeda: Profesional que supervisa, diseña actividades y realiza seguimiento.
+	Familia: Usuario que accede al progreso y recomendaciones del paciente.
+	Actividad: Ejercicio diseñado para trabajar habilidades comunicativas.
+	Categoría: Agrupación semántica de actividades (ej: vocabulario, emociones).
+	Sesión: Evento en el que el paciente realiza actividades (en consulta o en casa).
+	Registro: Entrada en la bitácora con notas, recomendaciones o recordatorios.
+	Asignación de actividad: Relación entre paciente y actividad con un estado de 	progreso.
+	CAA: Comunicación Aumentativa y Alternativa basada en pictogramas.
+	Para no confundir la sesión referida al usuario con la sesión ya mencionada en el 	glosario, se usarán términos ingleses como login, logout, lo mismo con 	registro y 	sign in
+
+Requisitos suplementarios:
+	Usabilidad:
+		La familia debe entender el progreso sin conocimientos técnicos
+	Rendimiento:
+		Carga rápida de actividades y pictogramas
+	Seguridad:
+		Acceso restringido por roles (logopeda / familia)
+	Compatibilidad:
+		Uso en móvil y otros dispositivos
+	Disponibilidad:
+		Acceso continuo a registros y actividades
+	Extensibilidad:
+		Posibilidad de añadir nuevos tipos de actividad sin romper el sistema

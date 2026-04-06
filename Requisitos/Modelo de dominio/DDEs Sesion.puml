@@ -1,0 +1,19 @@
+@startuml
+
+[*] --> Iniciada : usuario selecciona actividad
+
+Iniciada --> EnCurso : primer intento registrado
+
+EnCurso --> EnCurso : usuario responde (acierto/error)
+
+EnCurso --> Pausada : usuario interrumpe
+
+Pausada --> EnCurso : usuario retoma
+Pausada --> Abandonada : no se retoma (timeout)
+
+EnCurso --> Finalizada : actividad completada
+
+Finalizada --> [*] : resultados guardados
+Abandonada --> [*] : resultados parciales guardados
+
+@enduml

@@ -1,0 +1,103 @@
+@startuml
+
+class Paciente {
+  +id
+  +nombre
+  +fechaNacimiento
+  +nivelActual
+}
+
+class Usuario {
+  +id
+  +nombre
+  +email
+  +rol
+}
+
+enum Rol {
+  LOGOPEDA
+  FAMILIA
+}
+
+class Actividad {
+  +id
+  +titulo
+  +descripcion
+  +nivelDificultad
+}
+
+class Categoria {
+  +id
+  +nombre
+  +color
+  +icono
+}
+
+class TipoActividad {
+  +id
+  +nombre
+}
+
+class Pictograma {
+  +id
+  +urlImagen
+  +etiqueta
+}
+
+class Sesion {
+  +id
+  +fecha
+  +tipo
+  +aciertos
+  +errores
+  +notas
+}
+
+enum TipoSesion {
+  PRESENCIAL
+  CASA
+}
+
+class Registro {
+  +id
+  +fecha
+  +titulo
+  +contenido
+  +tipo
+}
+
+enum TipoRegistro {
+  NOTA
+  RECORDATORIO
+  RECOMENDACION
+}
+
+class AsignacionActividad {
+  +estado
+}
+
+enum EstadoActividad {
+  PENDIENTE
+  EN_PROGRESO
+  COMPLETADA
+}
+
+' Relaciones
+Usuario --> Paciente : atiende/cuida
+
+Actividad --> Categoria
+Actividad --> TipoActividad
+
+Pictograma --> Categoria
+
+Paciente --> Sesion
+Sesion --> Actividad
+
+Paciente --> Registro
+Usuario --> Registro : crea
+Registro --> Actividad : opcional
+
+Paciente --> AsignacionActividad
+AsignacionActividad --> Actividad
+
+@enduml

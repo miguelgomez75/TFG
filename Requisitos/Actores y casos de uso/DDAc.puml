@@ -1,0 +1,16 @@
+@startuml
+
+left to right direction
+
+actor Logopeda
+actor Familia
+
+rectangle Sistema_CAA {
+}
+
+Logopeda --> Sistema_CAA : gestiona pacientes\ncrea actividades\nregistra sesiones
+Familia --> Sistema_CAA : consulta progreso\nrealiza actividades
+
+Logopeda --> Familia : comparte seguimiento\ny recomendaciones
+
+@enduml

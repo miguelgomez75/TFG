@@ -1,0 +1,39 @@
+@startuml
+
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+  ' AUTENTICACIÓN
+  Logopeda -- (Login / Sign in)
+  Logopeda -- (Logout)
+
+  ' GESTIÓN DE PACIENTES
+  Logopeda -- (Crear paciente)
+  Logopeda -- (Editar paciente)
+  Logopeda -- (Consultar paciente)
+  Logopeda -- (Ver progreso paciente)
+
+  ' ACTIVIDADES
+  Logopeda -- (Crear actividad)
+  Logopeda -- (Editar actividad)
+  Logopeda -- (Publicar actividad)
+  Logopeda -- (Archivar actividad)
+  Logopeda -- (Ver actividad)
+  Logopeda -- (Asignar actividad)
+  Logopeda -- (Recomendar actividad)
+
+  ' SEGUIMIENTO
+  Logopeda -- (Registrar sesión)
+  Logopeda -- (Consultar sesiones)
+
+  ' COMUNICACIÓN / REGISTROS
+  Logopeda -- (Crear registro)
+  Logopeda -- (Editar registro)
+  Logopeda -- (Eliminar registro)
+
+}
+
+@enduml

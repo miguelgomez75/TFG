@@ -1,0 +1,23 @@
+@startuml
+
+left to right direction
+
+actor Familia
+
+rectangle Sistema_CAA {
+
+  ' Seguimiento
+  Familia -- (Ver progreso paciente)
+  Familia -- (Consultar sesiones)
+
+  ' Comunicación
+  Familia -- (Ver registros)
+
+  ' Actividades
+  Familia -- (Ver actividades recomendadas)
+  Familia -- (Realizar actividad)
+  Familia -- (Ver resultados)
+
+}
+
+@enduml

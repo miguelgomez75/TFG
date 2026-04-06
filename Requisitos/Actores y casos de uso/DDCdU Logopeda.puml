@@ -1,0 +1,35 @@
+@startuml
+
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+  ' Gestión de actividades
+  Logopeda -- (Crear actividad)
+  Logopeda -- (Editar actividad)
+  Logopeda -- (Publicar actividad)
+  Logopeda -- (Archivar actividad)
+
+  ' Gestión de pacientes
+  Logopeda -- (Crear paciente)
+  Logopeda -- (Consultar paciente)
+  Logopeda -- (Ver progreso paciente)
+
+  ' Seguimiento terapéutico
+  Logopeda -- (Registrar sesión)
+  Logopeda -- (Consultar sesiones)
+
+  ' Comunicación
+  Logopeda -- (Crear registro)
+  Logopeda -- (Editar registro)
+  Logopeda -- (Eliminar registro)
+
+  ' Trabajo en casa
+  Logopeda -- (Asignar actividad)
+  Logopeda -- (Recomendar actividad)
+
+}
+
+@enduml

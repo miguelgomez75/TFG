@@ -1,0 +1,21 @@
+@startuml
+
+[*] --> Home : Login / Sign up
+
+Home --> Pacientes : ver pacientes
+Home --> Progreso : ver progreso
+Home --> Registros : ver registros
+Home --> Actividades : ver actividades
+
+Pacientes --> Home : volver
+Progreso --> Home : volver
+Registros --> Home : volver
+Actividades --> Home : volver
+
+Actividades --> DetalleActividad : seleccionar actividad
+DetalleActividad --> ActividadEnCurso : realizar actividad
+
+ActividadEnCurso --> ResultadoActividad : completar actividad
+ResultadoActividad --> Home : finalizar
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+
+[*] --> Dashboard : Login / Sign in
+
+Dashboard --> Pacientes : acceder a pacientes
+Dashboard --> Actividades : gestionar actividades
+Dashboard --> Seguimiento : ver seguimiento
+Dashboard --> Registros : gestionar registros
+
+' PACIENTES
+Pacientes --> PerfilPaciente : seleccionar paciente
+PerfilPaciente --> Seguimiento : ver progreso
+PerfilPaciente --> AsignacionActividad : asignar actividad
+
+' ACTIVIDADES
+Actividades --> CrearActividad : crear actividad
+Actividades --> EditarActividad : editar actividad
+Actividades --> PublicarActividad : publicar actividad
+Actividades --> Archivadas : archivar actividad
+Actividades --> DetalleActividad : ver actividad
+
+DetalleActividad --> Actividades : volver
+
+' SEGUIMIENTO
+Seguimiento --> RegistrarSesion : registrar sesión
+RegistrarSesion --> Seguimiento : guardar sesión
+
+Seguimiento --> PerfilPaciente : volver
+
+' REGISTROS
+Registros --> CrearRegistro : crear nota
+Registros --> EditarRegistro : editar nota
+Registros --> EliminarRegistro : eliminar nota
+
+CrearRegistro --> Registros : guardar
+EditarRegistro --> Registros : guardar
+
+@enduml

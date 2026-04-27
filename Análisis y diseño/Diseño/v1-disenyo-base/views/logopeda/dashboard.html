@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Logopeda</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f0f4ff; }
+    header {
+      background: #1a1a2e; color: white; padding: 16px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 800; }
+    header button {
+      background: none; border: 1px solid rgba(255,255,255,.4);
+      color: white; padding: 6px 16px; border-radius: 8px;
+      cursor: pointer; font-family: inherit;
+    }
+    .container { max-width: 1100px; margin: 32px auto; padding: 0 24px; }
+    h2 { font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .card {
+      background: white; border-radius: 16px; padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .card h3 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+    .card p  { font-size: 0.85rem; color: #666; margin-bottom: 16px; }
+    .tag {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 0.78rem; font-weight: 700; margin-bottom: 12px;
+    }
+    .tag.borrador   { background: #fff3cd; color: #856404; }
+    .tag.disponible { background: #d1fae5; color: #065f46; }
+    .tag.archivada  { background: #f3f4f6; color: #6b7280; }
+    button.btn {
+      padding: 8px 18px; border: none; border-radius: 8px;
+      font-family: inherit; font-weight: 700; cursor: pointer;
+      font-size: 0.85rem; background: #4361ee; color: white;
+      transition: background .2s;
+    }
+    button.btn:hover { background: #3451d1; }
+    .empty { color: #999; font-style: italic; }
+    #loading { text-align: center; color: #666; margin: 40px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CAA · Panel del Logopeda</h1>
+    <button onclick="logout()">Cerrar sesión</button>
+  </header>
+  <div class="container">
+    <h2>Actividades</h2>
+    <div id="loading">Cargando...</div>
+    <div class="grid" id="actividades"></div>
+  </div>
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+
+    async function cargarActividades() {
+      const res  = await fetch('/api/actividades', { headers: { Authorization: `Bearer ${token}` } });
+      const data = await res.json();
+      document.getElementById('loading').style.display = 'none';
+      const grid = document.getElementById('actividades');
+      if (!data.length) { grid.innerHTML = '<p class="empty">No hay actividades</p>'; return; }
+      grid.innerHTML = data.map(a => `
+        <div class="card">
+          <span class="tag ${a.estado.toLowerCase()}">${a.estado}</span>
+          <h3>${a.titulo}</h3>
+          <p>${a.descripcion || 'Sin descripción'}</p>
+          ${a.estado === 'BORRADOR' ?
+            `<button class="btn" onclick="publicar('${a._id}')">Publicar</button>` : ''}
+        </div>`).join('');
+    }
+
+    async function publicar(id) {
+      await fetch(`/api/actividades/${id}/publicar`, {
+        method: 'PUT', headers: { Authorization: `Bearer ${token}` }
+      });
+      cargarActividades();
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/compartida/login.html';
+    }
+
+    cargarActividades();
+  </script>
+</body>
+</html>

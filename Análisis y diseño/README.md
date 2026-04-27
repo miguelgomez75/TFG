@@ -31,7 +31,7 @@ Aplicación de Comunicación Aumentativa y Alternativa (CAA) desarrollada como T
 
 ---
 
-## Parte I — Análisis
+## [Parte I — Análisis](Análisis/README_Analisis.md)
 
 ### Arquitectura del sistema
 
@@ -130,7 +130,7 @@ vista               (logopeda · familia · compartida)
 
 ---
 
-## Parte II — Diseño
+## [Parte II — Diseño](Diseño/README_Disenyo.md)
 
 El código está organizado en tres versiones que muestran la evolución del diseño desde el análisis básico hasta los principios SOLID, siguiendo el temario de la asignatura.
 

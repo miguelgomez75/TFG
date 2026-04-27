@@ -1,0 +1,24 @@
+@startuml
+
+actor Logopeda
+
+participant "VistaLogopeda" as VL
+participant "SesionController" as SC
+participant "PacienteController" as PC
+participant "Paciente" as MP
+participant "Sesion" as MS
+
+Logopeda -> VL : selecciona paciente
+VL -> PC : getPaciente(pacienteId)
+PC -> MP : findById(pacienteId)
+MP --> PC : datosPaciente
+PC --> VL : paciente cargado
+
+Logopeda -> VL : abre formulario de sesión
+Logopeda -> VL : introduce observaciones y datos
+VL -> SC : crearSesion(pacienteId, {fecha, tipo, observaciones, aciertos, errores})
+SC -> MS : create({pacienteId, fecha, tipo, observaciones, aciertos, errores})
+MS --> SC : sesionGuardada
+SC --> VL : confirmación guardado
+
+@enduml

@@ -1,0 +1,272 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' ─────────────────────────────────────────
+' CLASES MODELO
+' ─────────────────────────────────────────
+
+package "Modelo" {
+
+  class Usuario {
+    +id
+    +nombre
+    +email
+    +rol : Rol
+    +login()
+    +logout()
+  }
+
+  enum Rol {
+    LOGOPEDA
+    FAMILIA
+  }
+
+  class Paciente {
+    +id
+    +nombre
+    +fechaNacimiento
+    +nivelActual
+  }
+
+  class Actividad {
+    +id
+    +titulo
+    +descripcion
+    +nivelDificultad
+    +estado : EstadoContenido
+    +publicar()
+    +archivar()
+  }
+
+  enum EstadoContenido {
+    BORRADOR
+    DISPONIBLE
+    ARCHIVADA
+  }
+
+  class AsignacionActividad {
+    +estado : EstadoProgreso
+  }
+
+  enum EstadoProgreso {
+    PENDIENTE
+    EN_PROGRESO
+    COMPLETADA
+  }
+
+  class Sesion {
+    +id
+    +fecha
+    +tipo : TipoSesion
+    +aciertos
+    +errores
+    +notas
+    +estado : EstadoSesion
+    +iniciar()
+    +finalizar()
+    +registrarRespuesta()
+  }
+
+  enum TipoSesion {
+    PRESENCIAL
+    CASA
+  }
+
+  enum EstadoSesion {
+    INICIADA
+    EN_CURSO
+    PAUSADA
+    FINALIZADA
+    ABANDONADA
+  }
+
+  class Registro {
+    +id
+    +fecha
+    +titulo
+    +contenido
+    +tipo : TipoRegistro
+  }
+
+  enum TipoRegistro {
+    NOTA
+    RECORDATORIO
+    RECOMENDACION
+  }
+
+  class Categoria {
+    +id
+    +nombre
+    +color
+    +icono
+  }
+
+  class Pictograma {
+    +id
+    +urlImagen
+    +etiqueta
+  }
+
+  ' Relaciones Modelo
+  Usuario "1" --> "0..*" Paciente : atiende / cuida
+  Usuario "1" --> "0..*" Registro : crea
+  Paciente "1" --> "0..*" Sesion : tiene
+  Paciente "1" --> "0..*" Registro : recibe
+  Paciente "1" --> "0..*" AsignacionActividad : tiene asignadas
+  AsignacionActividad "0..*" --> "1" Actividad : referencia
+  Sesion "0..*" --> "1" Actividad : practica
+  Registro "0..*" --> "0..1" Actividad : referencia (opcional)
+  Actividad "0..*" --> "1" Categoria : pertenece a
+  Pictograma "0..*" --> "1" Categoria : clasificado en
+  Usuario --> Rol
+  Actividad --> EstadoContenido
+  AsignacionActividad --> EstadoProgreso
+  Sesion --> TipoSesion
+  Sesion --> EstadoSesion
+  Registro --> TipoRegistro
+}
+
+' ─────────────────────────────────────────
+' CLASES VISTA
+' ─────────────────────────────────────────
+
+package "Vista" {
+
+  class VistaLogopeda {
+    +mostrarDashboard()
+    +navegarA(seccion)
+  }
+
+  class VistaFamilia {
+    +mostrarHome()
+    +navegarA(seccion)
+  }
+
+  class VistaPaciente {
+    +mostrarPerfil(paciente)
+    +mostrarListado(pacientes)
+  }
+
+  class VistaActividad {
+    +mostrarDetalle(actividad)
+    +mostrarListado(actividades)
+    +mostrarFormulario()
+  }
+
+  class VistaSesion {
+    +mostrarEjercicio(sesion)
+    +mostrarResultados(sesion)
+  }
+
+  class VistaRegistro {
+    +mostrarRegistro(registro)
+    +mostrarFormulario()
+  }
+
+  class VistaAsignacion {
+    +mostrarEstado(asignacion)
+  }
+
+  class VistaProgreso {
+    +mostrarMetricas(datos)
+    +mostrarGrafica(evolucion)
+  }
+}
+
+' ─────────────────────────────────────────
+' CLASES CONTROLADOR
+' ─────────────────────────────────────────
+
+package "Controlador" {
+
+  class AuthController {
+    +login(email, password)
+    +logout()
+    +registrar(datos)
+    +validarRol(rol)
+  }
+
+  class PacienteController {
+    +crearPaciente(datos)
+    +editarPaciente(id, datos)
+    +consultarPaciente(id)
+    +listarPacientes()
+  }
+
+  class ActividadController {
+    +crearActividad(datos)
+    +editarActividad(id, datos)
+    +publicarActividad(id)
+    +archivarActividad(id)
+    +getActividad(id)
+    +listarActividades()
+  }
+
+  class AsignacionController {
+    +asignarActividad(pacienteId, actividadId)
+    +getAsignaciones(pacienteId)
+  }
+
+  class RecomendacionController {
+    +recomendarActividad(pacienteId, actividadId, instrucciones)
+  }
+
+  class SesionController {
+    +iniciarSesion(pacienteId, actividadId)
+    +registrarRespuesta(sesionId, respuesta)
+    +finalizarSesion(sesionId)
+    +crearSesion(pacienteId, datos)
+    +getSesiones(pacienteId)
+  }
+
+  class RegistroController {
+    +crearRegistro(pacienteId, datos)
+    +editarRegistro(id, datos)
+    +eliminarRegistro(id)
+    +getRegistros(pacienteId)
+  }
+
+  class ProgresoController {
+    +getProgreso(pacienteId)
+    +calcularMetricas(sesiones)
+  }
+}
+
+' ─────────────────────────────────────────
+' RELACIONES VISTA → CONTROLADOR → MODELO
+' ─────────────────────────────────────────
+
+VistaLogopeda ..> AuthController
+VistaLogopeda ..> PacienteController
+VistaLogopeda ..> ActividadController
+VistaLogopeda ..> AsignacionController
+VistaLogopeda ..> RecomendacionController
+VistaLogopeda ..> SesionController
+VistaLogopeda ..> RegistroController
+VistaLogopeda ..> ProgresoController
+
+VistaFamilia ..> AuthController
+VistaFamilia ..> SesionController
+VistaFamilia ..> ProgresoController
+VistaFamilia ..> RegistroController
+
+VistaPaciente ..> PacienteController
+VistaActividad ..> ActividadController
+VistaSesion ..> SesionController
+VistaRegistro ..> RegistroController
+VistaAsignacion ..> AsignacionController
+VistaProgreso ..> ProgresoController
+
+AuthController ..> Usuario
+PacienteController ..> Paciente
+ActividadController ..> Actividad
+AsignacionController ..> AsignacionActividad
+RecomendacionController ..> Registro
+SesionController ..> Sesion
+RegistroController ..> Registro
+ProgresoController ..> Sesion
+ProgresoController ..> Paciente
+
+@enduml

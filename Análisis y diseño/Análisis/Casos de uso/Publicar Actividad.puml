@@ -1,0 +1,27 @@
+@startuml
+
+actor Logopeda
+
+participant "VistaLogopeda" as VL
+participant "ActividadController" as AC
+participant "Actividad" as MA
+
+Logopeda -> VL : selecciona actividad en estado Borrador
+VL -> AC : getActividad(actividadId)
+AC -> MA : findById(actividadId)
+MA --> AC : actividad {estado: Borrador}
+AC --> VL : actividad cargada para revisión
+
+Logopeda -> VL : revisa contenido y confirma publicación
+VL -> AC : publicarActividad(actividadId)
+AC -> MA : update(actividadId, {estado: Disponible})
+
+alt contenido válido
+  MA --> AC : actividadActualizada
+  AC --> VL : actividad publicada correctamente
+else contenido incompleto
+  MA --> AC : error validación
+  AC --> VL : error — actividad no publicada
+end
+
+@enduml

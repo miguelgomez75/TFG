@@ -1,0 +1,25 @@
+@startuml
+
+node "Dispositivo del usuario\n(navegador web)" {
+  component "React SPA" as SPA
+}
+
+node "Servidor de aplicación" {
+  component "Node.js + Express API" as API
+  component "Middleware Auth (JWT)" as JWT
+  API --> JWT
+}
+
+node "Servidor de base de datos" {
+  database "MongoDB" as DB
+}
+
+SPA --> API : HTTPS / REST
+API --> DB : Mongoose
+
+note right of JWT
+  Control de acceso por rol:
+  LOGOPEDA / FAMILIA
+end note
+
+@enduml

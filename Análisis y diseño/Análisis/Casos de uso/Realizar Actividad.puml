@@ -1,0 +1,35 @@
+@startuml
+
+actor Familia
+
+participant "VistaFamilia" as VF
+participant "SesionController" as SC
+participant "ActividadController" as AC
+participant "Actividad" as MA
+participant "Sesion" as MS
+
+Familia -> VF : selecciona actividad asignada
+VF -> AC : getActividad(actividadId)
+AC -> MA : findById(actividadId)
+MA --> AC : datosActividad
+AC --> VF : actividad cargada
+
+VF -> SC : iniciarSesion(pacienteId, actividadId)
+SC -> MS : create({pacienteId, actividadId, estado: EnCurso})
+MS --> SC : sesionCreada
+
+loop por cada ejercicio
+  Familia -> VF : responde ejercicio
+  VF -> SC : registrarRespuesta(sesionId, respuesta)
+  SC -> MS : update(sesionId, {respuesta, acierto/error})
+  MS --> SC : ok
+  SC --> VF : siguiente ejercicio / resultado parcial
+end
+
+Familia -> VF : completa actividad
+VF -> SC : finalizarSesion(sesionId)
+SC -> MS : update(sesionId, {estado: Finalizada})
+MS --> SC : sesionFinalizada
+SC --> VF : mostrar resultados
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+
+actor Logopeda
+
+participant "VistaLogopeda" as VL
+participant "RegistroController" as RC
+participant "ActividadController" as AC
+participant "Actividad" as MA
+participant "Registro" as MR
+
+Logopeda -> VL : selecciona paciente y actividad
+VL -> AC : getActividad(actividadId)
+AC -> MA : findById(actividadId)
+MA --> AC : datosActividad
+AC --> VL : actividad disponible
+
+Logopeda -> VL : añade instrucciones y recomendación
+VL -> RC : crearRegistro(pacienteId, {tipo: RECOMENDACION, actividadId, contenido})
+RC -> MR : create({pacienteId, tipo: RECOMENDACION, actividadId, contenido, fecha})
+MR --> RC : registroCreado
+RC --> VL : recomendación guardada y visible para Familia
+
+@enduml

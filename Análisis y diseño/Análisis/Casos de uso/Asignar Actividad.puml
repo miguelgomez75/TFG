@@ -1,0 +1,31 @@
+@startuml
+
+actor Logopeda
+
+participant "VistaLogopeda" as VL
+participant "AsignacionController" as ASC
+participant "PacienteController" as PC
+participant "ActividadController" as AC
+participant "Paciente" as MP
+participant "Actividad" as MA
+participant "AsignacionActividad" as MAS
+
+Logopeda -> VL : selecciona paciente
+VL -> PC : getPaciente(pacienteId)
+PC -> MP : findById(pacienteId)
+MP --> PC : datosPaciente
+PC --> VL : paciente cargado
+
+Logopeda -> VL : selecciona actividad
+VL -> AC : getActividad(actividadId)
+AC -> MA : findById(actividadId)
+MA --> AC : datosActividad
+AC --> VL : actividad cargada
+
+Logopeda -> VL : confirma asignación
+VL -> ASC : asignarActividad(pacienteId, actividadId)
+ASC -> MAS : create({pacienteId, actividadId, estado: Pendiente})
+MAS --> ASC : asignacionCreada
+ASC --> VL : confirmación
+
+@enduml

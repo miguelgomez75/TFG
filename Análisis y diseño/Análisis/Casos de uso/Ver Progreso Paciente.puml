@@ -1,0 +1,32 @@
+@startuml
+
+actor Logopeda
+actor Familia
+
+participant "Vista" as V
+participant "PacienteController" as PC
+participant "SesionController" as SC
+participant "Paciente" as MP
+participant "Sesion" as MS
+
+Logopeda -> V : selecciona paciente
+Familia -> V : accede a progreso
+
+V -> PC : getPaciente(pacienteId)
+PC -> MP : findById(pacienteId)
+MP --> PC : datosPaciente
+PC --> V : datos cargados
+
+V -> SC : getSesiones(pacienteId)
+SC -> MS : find({pacienteId})
+MS --> SC : listaSesiones
+
+alt hay sesiones registradas
+  SC --> V : métricas (aciertos, errores, evolución)
+  V -> V : renderizar gráficas de progreso
+else sin datos
+  SC --> V : lista vacía
+  V -> V : mostrar mensaje sin datos
+end
+
+@enduml

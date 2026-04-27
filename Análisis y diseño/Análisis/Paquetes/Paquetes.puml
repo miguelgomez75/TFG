@@ -1,0 +1,121 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+' ─────────────────────────────────────────
+' CAPA MODELO
+' ─────────────────────────────────────────
+
+package "modelo" {
+
+  package "modelo.usuario" {
+    class Usuario
+    enum Rol
+  }
+
+  package "modelo.terapia" {
+    class Paciente
+    class Sesion
+    enum TipoSesion
+    enum EstadoSesion
+  }
+
+  package "modelo.actividad" {
+    class Actividad
+    class AsignacionActividad
+    class Categoria
+    class Pictograma
+    enum EstadoContenido
+    enum EstadoProgreso
+  }
+
+  package "modelo.comunicacion" {
+    class Registro
+    enum TipoRegistro
+  }
+}
+
+' ─────────────────────────────────────────
+' CAPA CONTROLADOR
+' ─────────────────────────────────────────
+
+package "controlador" {
+
+  package "controlador.auth" {
+    class AuthController
+  }
+
+  package "controlador.terapia" {
+    class PacienteController
+    class SesionController
+    class ProgresoController
+  }
+
+  package "controlador.actividad" {
+    class ActividadController
+    class AsignacionController
+    class RecomendacionController
+  }
+
+  package "controlador.comunicacion" {
+    class RegistroController
+  }
+}
+
+' ─────────────────────────────────────────
+' CAPA VISTA
+' ─────────────────────────────────────────
+
+package "vista" {
+
+  package "vista.logopeda" {
+    class VistaLogopeda
+    class VistaPaciente
+    class VistaRegistro
+    class VistaAsignacion
+  }
+
+  package "vista.familia" {
+    class VistaFamilia
+    class VistaProgreso
+  }
+
+  package "vista.compartida" {
+    class VistaActividad
+    class VistaSesion
+  }
+}
+
+' ─────────────────────────────────────────
+' DEPENDENCIAS ENTRE PAQUETES
+' ─────────────────────────────────────────
+
+' Vista → Controlador
+vista.logopeda ..> controlador.auth
+vista.logopeda ..> controlador.terapia
+vista.logopeda ..> controlador.actividad
+vista.logopeda ..> controlador.comunicacion
+
+vista.familia ..> controlador.auth
+vista.familia ..> controlador.terapia
+
+vista.compartida ..> controlador.terapia
+vista.compartida ..> controlador.actividad
+
+' Controlador → Modelo
+controlador.auth ..> modelo.usuario
+controlador.terapia ..> modelo.terapia
+controlador.terapia ..> modelo.usuario
+controlador.actividad ..> modelo.actividad
+controlador.actividad ..> modelo.comunicacion
+controlador.comunicacion ..> modelo.comunicacion
+
+' Dependencias entre paquetes modelo
+modelo.terapia ..> modelo.usuario
+modelo.terapia ..> modelo.actividad
+modelo.actividad ..> modelo.usuario
+modelo.comunicacion ..> modelo.usuario
+modelo.comunicacion ..> modelo.actividad
+
+@enduml

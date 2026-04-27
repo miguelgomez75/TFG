@@ -1,0 +1,10 @@
+const router              = require('express').Router();
+const ActividadController = require('../../controllers/actividad/ActividadController');
+const { soloLogopeda }    = require('../../middleware/auth');
+router.use(soloLogopeda);
+router.post('/',            ActividadController.crearActividad);
+router.put('/:id/publicar', ActividadController.publicarActividad);
+router.put('/:id/archivar', ActividadController.archivarActividad);
+router.get('/:id',          ActividadController.getActividad);
+router.get('/',             ActividadController.listarActividades);
+module.exports = router;

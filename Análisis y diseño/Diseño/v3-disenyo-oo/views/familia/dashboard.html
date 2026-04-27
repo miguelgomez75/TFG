@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Familia</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #fdf4ff; }
+    header {
+      background: #6d28d9; color: white; padding: 16px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 800; }
+    header button {
+      background: none; border: 1px solid rgba(255,255,255,.4);
+      color: white; padding: 6px 16px; border-radius: 8px;
+      cursor: pointer; font-family: inherit;
+    }
+    .container { max-width: 900px; margin: 32px auto; padding: 0 24px; }
+    h2 { font-size: 1.4rem; font-weight: 800; color: #1a1a2e; margin-bottom: 20px; }
+    .actividad {
+      background: white; border-radius: 16px; padding: 24px;
+      margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .actividad h3 { font-size: 1rem; font-weight: 700; color: #1a1a2e; }
+    .actividad p  { font-size: 0.85rem; color: #666; margin-top: 4px; }
+    button.btn {
+      padding: 10px 22px; border: none; border-radius: 10px;
+      font-family: inherit; font-weight: 700; cursor: pointer;
+      background: #6d28d9; color: white; white-space: nowrap;
+    }
+    #loading { text-align: center; color: #666; margin: 40px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CAA · Actividades</h1>
+    <button onclick="logout()">Salir</button>
+  </header>
+  <div class="container">
+    <h2>Actividades disponibles</h2>
+    <div id="loading">Cargando...</div>
+    <div id="lista"></div>
+  </div>
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+
+    async function cargar() {
+      const res  = await fetch('/api/actividades', { headers: { Authorization: `Bearer ${token}` } });
+      const data = await res.json();
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('lista').innerHTML = data
+        .filter(a => a.estado === 'DISPONIBLE')
+        .map(a => `
+          <div class="actividad">
+            <div>
+              <h3>${a.titulo}</h3>
+              <p>${a.descripcion || ''}</p>
+            </div>
+            <button class="btn" onclick="alert('Actividad: ${a.titulo}')">Realizar</button>
+          </div>`).join('');
+    }
+
+    function logout() { localStorage.clear(); window.location.href = '/compartida/login.html'; }
+    cargar();
+  </script>
+</body>
+</html>

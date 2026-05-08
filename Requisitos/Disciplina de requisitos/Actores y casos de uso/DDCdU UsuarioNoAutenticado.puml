@@ -1,0 +1,16 @@
+@startuml
+
+left to right direction
+
+actor UsuarioNoAutenticado as UNA
+
+rectangle Sistema_CAA {
+
+  ' ── AUTENTICACIÓN ─────────────────────────────────────────
+  package "Autenticación" {
+    UNA -- (Sign in)
+    UNA -- (Login)
+  }
+}
+
+@enduml

@@ -1,0 +1,33 @@
+' ════════════════════════════════════════════════════════════
+' CdU-02  Publicar actividad
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+
+rectangle "CdU-02 · Publicar actividad" {
+  (Publicar actividad) as PA
+  Logopeda --> PA
+}
+
+note right of PA
+  **Actor principal:** Logopeda
+  **Precondiciones:**
+    P1. El logopeda está autenticado.
+    P2. La actividad seleccionada está en estado BORRADOR.
+
+  **Flujo principal:**
+    1. El logopeda accede al detalle de la actividad en BORRADOR.
+    2. El logopeda revisa título, descripción y contenido.
+    3. El logopeda pulsa "Publicar".
+    4. El sistema valida que todos los campos obligatorios estén completos.
+    5. El sistema cambia el estado de la actividad a DISPONIBLE.
+
+  **Postcondiciones:**
+    Q1. La actividad está en estado DISPONIBLE y es visible para asignación.
+
+  **Flujos alternativos:**
+    FA-1 (paso 4): La actividad tiene campos incompletos → el sistema muestra los errores y permanece en BORRADOR.
+    FA-2 (paso 3): El logopeda cancela → el estado no cambia. Fin del caso de uso.
+end note
+@enduml

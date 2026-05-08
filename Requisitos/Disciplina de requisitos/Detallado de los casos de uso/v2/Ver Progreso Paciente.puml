@@ -1,0 +1,33 @@
+' ════════════════════════════════════════════════════════════
+' CdU-06  Ver progreso paciente
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+actor Familia
+
+rectangle "CdU-06 · Ver progreso paciente" {
+  (Ver progreso paciente) as VP
+  Logopeda --> VP
+  Familia --> VP
+}
+
+note right of VP
+  **Actores:** Logopeda (primario), Familia (secundario)
+  **Precondiciones:**
+    P1. El actor está autenticado.
+    P2. El paciente existe y tiene al menos una Sesion o AsignacionActividad registrada.
+
+  **Flujo principal:**
+    1. El actor accede al estado PROGRESO_ABIERTO del paciente.
+    2. El sistema carga las métricas: sesiones, aciertos, errores, evolución temporal.
+    3. El sistema muestra gráficas y estadísticas de progreso.
+
+  **Postcondiciones:**
+    Q1. Los datos de progreso se muestran correctamente.
+
+  **Flujos alternativos:**
+    FA-1 (paso 2): No hay datos disponibles → el sistema muestra un mensaje informativo vacío.
+    FA-2 (paso 2): Paciente no encontrado → el sistema muestra error 404 y redirige al listado.
+end note
+@enduml

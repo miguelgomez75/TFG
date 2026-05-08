@@ -1,0 +1,221 @@
+' ════════════════════════════════════════════════════════════
+' CdU-01  Asignar actividad
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+
+rectangle "CdU-01 · Asignar actividad" {
+  (Asignar actividad) as AA
+  Logopeda --> AA
+}
+
+note right of AA
+  **Actor principal:** Logopeda
+  **Precondiciones:**
+    P1. El logopeda está autenticado.
+    P2. Existe al menos un paciente activo.
+    P3. Existe al menos una actividad en estado DISPONIBLE.
+
+  **Flujo principal:**
+    1. El logopeda selecciona un paciente.
+    2. El logopeda selecciona una actividad disponible.
+    3. El sistema muestra el formulario de parámetros.
+    4. El logopeda confirma la asignación.
+    5. El sistema crea la AsignacionActividad en estado PENDIENTE.
+    6. El sistema notifica a la familia.
+
+  **Postcondiciones:**
+    Q1. Existe una AsignacionActividad vinculando paciente y actividad.
+    Q2. El estado de progreso es PENDIENTE.
+
+  **Flujos alternativos:**
+    FA-1 (paso 1): Paciente no activo → el sistema muestra aviso y no permite continuar.
+    FA-2 (paso 2): La actividad no está DISPONIBLE → el sistema filtra la lista y no la muestra.
+    FA-3 (paso 4): El logopeda cancela → no se crea ninguna asignación. Fin del caso de uso.
+end note
+@enduml
+
+
+' ════════════════════════════════════════════════════════════
+' CdU-02  Publicar actividad
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+
+rectangle "CdU-02 · Publicar actividad" {
+  (Publicar actividad) as PA
+  Logopeda --> PA
+}
+
+note right of PA
+  **Actor principal:** Logopeda
+  **Precondiciones:**
+    P1. El logopeda está autenticado.
+    P2. La actividad seleccionada está en estado BORRADOR.
+
+  **Flujo principal:**
+    1. El logopeda accede al detalle de la actividad en BORRADOR.
+    2. El logopeda revisa título, descripción y contenido.
+    3. El logopeda pulsa "Publicar".
+    4. El sistema valida que todos los campos obligatorios estén completos.
+    5. El sistema cambia el estado de la actividad a DISPONIBLE.
+
+  **Postcondiciones:**
+    Q1. La actividad está en estado DISPONIBLE y es visible para asignación.
+
+  **Flujos alternativos:**
+    FA-1 (paso 4): La actividad tiene campos incompletos → el sistema muestra los errores y permanece en BORRADOR.
+    FA-2 (paso 3): El logopeda cancela → el estado no cambia. Fin del caso de uso.
+end note
+@enduml
+
+
+' ════════════════════════════════════════════════════════════
+' CdU-03  Realizar actividad
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Familia
+
+rectangle "CdU-03 · Realizar actividad" {
+  (Realizar actividad) as RA
+  Familia --> RA
+}
+
+note right of RA
+  **Actor principal:** Familia
+  **Precondiciones:**
+    P1. La familia está autenticada.
+    P2. Existe una AsignacionActividad en estado PENDIENTE o EN_PROGRESO
+        para el paciente asociado.
+
+  **Flujo principal:**
+    1. La familia selecciona la actividad en ACTIVIDAD_ABIERTA.
+    2. La familia pulsa "Iniciar".
+    3. El sistema crea una Sesion en estado EnCurso.
+    4. El sistema muestra los ejercicios uno a uno.
+    5. La familia responde cada ejercicio; el sistema registra aciertos/errores.
+    6. Al responder el último ejercicio, el sistema marca la Sesion como Finalizada.
+    7. El sistema actualiza el progreso de la AsignacionActividad a COMPLETADA.
+    8. El sistema muestra la pantalla RESULTADO_ACTIVIDAD.
+
+  **Postcondiciones:**
+    Q1. Existe una Sesion Finalizada con los resultados registrados.
+    Q2. El progreso de la AsignacionActividad es COMPLETADA.
+
+  **Flujos alternativos:**
+    FA-1 (paso 5): La familia interrumpe → la Sesion pasa a Pausada; el progreso queda EN_PROGRESO.
+    FA-2 (FA-1, timeout): Sin retomar en el tiempo límite → la Sesion pasa a Abandonada; se guardan resultados parciales.
+    FA-3 (paso 4): Pérdida de conexión → el sistema guarda el estado actual; la familia puede retomar al reconectar.
+end note
+@enduml
+
+
+' ════════════════════════════════════════════════════════════
+' CdU-04  Recomendar actividad
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+
+rectangle "CdU-04 · Recomendar actividad" {
+  (Recomendar actividad) as RE
+  Logopeda --> RE
+}
+
+note right of RE
+  **Actor principal:** Logopeda
+  **Precondiciones:**
+    P1. El logopeda está autenticado.
+    P2. La actividad existe y está en estado DISPONIBLE.
+    P3. El paciente tiene acceso activo al sistema.
+
+  **Flujo principal:**
+    1. El logopeda selecciona el paciente.
+    2. El logopeda selecciona la actividad a recomendar.
+    3. El logopeda añade instrucciones opcionales para la familia.
+    4. El logopeda guarda la recomendación.
+    5. El sistema crea un Registro de tipo RECOMENDACION vinculado al paciente.
+    6. La actividad queda visible en la sección "Actividades recomendadas" de la familia.
+
+  **Postcondiciones:**
+    Q1. Existe un Registro de tipo RECOMENDACION para el paciente.
+    Q2. La actividad es visible para la familia en su listado de recomendadas.
+
+  **Flujos alternativos:**
+    FA-1 (paso 2): La actividad está ARCHIVADA → el sistema no la muestra en la lista. Fin del caso de uso.
+    FA-2 (paso 3): El paciente no tiene acceso activo → el sistema avisa al logopeda. Fin del caso de uso.
+end note
+@enduml
+
+
+' ════════════════════════════════════════════════════════════
+' CdU-05  Registrar sesión
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+
+rectangle "CdU-05 · Registrar sesión" {
+  (Registrar sesión) as RS
+  Logopeda --> RS
+}
+
+note right of RS
+  **Actor principal:** Logopeda
+  **Precondiciones:**
+    P1. El logopeda está autenticado.
+    P2. El paciente existe y está activo.
+
+  **Flujo principal:**
+    1. El logopeda accede al estado SEGUIMIENTO_ABIERTO del paciente.
+    2. El logopeda pulsa "Registrar sesión".
+    3. El sistema muestra el formulario de sesión (fecha, tipo, observaciones).
+    4. El logopeda introduce los datos y guarda.
+    5. El sistema crea la Sesion vinculada al paciente con tipo PRESENCIAL o CASA.
+
+  **Postcondiciones:**
+    Q1. La Sesion queda almacenada en el historial del paciente.
+
+  **Flujos alternativos:**
+    FA-1 (paso 4): Datos obligatorios incompletos → el sistema muestra errores y no guarda.
+    FA-2 (paso 4): El logopeda cancela → no se crea ninguna sesión. Fin del caso de uso.
+end note
+@enduml
+
+
+' ════════════════════════════════════════════════════════════
+' CdU-06  Ver progreso paciente
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+actor Familia
+
+rectangle "CdU-06 · Ver progreso paciente" {
+  (Ver progreso paciente) as VP
+  Logopeda --> VP
+  Familia --> VP
+}
+
+note right of VP
+  **Actores:** Logopeda (primario), Familia (secundario)
+  **Precondiciones:**
+    P1. El actor está autenticado.
+    P2. El paciente existe y tiene al menos una Sesion o AsignacionActividad registrada.
+
+  **Flujo principal:**
+    1. El actor accede al estado PROGRESO_ABIERTO del paciente.
+    2. El sistema carga las métricas: sesiones, aciertos, errores, evolución temporal.
+    3. El sistema muestra gráficas y estadísticas de progreso.
+
+  **Postcondiciones:**
+    Q1. Los datos de progreso se muestran correctamente.
+
+  **Flujos alternativos:**
+    FA-1 (paso 2): No hay datos disponibles → el sistema muestra un mensaje informativo vacío.
+    FA-2 (paso 2): Paciente no encontrado → el sistema muestra error 404 y redirige al listado.
+end note
+@enduml

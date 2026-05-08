@@ -1,0 +1,39 @@
+' ════════════════════════════════════════════════════════════
+' CdU-03  Realizar actividad
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Familia
+
+rectangle "CdU-03 · Realizar actividad" {
+  (Realizar actividad) as RA
+  Familia --> RA
+}
+
+note right of RA
+  **Actor principal:** Familia
+  **Precondiciones:**
+    P1. La familia está autenticada.
+    P2. Existe una AsignacionActividad en estado PENDIENTE o EN_PROGRESO
+        para el paciente asociado.
+
+  **Flujo principal:**
+    1. La familia selecciona la actividad en ACTIVIDAD_ABIERTA.
+    2. La familia pulsa "Iniciar".
+    3. El sistema crea una Sesion en estado EnCurso.
+    4. El sistema muestra los ejercicios uno a uno.
+    5. La familia responde cada ejercicio; el sistema registra aciertos/errores.
+    6. Al responder el último ejercicio, el sistema marca la Sesion como Finalizada.
+    7. El sistema actualiza el progreso de la AsignacionActividad a COMPLETADA.
+    8. El sistema muestra la pantalla RESULTADO_ACTIVIDAD.
+
+  **Postcondiciones:**
+    Q1. Existe una Sesion Finalizada con los resultados registrados.
+    Q2. El progreso de la AsignacionActividad es COMPLETADA.
+
+  **Flujos alternativos:**
+    FA-1 (paso 5): La familia interrumpe → la Sesion pasa a Pausada; el progreso queda EN_PROGRESO.
+    FA-2 (FA-1, timeout): Sin retomar en el tiempo límite → la Sesion pasa a Abandonada; se guardan resultados parciales.
+    FA-3 (paso 4): Pérdida de conexión → el sistema guarda el estado actual; la familia puede retomar al reconectar.
+end note
+@enduml

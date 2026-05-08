@@ -1,0 +1,37 @@
+' ════════════════════════════════════════════════════════════
+' CdU-01  Asignar actividad
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+
+rectangle "CdU-01 · Asignar actividad" {
+  (Asignar actividad) as AA
+  Logopeda --> AA
+}
+
+note right of AA
+  **Actor principal:** Logopeda
+  **Precondiciones:**
+    P1. El logopeda está autenticado.
+    P2. Existe al menos un paciente activo.
+    P3. Existe al menos una actividad en estado DISPONIBLE.
+
+  **Flujo principal:**
+    1. El logopeda selecciona un paciente.
+    2. El logopeda selecciona una actividad disponible.
+    3. El sistema muestra el formulario de parámetros.
+    4. El logopeda confirma la asignación.
+    5. El sistema crea la AsignacionActividad en estado PENDIENTE.
+    6. El sistema notifica a la familia.
+
+  **Postcondiciones:**
+    Q1. Existe una AsignacionActividad vinculando paciente y actividad.
+    Q2. El estado de progreso es PENDIENTE.
+
+  **Flujos alternativos:**
+    FA-1 (paso 1): Paciente no activo → el sistema muestra aviso y no permite continuar.
+    FA-2 (paso 2): La actividad no está DISPONIBLE → el sistema filtra la lista y no la muestra.
+    FA-3 (paso 4): El logopeda cancela → no se crea ninguna asignación. Fin del caso de uso.
+end note
+@enduml

@@ -1,0 +1,33 @@
+' ════════════════════════════════════════════════════════════
+' CdU-05  Registrar sesión
+' ════════════════════════════════════════════════════════════
+@startuml
+left to right direction
+actor Logopeda
+
+rectangle "CdU-05 · Registrar sesión" {
+  (Registrar sesión) as RS
+  Logopeda --> RS
+}
+
+note right of RS
+  **Actor principal:** Logopeda
+  **Precondiciones:**
+    P1. El logopeda está autenticado.
+    P2. El paciente existe y está activo.
+
+  **Flujo principal:**
+    1. El logopeda accede al estado SEGUIMIENTO_ABIERTO del paciente.
+    2. El logopeda pulsa "Registrar sesión".
+    3. El sistema muestra el formulario de sesión (fecha, tipo, observaciones).
+    4. El logopeda introduce los datos y guarda.
+    5. El sistema crea la Sesion vinculada al paciente con tipo PRESENCIAL o CASA.
+
+  **Postcondiciones:**
+    Q1. La Sesion queda almacenada en el historial del paciente.
+
+  **Flujos alternativos:**
+    FA-1 (paso 4): Datos obligatorios incompletos → el sistema muestra errores y no guarda.
+    FA-2 (paso 4): El logopeda cancela → no se crea ninguna sesión. Fin del caso de uso.
+end note
+@enduml

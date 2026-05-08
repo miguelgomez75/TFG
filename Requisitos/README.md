@@ -1,152 +1,177 @@
 
 # 📌 Índice
 
-- [1. Diagrama de Entidades](#1--diagrama-de-entidades)
-- [2. Diagramas de Estados](#2--diagramas-de-estados)
-- [3. Actores del Sistema](#-3-actores-del-sistema)
-- [4. Casos de Uso](#4--casos-de-uso)
-- [5. Diagramas de Contexto](#5--diagramas-de-contexto)
-- [6. Casos de Uso Detallados](#6--casos-de-uso-detallados)
-- [7. Glosario](#7--glosario)
-- [8. Requisitos Suplementarios](#8-%EF%B8%8F-requisitos-suplementarios-no-funcionales)
+- [1. Modelo del Dominio](#1--modelo-del-dominio)
+  - [1.1. Diagrama de Entidades](#11-diagrama-de-entidades)
+  - [1.2. Diagramas de Estados](#12--diagramas-de-estados)
+- [2. Disciplina de Requisitos](#2-disciplina-de-requisitos)
+  - [2.1. Actores del Sistema](#21--actores-del-sistema)
+  - [2.2. Casos de Uso](#22--casos-de-uso)
+  - [2.3 Diagramas de Contexto](#23--diagramas-de-contexto)
+  - [2.4. Casos de Uso Detallados](#24--casos-de-uso-detallados)
+  - [2.5. Glosario](#25--glosario)
+  - [2.6. Requisitos No Funcionales](#26-%EF%B8%8F-requisitos-no-funcionales)
 
 ---
 
-# 1. 📊 Diagrama de Entidades
+# 1. 📊 Modelo del Dominio
 
-| Elemento | Diagrama | Código PlantUML |
-|----------|----------|-----------------|
-| Modelo de dominio | ![dominio](Modelo%20de%20dominio/DDEn.png) | [Ver código](Modelo%20de%20dominio/DDEn.puml) |
+## 1.1. Diagrama de Entidades
 
----
+Diagrama de entidades del modelo del dominio del sistema CAA.
 
-# 2. 🔄 Diagramas de Estados
-
-| Elemento | Diagrama | Código |
-|----------|----------|--------|
-| Actividad (Contenido) | ![actividadc](Modelo%20de%20dominio/DDEs%20Actividad(Contenido).png) | [PUML](Modelo%20de%20dominio/DDEs%20Actividad(Contenido).puml) |
-| Actividad (Contenido) | ![actividadc](Modelo%20de%20dominio/DDEs%20Actividad(Progreso).png) | [PUML](Modelo%20de%20dominio/DDEs%20Actividad(Progreso).puml) |
-| Sesión de práctica | ![sesion](Modelo%20de%20dominio/DDEs%20Sesion.png) | [PUML](Modelo%20de%20dominio/DDEs%20Sesion.puml) |
-| Registro de sesión | ![nota](Modelo%20de%20dominio/DDEs%20Registro.png) | [PUML](Modelo%20de%20dominio/DDEs%20Registro.puml) |
+| Diagrama | Código PlantUML |
+|----------|-----------------|
+| ![entidades](Modelo%20de%20dominio/v2/DDEn.svg) | [Ver código](Modelo%20de%20dominio/v2/DDEn.puml) |
 
 ---
 
-# 👥 3. Actores del Sistema
+## 1.2. 🔄 Diagramas de Estados
+
+El sistema define cuatro máquinas de estado independientes.
+
+**Actividad (ciclo de vida del contenido):** gestiona si la actividad está siendo editada, publicada o retirada.
 
 | Diagrama | Código |
 |----------|--------|
-| ![actividadc](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDAc.png) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDAc.puml) |
+| ![actividadc](Modelo%20de%20dominio/DDEs%20Actividad(Contenido).png) | [PUML](Modelo%20de%20dominio/DDEs%20Actividad(Contenido).puml) |
 
-## 👩‍⚕️ Logopeda
-
-| Característica | Descripción |
-|---------------|-------------|
-| Rol principal | Profesional clínico responsable de la intervención |
-| Función | Gestión completa del sistema terapéutico |
-| Permisos | Altos (CRUD completo sobre entidades principales) |
-| Interacción | Configura, supervisa y evalúa pacientes |
-
-### Funciones principales:
-- Gestión de pacientes
-- Gestión de actividades
-- Seguimiento terapéutico
-- Gestión de registros clínicos
-- Asignación y recomendación de actividades
-
----
-
-## 👨‍👩‍👧 Familia
-
-| Característica | Descripción |
-|---------------|-------------|
-| Rol principal | Usuario final del sistema terapéutico |
-| Función | Ejecución de actividades y consulta de progreso |
-| Permisos | Lectura y ejecución |
-| Interacción | Realiza actividades y consulta resultados |
-
-### Funciones principales:
-- Realizar actividades
-- Consultar progreso
-- Ver sesiones y registros
-- Acceder a actividades recomendadas
-
----
-
-# 4. 🎯 Casos de Uso
-
-## 👩‍⚕️ Logopeda
+**Actividad (progreso del paciente):** gestiona si el paciente ha completado, abandonado o no iniciado la actividad asignada.
 
 | Diagrama | Código |
 |----------|--------|
-| ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDCdU%20Logopeda%20v2.png) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDCdU%20Logopeda%20v2.puml) |
+| ![actividadp](Modelo%20de%20dominio/v2/DDEs%20Actividad(Progreso).svg) | [PUML](Modelo%20de%20dominio/v2/DDEs%20Actividad(Progreso).puml) |
 
----
-
-## 👨‍👩‍👧 Familia
+**Sesión de práctica:** estados internos durante la ejecución de una actividad por parte de la familia. La sesión comienza cuando el usuario pulsa "Iniciar" en la pantalla de detalle de actividad.
 
 | Diagrama | Código |
 |----------|--------|
-| ![cuF](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDCdU%20Familia%20v2.png) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDCdU%20Familia%20v2.puml) |
+| ![sesion](Modelo%20de%20dominio/v2/DDEs%20Sesion.svg) | [PUML](Modelo%20de%20dominio/v2/DDEs%20Sesion.puml) |
+
+**Registro clínico:** ciclo de vida de una nota, recordatorio o recomendación creada por el logopeda.
+
+| Diagrama | Código |
+|----------|--------|
+| ![nota](Modelo%20de%20dominio/DDEs%20Registro.png) | [PUML](Modelo%20de%20dominio/DDEs%20Registro.puml) |
+
+> **Nota sobre nomenclatura:** la *Sesión de práctica* (ejecución de una actividad) y el *Registro de sesión clínica* (anotación del logopeda sobre una consulta presencial) son entidades distintas con ciclos de vida propios.
 
 ---
 
-# 5. 🧭 Diagramas de Contexto
+# 2. Disciplina de Requisitos
+
+## 2.1. 👥 Actores del Sistema
+
+El diagrama muestra la jerarquía de actores mediante relaciones de herencia. Solo se permiten relaciones de herencia entre actores; no se representan aquí sus interacciones con el sistema.
+
+| Diagrama | Código |
+|----------|--------|
+| ![actores](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v2/DDAc.svg) | [PUML](Disciplina%20de%20requisitos/v2/Actores%20y%20casos%20de%20uso/DDAc.puml) |
+
+Los tres actores del sistema son:
+
+**UsuarioNoAutenticado** — cualquier visitante antes de identificarse. Es el único que puede ejecutar los casos de uso de autenticación (Login / Signin).
+
+**Logopeda** — especialización de UsuarioNoAutenticado. Profesional clínico con permisos de escritura completos sobre pacientes, actividades, sesiones y registros.
+
+**Familia** — especialización de UsuarioNoAutenticado. Usuario con permisos de lectura y ejecución: consulta el progreso del paciente y realiza las actividades asignadas.
+
+---
+
+## 2.2. 🎯 Casos de Uso
+
+Los casos de uso están agrupados por actor y por paquete funcional.
+
+### 👩‍⚕️ Logopeda
+
+| Diagrama | Código |
+|----------|--------|
+| ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v3/DDCdU%20Logopeda.svg) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v3/DDCdU%20Logopeda.puml) |
+
+### 👨‍👩‍👧 Familia
+
+| Diagrama | Código |
+|----------|--------|
+| ![cuF](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v3/DDCdU%20Familia.svg) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v3/DDCdU%20Familia.puml) |
+
+### Usuario no Autenticado
+
+| Diagrama | Código |
+|----------|--------|
+| ![cuUnA](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso//DDCdU%20UsuarioNoAutenticado.svg) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDCdU%20UsuarioNoAutenticado.puml) |
+
+---
+
+## 2.3. 🧭 Diagramas de Contexto
+
+Los diagramas de contexto modelan la navegación del sistema como una máquina de estados. Los nombres de estado siguen la convención `ENTIDAD_ESTADO` (p. ej. `PACIENTES_ABIERTO`, `PACIENTE_ABIERTO`). Las transiciones corresponden a los casos de uso.
 
 | Actor | Diagrama | Código |
 |-------|----------|--------|
-| Logopeda | ![ctx1](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Logopeda.png) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Logopeda.puml) |
-| Familia | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Familia.png) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Familia.puml) |
+| Logopeda | ![ctx1](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v2/DDCtx%20Logopeda.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Logopeda.puml) |
+| Familia | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v2/DDCtx%20Familia.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Familia.puml) |
+| Usuario no Autenticado | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.puml) |
 
 ---
 
-# 6. 🧩 Casos de Uso Detallados
+## 2.4. 🧩 Casos de Uso Detallados
 
-| Caso | Descripción | Diagrama | Código |
-|------|-------------|----------|--------|
-| Asignar actividad | Asignación de actividades a pacientes | ![d1](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Asignar%20Actividad.png) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Asignar%20Actividad.puml) |
-| Realizar actividad | Ejecución de ejercicios terapéuticos | ![d2](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Realizar%20Actividad.png) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Realizar%20Actividad.puml) |
-| Ver progreso | Seguimiento evolutivo | ![d3](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Ver%20Progreso%20Paciente.png) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Ver%20Progreso%20Paciente.puml) |
-| Recomendar actividad | Recomendación terapéutica | ![d4](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Recomendar%20Actividad.png) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Recomendar%20Actividad.puml) |
-| Publicar actividad | Activación de actividades | ![d5](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Publicar%20Actividad.png) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Publicar%20Actividad.puml) |
-| Registrar sesión | Registro clínico | ![d6](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Registrar%20Sesion.png) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/Registrar%20Sesion.puml) |
+Cada caso de uso se describe con: actor principal, precondiciones, flujo principal, postcondiciones y flujos alternativos (con identificador FA-n).
+
+| ID | Caso de uso | Diagrama | Código |
+|----|-------------|----------|--------|
+| CdU-01 | Asignar actividad | ![d1](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Asignar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Asignar%20Actividad.puml) |
+| CdU-02 | Publicar actividad | ![d5](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Publicar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Publicar%20Actividad.puml) |
+| CdU-03 | Realizar actividad | ![d2](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Realizar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Realizar%20Actividad.puml) |
+| CdU-04 | Recomendar actividad | ![d4](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Recomendar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Recomendar%20Actividad.puml) |
+| CdU-05 | Registrar sesión | ![d6](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Registrar%20Sesion.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Registrar%20Sesion.puml) |
+| CdU-06 | Ver progreso paciente | ![d3](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Ver%20Progreso%20Paciente.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v2/Ver%20Progreso%20Paciente.puml) |
 
 ---
 
-# 7. 📚 Glosario
+## 2.5. 📚 Glosario
 
 | Término | Definición |
 |--------|------------|
-| Logopeda | Profesional responsable de la intervención del lenguaje |
-| Familia | Usuario que ejecuta actividades terapéuticas |
-| Actividad | Ejercicio terapéutico diseñado para el paciente |
-| Sesión | Registro de intervención clínica |
-| Progreso | Evolución del paciente |
-| Registro | Nota clínica del logopeda |
-| CAA | Comunicación Aumentativa y Alternativa |
+| Paciente | Persona que realiza las actividades terapéuticas. |
+| Logopeda | Profesional clínico que supervisa, diseña actividades y realiza el seguimiento. |
+| Familia | Usuario que ejecuta actividades y consulta el progreso del paciente. |
+| UsuarioNoAutenticado | Visitante del sistema antes de completar el proceso de login. |
+| Actividad | Ejercicio terapéutico basado en pictogramas, diseñado por el logopeda. |
+| Sesión de práctica | Ejecución de una actividad por parte de la familia o el paciente. |
+| Sesión clínica | Registro de una consulta presencial introducido por el logopeda. |
+| Registro | Entrada en la bitácora clínica: nota, recordatorio o recomendación. |
+| AsignacionActividad | Relación entre un paciente y una actividad, con estado de progreso. |
+| CAA | Comunicación Aumentativa y Alternativa basada en pictogramas. |
 
-Para evitar confusiones, la sesión referente a la autenticación del usuario dentro del sistema se referirá por medio de los terminos login, logout y al registro por medio de sign in
+> Para evitar ambigüedad con el término *registro* (bitácora clínica vs. creación de cuenta), el proceso de creación de cuenta se denomina *sign in* y la autenticación *login / logout*.
+
 ---
 
-# 8. ⚙️ Requisitos Suplementarios (No funcionales)
+## 2.6. ⚙️ Requisitos No Funcionales
 
-## 8.1 Rendimiento
-- Respuesta del sistema en menos de 2 segundos en condiciones normales.
-- Soporte para múltiples usuarios concurrentes.
+Los siguientes requisitos no funcionales han sido definidos por el cliente.
 
-## 8.2 Seguridad
-- Autenticación obligatoria.
-- Control de permisos según rol (Logopeda / Familia).
+### 2.6.1 Rendimiento
 
-## 8.3 Usabilidad
-- Interfaz intuitiva y accesible.
-- Compatible con dispositivos móviles y tablets.
+El tiempo de respuesta del sistema deberá ser inferior a 2 segundos en condiciones de carga normal. El sistema deberá soportar múltiples usuarios concurrentes sin degradación perceptible.
 
-## 8.4 Mantenibilidad
-- Arquitectura modular.
-- Código documentado y estructurado.
+### 2.6.2 Seguridad
 
-## 8.5 Disponibilidad
-- Disponibilidad mínima del sistema del 99%.
+El control de acceso se realizará por roles: Logopeda y Familia tienen permisos distintos y mutuamente excluyentes. La obligatoriedad de autenticación queda recogida en los diagramas de contexto: ambos actores parten del estado `INICIO` y solo acceden al sistema tras ejecutar el caso de uso *Login*.
 
-## 8.6 Escalabilidad
-- Preparado para crecimiento de usuarios y datos sin degradación del rendimiento.
+### 2.6.3 Usabilidad
+
+La interfaz deberá ser comprensible para usuarios sin conocimientos técnicos, en particular para el actor Familia. El sistema deberá ser compatible con dispositivos móviles y tabletas.
+
+### 2.6.4 Mantenibilidad
+
+La arquitectura será modular, permitiendo añadir nuevos tipos de actividad sin modificar los módulos existentes. El código estará documentado.
+
+### 2.6.5 Disponibilidad
+
+La disponibilidad mínima del sistema será del 99 %.
+
+### 2.6.6 Escalabilidad
+
+El sistema estará preparado para crecer en número de usuarios y volumen de datos sin degradación del rendimiento.

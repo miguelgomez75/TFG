@@ -1,0 +1,50 @@
+@startuml
+
+[*] --> DASHBOARD : Login (UsuarioNoAutenticado)
+
+DASHBOARD --> PACIENTES_ABIERTO : consultar pacientes
+DASHBOARD --> ACTIVIDADES_ABIERTAS : gestionar actividades
+DASHBOARD --> SEGUIMIENTO_ABIERTO : ver seguimiento
+DASHBOARD --> REGISTROS_ABIERTOS : gestionar registros
+DASHBOARD --> [*] : Logout
+
+' ── PACIENTES ────────────────────────────────────────────
+PACIENTES_ABIERTO --> PACIENTE_ABIERTO : consultar paciente
+PACIENTE_ABIERTO --> PACIENTES_ABIERTO : volver
+
+PACIENTE_ABIERTO --> SEGUIMIENTO_ABIERTO : ver progreso paciente
+PACIENTE_ABIERTO --> ACTIVIDAD_ASIGNANDO : asignar actividad
+ACTIVIDAD_ASIGNANDO --> PACIENTE_ABIERTO : asignación confirmada / cancelada
+
+' ── ACTIVIDADES ──────────────────────────────────────────
+ACTIVIDADES_ABIERTAS --> ACTIVIDAD_CREANDO : crear actividad
+ACTIVIDAD_CREANDO --> ACTIVIDADES_ABIERTAS : guardar / cancelar
+
+ACTIVIDADES_ABIERTAS --> ACTIVIDAD_ABIERTA : ver actividad
+ACTIVIDAD_ABIERTA --> ACTIVIDADES_ABIERTAS : volver
+
+ACTIVIDAD_ABIERTA --> ACTIVIDAD_EDITANDO : editar actividad
+ACTIVIDAD_EDITANDO --> ACTIVIDAD_ABIERTA : guardar / cancelar
+
+ACTIVIDAD_ABIERTA --> ACTIVIDADES_ABIERTAS : publicar actividad
+ACTIVIDAD_ABIERTA --> ACTIVIDADES_ABIERTAS : archivar actividad
+
+ACTIVIDAD_ABIERTA --> ACTIVIDAD_RECOMENDANDO : recomendar actividad
+ACTIVIDAD_RECOMENDANDO --> ACTIVIDAD_ABIERTA : recomendación guardada / cancelada
+
+' ── SEGUIMIENTO ──────────────────────────────────────────
+SEGUIMIENTO_ABIERTO --> SESION_REGISTRANDO : registrar sesión
+SESION_REGISTRANDO --> SEGUIMIENTO_ABIERTO : sesión guardada / cancelada
+
+SEGUIMIENTO_ABIERTO --> PACIENTE_ABIERTO : volver a paciente
+
+' ── REGISTROS ────────────────────────────────────────────
+REGISTROS_ABIERTOS --> REGISTRO_CREANDO : crear registro
+REGISTRO_CREANDO --> REGISTROS_ABIERTOS : guardar / cancelar
+
+REGISTROS_ABIERTOS --> REGISTRO_EDITANDO : editar registro
+REGISTRO_EDITANDO --> REGISTROS_ABIERTOS : guardar / cancelar
+
+REGISTROS_ABIERTOS --> REGISTROS_ABIERTOS : eliminar registro
+
+@enduml

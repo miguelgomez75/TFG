@@ -1,0 +1,27 @@
+@startuml
+
+[*] --> HOME
+HOME --> [*] : Logout
+
+HOME --> PACIENTES_ABIERTO : ver pacientes
+HOME --> PROGRESO_ABIERTO : ver progreso paciente
+HOME --> REGISTROS_ABIERTOS : ver registros
+HOME --> ACTIVIDADES_ABIERTAS : ver actividades recomendadas
+
+PACIENTES_ABIERTO --> HOME : volver
+PROGRESO_ABIERTO --> HOME : volver
+REGISTROS_ABIERTOS --> HOME : volver
+
+ACTIVIDADES_ABIERTAS --> HOME : volver
+ACTIVIDADES_ABIERTAS --> ACTIVIDAD_ABIERTA : seleccionar actividad
+
+ACTIVIDAD_ABIERTA --> ACTIVIDADES_ABIERTAS : volver
+ACTIVIDAD_ABIERTA --> ACTIVIDAD_EN_CURSO : realizar actividad
+
+ACTIVIDAD_EN_CURSO --> ACTIVIDAD_EN_CURSO : usuario responde (acierto / error)
+ACTIVIDAD_EN_CURSO --> ACTIVIDAD_EN_CURSO : usuario pausa / retoma
+ACTIVIDAD_EN_CURSO --> RESULTADO_ACTIVIDAD : completar actividad
+
+RESULTADO_ACTIVIDAD --> HOME : finalizar / ver resultados
+
+@enduml

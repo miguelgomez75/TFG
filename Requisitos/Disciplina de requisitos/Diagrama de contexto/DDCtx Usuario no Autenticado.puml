@@ -1,0 +1,6 @@
+@startuml
+
+[*] --> [*] : Login
+[*] --> [*] : Signin
+
+@enduml

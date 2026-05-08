@@ -1,0 +1,35 @@
+@startuml
+
+left to right direction
+
+actor Familia
+
+rectangle Sistema_CAA {
+
+  ' ── AUTENTICACIÓN ─────────────────────────────────────────
+  package "Autenticación" {
+    Familia -- (Logout)
+  }
+
+  ' ── SEGUIMIENTO ───────────────────────────────────────────
+  package "Seguimiento" {
+    Familia -- (Ver progreso paciente)
+    Familia -- (Consultar sesiones)
+  }
+
+  ' ── COMUNICACIÓN ──────────────────────────────────────────
+  package "Comunicación" {
+    Familia -- (Ver registros)
+  }
+
+  ' ── ACTIVIDADES ───────────────────────────────────────────
+  package "Actividades" {
+    Familia -- (Ver actividades recomendadas)
+    Familia -- (Realizar actividad)
+    Familia -- (Ver resultados)
+  }
+
+}
+
+@enduml
+

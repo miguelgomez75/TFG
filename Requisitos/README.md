@@ -84,9 +84,9 @@ Los casos de uso están agrupados por actor y por paquete funcional.
 
 ### 👩‍⚕️ Logopeda
 
-| Diagrama | Código |
-|----------|--------|
-| ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v3/DDCdU%20Logopeda.svg) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v3/DDCdU%20Logopeda.puml) |
+| Diagrama 1 | Diagrama 2 | Código |
+|------------|------------|--------|
+| ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4/DDCdU%20Logopeda%201.svg) | ![cuL2](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4/DDCdU%20Logopeda%202.svg) |[PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4/) |
 
 ### 👨‍👩‍👧 Familia
 

@@ -1,0 +1,30 @@
+@startuml
+
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+    ' ── GESTIÓN DE PACIENTES ──────────────────────────────────
+  package "Gestión de pacientes" {
+    Logopeda -- (Crear paciente)
+    Logopeda -- (Editar paciente)
+    Logopeda -- (Consultar paciente)
+    Logopeda -- (Ver progreso paciente)
+  }
+  
+    ' ── GESTIÓN DE ACTIVIDADES ────────────────────────────────
+  package "Gestión de actividades" {
+    Logopeda -- (Crear actividad)
+    Logopeda -- (Editar actividad)
+    Logopeda -- (Ver actividad)
+    Logopeda -- (Publicar actividad)
+    Logopeda -- (Archivar actividad)
+    Logopeda -- (Asignar actividad)
+    Logopeda -- (Recomendar actividad)
+  }
+
+}
+
+@enduml

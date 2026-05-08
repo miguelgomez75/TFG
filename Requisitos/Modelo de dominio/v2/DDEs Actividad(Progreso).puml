@@ -1,0 +1,12 @@
+@startuml
+
+[*] --> Pendiente : actividad asignada
+
+Pendiente --> EnProgreso : usuario inicia actividad
+EnProgreso --> Completada : cumple criterio de éxito
+EnProgreso --> Pendiente : usuario abandona
+
+' El logopeda puede resetear la actividad para refuerzo
+Completada --> Pendiente : logopeda reasigna para refuerzo
+
+@enduml

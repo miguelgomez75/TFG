@@ -1,0 +1,48 @@
+@startuml
+
+class Usuario
+class Paciente
+class Actividad
+class Categoria
+class TipoActividad
+class Pictograma
+class Sesion
+class Registro
+class AsignacionActividad
+
+' Un usuario atiende o cuida a pacientes
+Usuario --> Paciente : atiende / cuida
+
+' Un usuario crea registros clínicos
+Usuario --> Registro : crea
+
+' El paciente tiene un historial de sesiones
+' (la sesión no existe sin el paciente)
+Paciente *-- Sesion : tiene historial de
+
+' El paciente acumula registros clínicos
+Paciente o-- Registro : tiene
+
+' El paciente tiene asignaciones de actividades
+' (la asignación no existe sin el paciente)
+Paciente *-- AsignacionActividad : tiene
+
+' Una sesión practica una actividad
+Sesion --> Actividad : practica
+
+' Una asignación referencia una actividad
+AsignacionActividad --> Actividad : referencia
+
+' Un registro puede mencionar una actividad
+Registro ..> Actividad : menciona (opcional)
+
+' Una actividad pertenece a una categoría
+Actividad --> Categoria : pertenece a
+
+' Una actividad tiene un tipo
+Actividad --> TipoActividad : tiene
+
+' Un pictograma se clasifica en una categoría
+Pictograma --> Categoria : clasificado en
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+
+' La sesión arranca cuando el usuario pulsa "Iniciar" en la pantalla DETALLE_ACTIVIDAD
+[*] --> EnCurso : usuario pulsa Iniciar
+
+EnCurso --> EnCurso : usuario responde (acierto / error)
+
+EnCurso --> Pausada : usuario interrumpe
+
+Pausada --> EnCurso : usuario retoma
+Pausada --> Abandonada : tiempo de espera agotado (timeout)
+
+EnCurso --> Finalizada : actividad completada
+
+Finalizada --> [*] : resultados guardados
+Abandonada --> [*] : resultados parciales guardados
+
+@enduml

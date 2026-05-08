@@ -1,0 +1,19 @@
+@startuml
+
+left to right direction
+
+actor UsuarioNoAutenticado as UNA
+actor Logopeda
+actor Familia
+
+' Herencia: Logopeda y Familia son especializaciones de UsuarioNoAutenticado
+' (heredan la capacidad de autenticarse)
+UNA <|-- Logopeda
+UNA <|-- Familia
+
+note bottom of UNA
+  Cualquier visitante antes
+  de identificarse en el sistema
+end note
+
+@enduml

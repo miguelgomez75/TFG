@@ -1,0 +1,76 @@
+@startuml
+
+left to right direction
+skinparam linetype polyline
+
+state "SESION_CERRADA"          as NoAuth
+state "DASHBOARD"               as Dashboard
+
+state "PACIENTES_ABIERTO"       as ListPacientes
+state "PACIENTE_ABIERTO"        as EditPaciente
+
+state "ACTIVIDADES_ABIERTAS"    as ListActividades
+state "ACTIVIDAD_ABIERTA"       as EditActividad
+
+state "SESIONES_ABIERTAS"       as ListSesiones
+state "SESION_ABIERTA"          as EditSesion
+
+state "REGISTROS_ABIERTOS"      as ListRegistros
+state "REGISTRO_ABIERTO"        as EditRegistro
+
+state "PROGRESO_ABIERTO"        as Progreso
+
+[*] --> NoAuth
+
+NoAuth --> Dashboard : iniciarSesion()
+
+Dashboard --> NoAuth           : cerrarSesion()
+Dashboard --> ListPacientes    : abrirPacientes()
+Dashboard --> ListActividades  : abrirActividades()
+Dashboard --> ListSesiones     : abrirSesiones()
+Dashboard --> ListRegistros    : abrirRegistros()
+
+' ── PACIENTES ────────────────────────────────────────────────
+ListPacientes --> EditPaciente    : crearPaciente()
+ListPacientes --> EditPaciente    : editarPaciente()
+ListPacientes --> ListPacientes   : eliminarPaciente()
+ListPacientes --> Dashboard       : completarGestion()
+
+EditPaciente --> EditPaciente     : editarPaciente()
+EditPaciente --> Progreso         : verProgreso()
+EditPaciente --> ListPacientes    : abrirPacientes()
+
+Progreso --> EditPaciente         : abrirPaciente()
+
+' ── ACTIVIDADES ──────────────────────────────────────────────
+ListActividades --> EditActividad   : crearActividad()
+ListActividades --> EditActividad   : editarActividad()
+ListActividades --> ListActividades : eliminarActividad()
+ListActividades --> Dashboard       : completarGestion()
+
+EditActividad --> EditActividad     : editarActividad()
+EditActividad --> ListActividades   : publicarActividad()
+EditActividad --> ListActividades   : archivarActividad()
+EditActividad --> EditActividad     : asignarActividad()
+EditActividad --> EditActividad     : recomendarActividad()
+EditActividad --> ListActividades   : abrirActividades()
+
+' ── SESIONES ─────────────────────────────────────────────────
+ListSesiones --> EditSesion       : registrarSesion()
+ListSesiones --> EditSesion       : editarSesion()
+ListSesiones --> ListSesiones     : eliminarSesion()
+ListSesiones --> Dashboard        : completarGestion()
+
+EditSesion --> EditSesion         : editarSesion()
+EditSesion --> ListSesiones       : abrirSesiones()
+
+' ── REGISTROS CLÍNICOS ───────────────────────────────────────
+ListRegistros --> EditRegistro    : crearRegistro()
+ListRegistros --> EditRegistro    : editarRegistro()
+ListRegistros --> ListRegistros   : eliminarRegistro()
+ListRegistros --> Dashboard       : completarGestion()
+
+EditRegistro --> EditRegistro     : editarRegistro()
+EditRegistro --> ListRegistros    : abrirRegistros()
+
+@enduml

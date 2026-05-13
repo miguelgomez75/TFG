@@ -1,0 +1,13 @@
+@startuml
+
+note "Una AsignacionActividad rastrea el progreso\nde una Actividad concreta asignada a un Paciente,\nindependientemente de en qué Sesiones se haya practicado." as N1
+
+[*] --> Pendiente : actividad asignada al paciente
+
+Pendiente --> EnProgreso : paciente inicia la actividad en una sesión
+EnProgreso --> Completada : paciente cumple criterio de éxito
+EnProgreso --> Pendiente : paciente abandona la sesión
+
+Completada --> Pendiente : logopeda reasigna para refuerzo
+
+@enduml

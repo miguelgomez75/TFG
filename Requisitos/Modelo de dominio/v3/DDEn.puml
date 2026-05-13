@@ -1,0 +1,62 @@
+@startuml
+
+class Usuario
+class Paciente
+class Actividad
+class Categoria
+class TipoActividad
+class Pictograma
+class Sesion
+class RegistroClinico
+class AsignacionActividad
+
+' Un usuario atiende o cuida a pacientes
+Usuario --> Paciente : atiende / cuida
+
+' Un usuario crea registros clínicos
+Usuario --> RegistroClinico : crea
+
+' El paciente tiene un historial de sesiones
+' (la sesión no existe sin el paciente)
+Paciente *-- Sesion : tiene historial de
+
+' El paciente acumula registros clínicos
+Paciente o-- RegistroClinico : tiene
+
+' El paciente tiene asignaciones de actividades
+' (la asignación no existe sin el paciente)
+Paciente *-- AsignacionActividad : tiene
+
+' Una sesión practica una actividad
+Sesion --> Actividad : practica
+
+' Una asignación referencia una actividad
+AsignacionActividad --> Actividad : referencia
+
+' Un registro puede mencionar una actividad
+RegistroClinico ..> Actividad : menciona (opcional)
+
+' Una actividad pertenece a una categoría
+Actividad --> Categoria : pertenece a
+
+' Una actividad tiene un tipo
+Actividad --> TipoActividad : tiene
+
+' Un pictograma se clasifica en una categoría
+Pictograma --> Categoria : clasificado en
+
+note bottom of Sesion
+  Evento presencial o en casa
+  en el que el logopeda trabaja
+  con el paciente. Puede agrupar
+  varias actividades practicadas.
+end note
+
+note bottom of RegistroClinico
+  Ficha clínica del paciente:
+  notas de seguimiento, recordatorios
+  y recomendaciones de actividades
+  creadas por el logopeda.
+end note
+
+@enduml

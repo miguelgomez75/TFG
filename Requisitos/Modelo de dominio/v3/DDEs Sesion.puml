@@ -1,0 +1,19 @@
+@startuml
+
+note "Una Sesion representa un evento clínico o en casa\nen el que el logopeda o la familia trabajan\nuna o varias Actividades con el paciente." as N1
+
+[*] --> EnCurso : logopeda / familia inicia sesión
+
+EnCurso --> EnCurso : se practica una actividad
+
+EnCurso --> Pausada : usuario interrumpe
+
+Pausada --> EnCurso : usuario retoma
+Pausada --> Abandonada : tiempo de espera agotado (timeout)
+
+EnCurso --> Finalizada : sesión completada
+
+Finalizada --> [*] : resultados guardados
+Abandonada --> [*] : resultados parciales guardados
+
+@enduml

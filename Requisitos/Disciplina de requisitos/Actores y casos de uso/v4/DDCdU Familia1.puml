@@ -1,0 +1,20 @@
+@startuml
+
+left to right direction
+
+actor Familia
+
+rectangle Sistema_CAA {
+
+  package "Autenticación" {
+    Familia -- (Logout)
+  }
+
+  package "Seguimiento" {
+    Familia -- (Ver progreso paciente)
+    Familia -- (Consultar sesiones)
+  }
+
+}
+
+@enduml

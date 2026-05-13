@@ -1,0 +1,21 @@
+@startuml
+
+left to right direction
+
+actor Familia
+
+rectangle Sistema_CAA {
+
+  package "Registros clínicos" {
+    Familia -- (Consultar registros clínicos)
+  }
+
+  package "Actividades" {
+    Familia -- (Ver actividades recomendadas)
+    Familia -- (Realizar actividad)
+    Familia -- (Ver resultados)
+  }
+
+}
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+
+left to right direction
+
+actor Logopeda
+
+rectangle Sistema_CAA {
+
+  package "Autenticación" {
+    Logopeda -- (Logout)
+  }
+
+  package "Seguimiento terapéutico" {
+    Logopeda -- (Registrar sesión)
+    Logopeda -- (Editar sesión)
+    Logopeda -- (Eliminar sesión)
+    Logopeda -- (Consultar sesiones)
+  }
+
+  package "Registros clínicos" {
+    Logopeda -- (Crear registro clínico)
+    Logopeda -- (Editar registro clínico)
+    Logopeda -- (Eliminar registro clínico)
+    Logopeda -- (Consultar registros clínicos)
+  }
+
+}
+
+@enduml

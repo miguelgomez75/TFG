@@ -1,0 +1,23 @@
+@startuml
+
+title registrarSesion()
+
+(*) --> "**Logopeda** solicita registrar sesión"
+
+--> "**Sistema** presenta lista de pacientes\n• Nombre de cada paciente"
+
+--> "**Logopeda** solicita seleccionar un paciente"
+
+--> "**Sistema** presenta formulario de sesión\n• Permite introducir fecha\n• Permite introducir tipo (PRESENCIAL / CASA)\n• Permite introducir observaciones\n• Permite introducir aciertos y errores\n• Permite solicitar guardar\n• Permite solicitar cancelar"
+
+--> "**Logopeda** introduce los datos y solicita guardar"
+
+if "" then
+  --> [datos completos] "**Sistema** registra la sesión\n• Sesión queda almacenada en el historial del paciente"
+  --> (*)
+else
+  --> [datos incompletos] "**Sistema** presenta errores de validación\n• Indica los campos obligatorios pendientes"
+  --> (*)
+endif
+
+@enduml

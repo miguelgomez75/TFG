@@ -1,0 +1,17 @@
+@startuml
+
+title verProgresoPaciente()
+
+(*) --> "**Logopeda / Familia** solicita ver progreso del paciente"
+
+--> "**Sistema** carga los datos del paciente\n• Sesiones registradas\n• Actividades asignadas y su estado"
+
+if "" then
+  --> [hay datos] "**Sistema** presenta métricas de progreso\n• Total de sesiones\n• Porcentaje medio de aciertos\n• Evolución temporal (gráfica)"
+  --> (*)
+else
+  --> [sin datos] "**Sistema** presenta mensaje informativo\n• No hay sesiones ni actividades registradas aún"
+  --> (*)
+endif
+
+@enduml

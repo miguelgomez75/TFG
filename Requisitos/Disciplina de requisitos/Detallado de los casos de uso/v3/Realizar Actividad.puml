@@ -1,0 +1,24 @@
+@startuml
+
+title realizarActividad()
+
+(*) --> "**Familia** solicita realizar actividad"
+
+--> "**Sistema** presenta detalle de la actividad\n• Título y descripción\n• Permite solicitar iniciar\n• Permite solicitar cancelar"
+
+--> "**Familia** solicita iniciar la actividad"
+
+--> "**Sistema** presenta el primer ejercicio\n• Pictograma o contenido del ejercicio\n• Permite solicitar respuesta"
+
+--> "**Familia** introduce respuesta al ejercicio"
+
+if "" then
+  --> [quedan ejercicios] "**Sistema** registra la respuesta\n• Actualiza aciertos / errores\n• Presenta el siguiente ejercicio"
+  --> "**Familia** introduce respuesta al ejercicio"
+else
+  --> [último ejercicio] "**Sistema** finaliza la actividad\n• Registra sesión como Finalizada\n• Actualiza progreso de la AsignacionActividad"
+  --> "**Sistema** presenta resultados\n• Porcentaje de aciertos\n• Resumen de la sesión"
+  --> (*)
+endif
+
+@enduml

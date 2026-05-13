@@ -1,0 +1,23 @@
+@startuml
+
+title asignarActividad()
+
+(*) --> "**Logopeda** solicita asignar actividad"
+
+--> "**Sistema** presenta lista de pacientes\n• Nombre de cada paciente"
+
+--> "**Logopeda** solicita seleccionar un paciente"
+
+--> "**Sistema** presenta lista de actividades disponibles\n• Título y nivel de dificultad de cada actividad\n• Permite solicitar seleccionar actividad"
+
+--> "**Logopeda** solicita seleccionar una actividad"
+
+if "" then
+  --> [actividad disponible] "**Sistema** registra la asignación\n• Crea AsignacionActividad en estado PENDIENTE"
+  --> (*)
+else
+  --> [actividad no disponible] "**Sistema** muestra aviso\n• La actividad no está disponible"
+  --> (*)
+endif
+
+@enduml

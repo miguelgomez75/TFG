@@ -1,0 +1,23 @@
+@startuml
+
+title recomendarActividad()
+
+(*) --> "**Logopeda** solicita recomendar actividad"
+
+--> "**Sistema** presenta lista de pacientes\n• Nombre de cada paciente"
+
+--> "**Logopeda** solicita seleccionar un paciente"
+
+--> "**Sistema** presenta lista de actividades disponibles\n• Título y nivel de dificultad de cada actividad"
+
+--> "**Logopeda** solicita seleccionar una actividad"
+
+--> "**Sistema** presenta formulario de recomendación\n• Permite introducir instrucciones opcionales para la familia\n• Permite solicitar guardar\n• Permite solicitar cancelar"
+
+--> "**Logopeda** introduce instrucciones y solicita guardar"
+
+--> "**Sistema** registra la recomendación\n• Crea RegistroClinico de tipo RECOMENDACION\n• La actividad queda visible para la familia"
+
+--> (*)
+
+@enduml

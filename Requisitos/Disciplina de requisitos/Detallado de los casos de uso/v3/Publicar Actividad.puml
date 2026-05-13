@@ -1,0 +1,19 @@
+@startuml
+
+title publicarActividad()
+
+(*) --> "**Logopeda** solicita publicar actividad"
+
+--> "**Sistema** presenta detalle de la actividad\n• Título, descripción y contenido\n• Permite solicitar confirmar publicación\n• Permite solicitar cancelar"
+
+--> "**Logopeda** solicita confirmar publicación"
+
+if "" then
+  --> [contenido completo] "**Sistema** cambia estado de la actividad\n• Estado pasa a DISPONIBLE"
+  --> (*)
+else
+  --> [contenido incompleto] "**Sistema** presenta errores de validación\n• Indica los campos obligatorios pendientes"
+  --> (*)
+endif
+
+@enduml

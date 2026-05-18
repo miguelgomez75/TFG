@@ -1,0 +1,24 @@
+@startuml Proto_Lista_Actividades
+salt
+{+
+  {
+    ← Dashboard  |  <b>Actividades</b>  |  [+ Nueva actividad]
+  }
+  ====
+  {
+    "🔍 Buscar...          "
+    Estado:
+    (X) Todos  () Borrador  () Disponible  () Archivada
+  }
+  ----
+  {#
+    Título                | Estado      | Categoría    | Dificultad
+    Animales del campo    | Disponible  | Vocabulario  | ★★☆
+    Colores y formas      | Disponible  | Conceptos    | ★☆☆
+    Emociones básicas     | Borrador    | Emociones    | ★★☆
+    Las estaciones        | Archivada   | Vocabulario  | ★★★
+  }
+  ----
+  [◀ Anterior] | Página 1 de 3 | [Siguiente ▶]
+}
+@enduml

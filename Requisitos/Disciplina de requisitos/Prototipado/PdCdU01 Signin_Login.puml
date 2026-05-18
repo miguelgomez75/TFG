@@ -1,0 +1,308 @@
+@startuml Proto_Login
+salt
+{
+  Sistema CAA
+  ----
+  {
+    Correo electrónico
+    "usuario@ejemplo.com    "
+    Contraseña
+    "**********             "
+  }
+  [  Iniciar sesión  ]
+  ----
+  "¿No tienes cuenta? Regístrate"
+}
+@enduml
+
+@startuml Proto_Dashboard_Logopeda
+salt
+{+
+  {/ <b>Logopeda</b> | Dra. López }
+  ====
+  {
+    {
+      [👥 Pacientes          ]
+      [🧩 Actividades        ]
+    }
+    {
+      [📋 Sesiones           ]
+      [📝 Registros          ]
+    }
+  }
+  ====
+  <b>Resumen reciente</b>
+  {#
+    Paciente        | Última sesión   | Progreso
+    Ana García      | 15/05/2026      | 80 %
+    Tomás Ruiz      | 12/05/2026      | 45 %
+    Laura Vega      | 08/05/2026      | 92 %
+  }
+  ----
+  [  Cerrar sesión  ]
+}
+@enduml
+
+@startuml Proto_Lista_Pacientes
+salt
+{+
+  {
+    ← Volver al dashboard  |  <b>Pacientes</b>  |  [+ Nuevo paciente]
+  }
+  ====
+  "🔍 Buscar paciente...         "
+  ----
+  {#
+    Nombre             | Nivel   | Último acceso
+    Ana García         | 3       | 15/05/2026
+    Tomás Ruiz         | 1       | 12/05/2026
+    Laura Vega         | 4       | 08/05/2026
+    Marco Sanz         | 2       | 01/05/2026
+  }
+  ----
+  {
+    [◀ Anterior] | Página 1 de 2 | [Siguiente ▶]
+  }
+}
+@enduml
+
+@startuml Proto_Perfil_Paciente
+salt
+{+
+  {
+    ← Pacientes  |  <b>Ana García</b>  |  [Editar]
+  }
+  ====
+  {
+    {
+      Fecha de nacimiento: | 14/03/2018
+      Nivel actual:        | 3
+    }
+  }
+  ----
+  {
+    [📊 Ver progreso] | [🧩 Asignar actividad]
+  }
+  ====
+  <b>Actividades asignadas</b>
+  {#
+    Actividad           | Estado      | Última práctica
+    Animales del campo  | En progreso | 14/05/2026
+    Colores y formas    | Completada  | 10/05/2026
+    Emociones básicas   | Pendiente   | —
+  }
+  ====
+  <b>Sesiones recientes</b>
+  {#
+    Fecha       | Tipo        | Aciertos
+    15/05/2026  | Presencial  | 85 %
+    08/05/2026  | Casa        | 70 %
+  }
+}
+@enduml
+
+@startuml Proto_Lista_Actividades
+salt
+{+
+  {
+    ← Dashboard  |  <b>Actividades</b>  |  [+ Nueva actividad]
+  }
+  ====
+  {
+    "🔍 Buscar...          "
+    Estado:
+    (X) Todos  () Borrador  () Disponible  () Archivada
+  }
+  ----
+  {#
+    Título                | Estado      | Categoría    | Dificultad
+    Animales del campo    | Disponible  | Vocabulario  | ★★☆
+    Colores y formas      | Disponible  | Conceptos    | ★☆☆
+    Emociones básicas     | Borrador    | Emociones    | ★★☆
+    Las estaciones        | Archivada   | Vocabulario  | ★★★
+  }
+  ----
+  [◀ Anterior] | Página 1 de 3 | [Siguiente ▶]
+}
+@enduml
+
+@startuml Proto_Detalle_Actividad_Logopeda
+salt
+{+
+  {
+    ← Actividades  |  <b>Animales del campo</b>  |  Estado: Disponible
+  }
+  ====
+  {
+    {
+      Categoría:   | Vocabulario
+      Dificultad:  | ★★☆
+    }
+  }
+  Descripción:
+  "Identifica animales típicos del entorno rural   "
+  "mediante pictogramas.                           "
+  ====
+  <b>Acciones</b>
+  {
+    [✏ Editar] | [📌 Asignar] | [💬 Recomendar] | [🗃 Archivar]
+  }
+  ====
+  <b>Ejercicios (6)</b>
+  {#
+    # | Pictograma   | Respuesta correcta
+    1 | 🐄 Vaca      | «vaca»
+    2 | 🐓 Gallo     | «gallo»
+    3 | 🐑 Oveja     | «oveja»
+  }
+  "... y 3 más"
+}
+@enduml
+
+@startuml Proto_Realizar_Actividad
+salt
+{+
+  {
+    ← Salir  |  <b>Animales del campo</b>  |  Ejercicio 2 de 6
+  }
+  ====
+  {
+    Progreso: [====    ] 33 %
+  }
+  ====
+  <i>¿Qué animal es este?</i>
+  .
+  {
+    [ 🐄 ]
+  }
+  .
+  ====
+  Elige la respuesta:
+  {
+    [   vaca   ] | [  toro  ]
+    [  caballo ] | [  cerdo ]
+  }
+  ----
+  {
+    [⏸ Pausar]
+  }
+}
+@enduml
+
+@startuml Proto_Resultado_Actividad
+salt
+{+
+  <b>¡Actividad completada!</b>
+  ====
+  {
+    Actividad:         | Animales del campo
+    Duración:          | 8 minutos
+    Aciertos:          | 5 de 6  (83 %)
+    Progreso asignado: | ✅ Completada
+  }
+  ====
+  <b>Detalle por ejercicio</b>
+  {#
+    Ejercicio   | Respuesta  | Resultado
+    🐄 Vaca     | «vaca»     | ✅
+    🐓 Gallo    | «pollo»    | ❌
+    🐑 Oveja    | «oveja»    | ✅
+    🐷 Cerdo    | «cerdo»    | ✅
+    🐴 Caballo  | «caballo»  | ✅
+    🐐 Cabra    | «cabra»    | ✅
+  }
+  ====
+  {
+    [🏠 Volver al inicio] | [🔁 Repetir actividad]
+  }
+}
+@enduml
+
+@startuml Proto_Registrar_Sesion
+salt
+{+
+  {
+    ← Cancelar  |  <b>Registrar sesión</b>  |  [Guardar]
+  }
+  ====
+  Paciente *
+  ^Ana García            ^
+  ----
+  Fecha *
+  "15/05/2026            "
+  ----
+  Tipo de sesión *
+  (X) Presencial   () Casa
+  ----
+  Observaciones
+  {SI
+    "La paciente ha mejorado notablemente  "
+    "la identificación de animales.        "
+    "                                      "
+  }
+  ----
+  Aciertos  "5 " | de | Errores "1 "
+}
+@enduml
+
+@startuml Proto_Progreso_Paciente
+salt
+{+
+  {
+    ← Volver  |  <b>Progreso — Ana García</b>
+  }
+  ====
+  Período:  ^Últimos 30 días  ^
+  ====
+  {
+    Sesiones realizadas: | 8
+    Media de aciertos:   | 78 %
+    Actividades:         | 2 completadas / 1 en progreso
+  }
+  ====
+  <b>Evolución de aciertos</b>
+  {
+    100 %  |
+     75 %  | ▬▬▬▬▬▬▬▬
+     50 %  |     ▬▬▬▬▬▬▬▬▬▬▬▬
+     25 %  |
+      0 %  |________________________
+           | may-1  may-8  may-15
+  }
+  ====
+  <b>Actividades trabajadas</b>
+  {#
+    Actividad           | Progreso  | Últ. sesión
+    Animales del campo  | 83 %      | 15/05/2026
+    Colores y formas    | 100 %  ✅  | 10/05/2026
+    Emociones básicas   | —         | pendiente
+  }
+}
+@enduml
+
+@startuml Proto_Home_Familia
+salt
+{+
+  {/ <b>Familia García</b> | Hola, Marta }
+  ====
+  <b>Actividades recomendadas</b>
+  {#
+    Actividad           | Estado        | Instrucciones
+    Animales del campo  | En progreso   | «Hazla por la tarde»
+    Emociones básicas   | Pendiente     | «Sin prisa»
+  }
+  ----
+  {
+    [▶ Realizar actividad]
+  }
+  ====
+  <b>Progreso reciente</b>
+  {
+    Última sesión:    | 14/05/2026
+    Aciertos medios:  | 78 %
+  }
+  [📊 Ver progreso completo]
+  ====
+  [📋 Ver registros clínicos] | [🚪 Cerrar sesión]
+}
+@enduml

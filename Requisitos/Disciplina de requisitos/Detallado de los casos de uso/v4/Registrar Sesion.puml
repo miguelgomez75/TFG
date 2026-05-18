@@ -1,0 +1,49 @@
+@startuml CdU05_RegistrarSesion_v4
+
+title registrarSesion()
+
+|Logopeda|
+start
+
+:solicita registrar sesión
+desde SESIONES_ABIERTAS;
+
+|Sistema|
+:presenta lista de pacientes activos
+• Nombre de cada paciente;
+
+|Logopeda|
+:selecciona un paciente;
+
+|Sistema|
+:presenta formulario de sesión
+• Fecha (obligatorio)
+• Tipo: PRESENCIAL / CASA (obligatorio)
+• Observaciones (opcional)
+• Aciertos y errores (opcional)
+• «Guardar» o «Cancelar»;
+
+|Logopeda|
+if (acción) then (Guardar)
+  |Sistema|
+  if (datos obligatorios completos) then (sí)
+    :crea Sesion vinculada al paciente
+    • Tipo PRESENCIAL o CASA
+    • Queda en historial del paciente;
+    :retorna a SESIONES_ABIERTAS;
+    stop
+  else (no — campos obligatorios vacíos)
+    :muestra errores de validación
+    • Indica campos pendientes
+    • No guarda ninguna Sesion;
+    :permanece en formulario;
+    stop
+  endif
+else (Cancelar)
+  :descarta la operación
+  • No se crea ninguna Sesion;
+  :retorna a SESIONES_ABIERTAS;
+  stop
+endif
+
+@enduml

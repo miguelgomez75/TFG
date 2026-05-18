@@ -1,0 +1,41 @@
+@startuml CdU01_AsignarActividad_v4
+
+title asignarActividad()
+
+|Logopeda|
+start
+
+:solicita asignar actividad
+desde PACIENTE_ABIERTO o ACTIVIDAD_ABIERTA;
+
+|Sistema|
+:presenta lista de pacientes activos
+• Nombre de cada paciente;
+
+|Logopeda|
+:introduce selección de paciente;
+
+|Sistema|
+:presenta lista de actividades DISPONIBLES
+• Título y nivel de dificultad;
+
+|Logopeda|
+if (presenta selección de actividad) then (disponible)
+  :introduce confirmación de la asignación;
+  |Sistema|
+  :permite crear AsignacionActividad en estado PENDIENTE
+  • Vincula paciente ↔ actividad
+  • Notifica a la familia;
+  |Sistema|
+  :retorna a PACIENTE_ABIERTO / ACTIVIDAD_ABIERTA;
+  stop
+else (cancela)
+  |Sistema|
+  :descarta la operación
+  • No se crea ninguna Asignación de Actividad;
+  |Sistema|
+  :retorna al estado anterior;
+  stop
+endif
+
+@enduml

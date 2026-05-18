@@ -1,0 +1,35 @@
+@startuml CdU06_VerProgresoPaciente_v4
+
+title verProgresoPaciente()
+
+|Logopeda / Familia|
+start
+
+:accede a PROGRESO_ABIERTO del paciente
+(desde PACIENTE_ABIERTO o HOME);
+
+|Sistema|
+:muestra datos del paciente
+• Sesiones registradas
+• Actividades asignadas y su estado;
+
+if (¿hay datos disponibles?) then (sí)
+  :presenta métricas de progreso
+  • Total de sesiones
+  • Porcentaje medio de aciertos
+  • Evolución temporal (gráfica);
+else (no)
+  :presenta mensaje informativo
+  • «No hay sesiones ni actividades registradas aún»;
+endif
+
+|Logopeda / Familia|
+:cierra la vista;
+
+|Sistema|
+:retorna al estado anterior
+(PACIENTE_ABIERTO o HOME);
+
+stop
+
+@enduml

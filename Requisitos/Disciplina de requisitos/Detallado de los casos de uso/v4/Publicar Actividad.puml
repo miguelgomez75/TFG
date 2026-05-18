@@ -1,0 +1,38 @@
+@startuml
+
+title publicarActividad()
+
+|Logopeda|
+start
+
+:solicita publicar actividad
+desde ACTIVIDAD_ABIERTA (estado BORRADOR);
+
+|Sistema|
+:presenta detalle de la actividad ya introducido
+• Título, descripción y contenido
+• «Publicar» o «Cancelar»;
+
+|Logopeda|
+if (respuesta es) then (Publicar)
+  |Sistema|
+  if (contenido completo) then (sí)
+    :cambia estado → DISPONIBLE
+    • Actividad visible para asignación;
+    :retorna a ACTIVIDADES_ABIERTAS;
+    stop
+  else (no — campos obligatorios vacíos)
+    :muestra errores de validación
+    • Indica campos pendientes
+    • Estado permanece BORRADOR;
+    :permanece en ACTIVIDAD_ABIERTA;
+    stop
+  endif
+else (Cancelar)
+  :descarta la operación
+  • Estado no cambia (sigue BORRADOR);
+  :retorna a ACTIVIDAD_ABIERTA;
+  stop
+endif
+
+@enduml

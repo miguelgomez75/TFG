@@ -1,0 +1,46 @@
+@startuml CdU04_RecomendarActividad_v4
+
+title recomendarActividad()
+
+|Logopeda|
+start
+
+:solicita recomendar actividad
+desde ACTIVIDAD_ABIERTA (estado DISPONIBLE);
+
+|Sistema|
+:presenta lista de pacientes activos
+• Nombre de cada paciente;
+
+|Logopeda|
+:selecciona un paciente;
+
+|Sistema|
+if (paciente con acceso activo) then (sí)
+  :presenta formulario de recomendación
+  • Campo de instrucciones opcionales para la familia
+  • «Guardar» o «Cancelar»;
+
+  |Logopeda|
+  if (acción) then (Guardar)
+    |Sistema|
+    :permite crear RegistroClinico de tipo RECOMENDACION
+    • Vinculado al paciente
+    • Actividad visible en sección «Recomendadas» de la familia;
+    :retorna a ACTIVIDAD_ABIERTA;
+    stop
+  else (Cancelar)
+    :descarta la operación
+    • No se crea ningún RegistroClinico;
+    :retorna a ACTIVIDAD_ABIERTA;
+    stop
+  endif
+
+else (no — paciente sin acceso activo)
+  :muestra aviso al logopeda
+  • El paciente no puede recibir recomendaciones;
+  :retorna a lista de pacientes;
+  stop
+endif
+
+@enduml

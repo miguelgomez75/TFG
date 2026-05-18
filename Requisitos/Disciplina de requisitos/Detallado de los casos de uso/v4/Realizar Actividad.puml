@@ -1,0 +1,55 @@
+@startuml CdU03_RealizarActividad_v4
+
+title realizarActividad()
+
+|Familia|
+start
+
+:accede a ACTIVIDAD_ABIERTA
+(AsignacionActividad PENDIENTE o EN_PROGRESO);
+
+|Sistema|
+:presenta detalle de la actividad
+• Título y descripción
+• «Iniciar» o «Volver»;
+
+|Familia|
+if (acción) then (Iniciar)
+  |Sistema|
+  :muestra comienzo de la actividad
+  • AsignacionActividad → EN_PROGRESO;
+  
+  :presenta primer ejercicio
+  • Pictograma / contenido del ejercicio;
+
+  repeat
+    |Familia|
+    :introduce respuesta al ejercicio;
+    |Sistema|
+    :registra respuesta
+    • Actualiza aciertos / errores;
+    if (¿quedan ejercicios?) then (sí)
+      :presenta siguiente ejercicio;
+    endif
+  repeat while (quedan ejercicios) is (sí)
+  ->no (último ejercicio respondido);
+
+  |Sistema|
+  :muestra final de la actividad
+  • Actualiza AsignacionActividad → COMPLETADA;
+  :presenta RESULTADO_ACTIVIDAD
+  • Porcentaje de aciertos
+  • Resumen de la sesión;
+
+  |Familia|
+  :finaliza y regresa a HOME;
+  stop
+
+else (Volver)
+  |Sistema|
+  :retorna a ACTIVIDADES_ABIERTAS
+  • No se realiza nada;
+  stop
+endif
+
+@enduml

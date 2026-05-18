@@ -8,8 +8,9 @@
   - [2.2. Casos de Uso](#22-casos-de-uso)
   - [2.3 Diagramas de Contexto](#23-diagramas-de-contexto)
   - [2.4. Casos de Uso Detallados](#24-casos-de-uso-detallados)
-  - [2.5. Glosario](#25-glosario)
-  - [2.6. Requisitos No Funcionales](#26-requisitos-no-funcionales)
+  - [2.5. Prototipado de Casos de Uso](#25-prototipado-de-casos-de-uso)
+  - [2.6. Glosario](#26-glosario)
+  - [2.7. Requisitos No Funcionales](#27-requisitos-no-funcionales)
 
 ---
 
@@ -117,20 +118,32 @@ Los diagramas de contexto modelan la navegación del sistema como una máquina d
 
 ## 2.4. Casos de Uso Detallados
 
-Cada caso de uso se describe con: actor principal, precondiciones, flujo principal, postcondiciones y flujos alternativos (con identificador FA-n).
+Cada caso de uso se describe basandose en su posición y como se llegó a ellos en el diagrama de contexto.
 
 | ID | Caso de uso | Diagrama | Código |
 |----|-------------|----------|--------|
-| CdU-01 | Asignar actividad | ![d1](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Asignar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Asignar%20Actividad.puml) |
-| CdU-02 | Publicar actividad | ![d5](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Publicar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Publicar%20Actividad.puml) |
-| CdU-03 | Realizar actividad | ![d2](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Realizar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Realizar%20Actividad.puml) |
-| CdU-04 | Recomendar actividad | ![d4](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Recomendar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Recomendar%20Actividad.puml) |
-| CdU-05 | Registrar sesión | ![d6](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Registrar%20Sesion.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Registrar%20Sesion.puml) |
-| CdU-06 | Ver progreso paciente | ![d3](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Ver%20Progreso%20Paciente.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v3/Ver%20Progreso%20Paciente.puml) |
+| CdU-01 | Asignar actividad | ![d1](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Asignar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Asignar%20Actividad.puml) |
+| CdU-02 | Publicar actividad | ![d2](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Publicar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Publicar%20Actividad.puml) |
+| CdU-03 | Realizar actividad | ![d3](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Realizar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Realizar%20Actividad.puml) |
+| CdU-04 | Recomendar actividad | ![d4](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Recomendar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Recomendar%20Actividad.puml) |
+| CdU-05 | Registrar sesión | ![d5](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Registrar%20Sesion.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Registrar%20Sesion.puml) |
+| CdU-06 | Ver progreso paciente | ![d6](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Ver%20Progreso%20Paciente.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Ver%20Progreso%20Paciente.puml) |
 
 ---
 
-## 2.5. Glosario
+## 2.5. Prototipado de Casos de Uso
+Una serie de prototipos hechos con la sintaxis salt de plantUML:
+
+| ID | Caso de uso | Diagrama | Código |
+|----|-------------|----------|--------|
+| CdU-01 | Sign in/Log in | ![d1](Disciplina%20de%20requisitos/Prototipado/PdCdU01%20Signin_Login.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU01%20Signin_Login.puml) |
+| CdU-02 | Abrir Pacientes (Logopeda) | ![d2](Disciplina%20de%20requisitos/Prototipado/PdCdU02%20LAbrirPacientes.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU02%20LAbrirPacientes.puml) |
+| CdU-03 | Abrir Paciente (Logopeda) | ![d3](Disciplina%20de%20requisitos/Prototipado/PdCdU03%20AbrirPaciente.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU03%20AbrirPaciente.puml) |
+| CdU-04 | Abrir Actividades (Logopeda) | ![d4](Disciplina%20de%20requisitos/Prototipado/PdCdU04%20AbrirActividades.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU04%20AbrirActividades.puml) |
+| CdU-05 | Realizar Actividad | ![d5](Disciplina%20de%20requisitos/Prototipado/PdCdU05%20RealizarActividad.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU05%20RealizarActividad.puml) |
+| CdU-06 | Ver progreso paciente | ![d6](Disciplina%20de%20requisitos/Prototipado/PdCdU06%20verProgreso.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU06%20verProgreso.puml) |
+
+## 2.6. Glosario
 
 | Término | Definición |
 |--------|------------|
@@ -149,30 +162,30 @@ Cada caso de uso se describe con: actor principal, precondiciones, flujo princip
 
 ---
 
-## 2.6. Requisitos No Funcionales
+## 2.7. Requisitos No Funcionales
 
 Los siguientes requisitos no funcionales han sido definidos por el cliente.
 
-### 2.6.1 Rendimiento
+### 2.7.1 Rendimiento
 
 El tiempo de respuesta del sistema deberá ser inferior a 2 segundos en condiciones de carga normal. El sistema deberá soportar múltiples usuarios concurrentes sin degradación perceptible.
 
-### 2.6.2 Seguridad
+### 2.7.2 Seguridad
 
 El control de acceso se realizará por roles: Logopeda y Familia tienen permisos distintos y mutuamente excluyentes. La obligatoriedad de autenticación queda recogida en los diagramas de contexto: ambos actores parten del estado `INICIO` y solo acceden al sistema tras ejecutar el caso de uso *Login*.
 
-### 2.6.3 Usabilidad
+### 2.7.3 Usabilidad
 
 La interfaz deberá ser comprensible para usuarios sin conocimientos técnicos, en particular para el actor Familia. El sistema deberá ser compatible con dispositivos móviles y tabletas.
 
-### 2.6.4 Mantenibilidad
+### 2.7.4 Mantenibilidad
 
 La arquitectura será modular, permitiendo añadir nuevos tipos de actividad sin modificar los módulos existentes. El código estará documentado.
 
-### 2.6.5 Disponibilidad
+### 2.7.5 Disponibilidad
 
 La disponibilidad mínima del sistema será del 99 %.
 
-### 2.6.6 Escalabilidad
+### 2.7.6 Escalabilidad
 
 El sistema estará preparado para crecer en número de usuarios y volumen de datos sin degradación del rendimiento.

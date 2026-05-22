@@ -1,0 +1,35 @@
+' ════════════════════════════════════════════════════════════
+' CdU-05  Registrar sesión
+' Desde: SESIONES_ABIERTAS
+' Hacia: SESIONES_ABIERTAS
+' ════════════════════════════════════════════════════════════
+
+@startuml CdU05-registrarSesion-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Sesiones Abiertas"   as SesionesAbiertasEntrada
+rectangle #CDEBA5 ":Sesiones Abiertas"   as SesionesAbiertasSalida
+
+package registrarSesion as "registrarSesion()" {
+    rectangle #629EF9 RegistrarSesionView
+    rectangle #b5bd68 SesionController
+    rectangle #b5bd68 PacienteController
+    rectangle #F2AC4E SesionRepository
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E Sesion
+    rectangle #F2AC4E Paciente
+}
+
+SesionesAbiertasEntrada --> RegistrarSesionView : registrarSesion()
+
+RegistrarSesionView --> PacienteController : listarPacientesActivos() : List<Paciente>
+PacienteController  --> PacienteRepository : findActivos() : List<Paciente>
+PacienteRepository  -- Paciente
+
+RegistrarSesionView --> SesionController   : validarDatos(sesion) : boolean
+RegistrarSesionView --> SesionController   : guardarSesion(pacienteId, fecha, tipo, observaciones, aciertos, errores) : void
+SesionController    --> SesionRepository   : save(sesion) : void
+SesionRepository    -- Sesion
+
+RegistrarSesionView ..> SesionesAbiertasSalida : abrirSesionesAbiertas()
+@enduml

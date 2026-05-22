@@ -1,0 +1,43 @@
+' ════════════════════════════════════════════════════════════
+' CdU-01  Asignar actividad
+' Desde: ACTIVIDAD_ABIERTA o PACIENTE_ABIERTO
+' Hacia: ACTIVIDAD_ABIERTA o PACIENTE_ABIERTO
+' ════════════════════════════════════════════════════════════
+
+@startuml CdU01-asignarActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividad Abierta"          as ActividadAbierta
+rectangle #CDEBA5 ":Paciente Abierto"           as PacienteAbierto
+rectangle #CDEBA5 ":Actividad Abierta"          as ActividadAbiertaSalida
+
+package asignarActividad as "asignarActividad()" {
+    rectangle #629EF9 AsignarActividadView
+    rectangle #b5bd68 AsignacionController
+    rectangle #b5bd68 PacienteController
+    rectangle #b5bd68 ActividadController
+    rectangle #F2AC4E AsignacionRepository
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E ActividadRepository
+    rectangle #F2AC4E AsignacionActividad
+    rectangle #F2AC4E Paciente
+    rectangle #F2AC4E Actividad
+}
+
+ActividadAbierta --> AsignarActividadView : asignarActividad()
+PacienteAbierto  --> AsignarActividadView : asignarActividad()
+
+AsignarActividadView --> PacienteController   : listarPacientesActivos() : List<Paciente>
+PacienteController   --> PacienteRepository   : findActivos() : List<Paciente>
+PacienteRepository   -- Paciente
+
+AsignarActividadView --> ActividadController  : listarDisponibles() : List<Actividad>
+ActividadController  --> ActividadRepository  : findDisponibles() : List<Actividad>
+ActividadRepository  -- Actividad
+
+AsignarActividadView --> AsignacionController : crearAsignacion(pacienteId, actividadId) : void
+AsignacionController --> AsignacionRepository : save(asignacion) : void
+AsignacionRepository -- AsignacionActividad
+
+AsignarActividadView ..> ActividadAbiertaSalida : abrirActividadAbierta()
+@enduml

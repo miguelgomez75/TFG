@@ -1,0 +1,37 @@
+' ════════════════════════════════════════════════════════════
+' CdU-04  Recomendar actividad
+' Desde: ACTIVIDAD_ABIERTA
+' Hacia: ACTIVIDAD_ABIERTA
+' ════════════════════════════════════════════════════════════
+
+@startuml CdU04-recomendarActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividad Abierta"   as ActividadAbiertaEntrada
+rectangle #CDEBA5 ":Actividad Abierta"   as ActividadAbiertaSalida
+
+package recomendarActividad as "recomendarActividad()" {
+    rectangle #629EF9 RecomendarActividadView
+    rectangle #b5bd68 RegistroClinicoController
+    rectangle #b5bd68 PacienteController
+    rectangle #F2AC4E RegistroClinicoRepository
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E RegistroClinico
+    rectangle #F2AC4E Paciente
+}
+
+ActividadAbiertaEntrada --> RecomendarActividadView : recomendarActividad(actividadId)
+
+RecomendarActividadView --> PacienteController          : listarPacientesActivos() : List<Paciente>
+PacienteController      --> PacienteRepository          : findActivos() : List<Paciente>
+PacienteRepository      -- Paciente
+
+RecomendarActividadView --> PacienteController          : verificarAccesoActivo(pacienteId) : boolean
+PacienteController      --> PacienteRepository          : findById(pacienteId) : Paciente
+
+RecomendarActividadView --> RegistroClinicoController   : crearRecomendacion(pacienteId, actividadId, instrucciones) : void
+RegistroClinicoController --> RegistroClinicoRepository : save(registro) : void
+RegistroClinicoRepository -- RegistroClinico
+
+RecomendarActividadView ..> ActividadAbiertaSalida : abrirActividadAbierta()
+@enduml

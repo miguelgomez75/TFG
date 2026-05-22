@@ -1,0 +1,43 @@
+' ════════════════════════════════════════════════════════════
+' CdU-03  Realizar actividad
+' Desde: ACTIVIDAD_ABIERTA (Familia)
+' Hacia: RESULTADO_ACTIVIDAD → HOME
+' ════════════════════════════════════════════════════════════
+
+@startuml CdU03-realizarActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividad Abierta"     as ActividadAbierta
+rectangle #CDEBA5 ":Resultado Actividad"   as ResultadoActividad
+
+package realizarActividad as "realizarActividad()" {
+    rectangle #629EF9 RealizarActividadView
+    rectangle #b5bd68 SesionController
+    rectangle #b5bd68 AsignacionController
+    rectangle #F2AC4E SesionRepository
+    rectangle #F2AC4E AsignacionRepository
+    rectangle #F2AC4E Sesion
+    rectangle #F2AC4E AsignacionActividad
+}
+
+ActividadAbierta --> RealizarActividadView : iniciarActividad(asignacionId)
+
+RealizarActividadView --> SesionController     : crearSesion(asignacionId) : Sesion
+SesionController      --> SesionRepository     : save(sesion) : void
+SesionRepository      -- Sesion
+
+RealizarActividadView --> AsignacionController : marcarEnProgreso(asignacionId) : void
+AsignacionController  --> AsignacionRepository : updateEstado(asignacionId, EN_PROGRESO) : void
+AsignacionRepository  -- AsignacionActividad
+
+RealizarActividadView --> SesionController     : registrarRespuesta(sesionId, ejercicioId, respuesta) : void
+SesionController      --> SesionRepository     : actualizarAciertos(sesionId) : void
+
+RealizarActividadView --> SesionController     : finalizarSesion(sesionId) : void
+SesionController      --> SesionRepository     : updateEstado(sesionId, FINALIZADA) : void
+
+RealizarActividadView --> AsignacionController : marcarCompletada(asignacionId) : void
+AsignacionController  --> AsignacionRepository : updateEstado(asignacionId, COMPLETADA) : void
+
+RealizarActividadView ..> ResultadoActividad   : mostrarResultado(sesionId)
+@enduml

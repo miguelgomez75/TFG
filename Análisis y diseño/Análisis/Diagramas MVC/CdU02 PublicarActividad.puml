@@ -1,0 +1,31 @@
+' ════════════════════════════════════════════════════════════
+' CdU-02  Publicar actividad
+' Desde: ACTIVIDAD_ABIERTA (estado BORRADOR)
+' Hacia: ACTIVIDADES_ABIERTAS
+' ════════════════════════════════════════════════════════════
+
+@startuml CdU02-publicarActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividad Abierta"     as ActividadAbierta
+rectangle #CDEBA5 ":Actividades Abiertas"  as ActividadesAbiertas
+
+package publicarActividad as "publicarActividad()" {
+    rectangle #629EF9 PublicarActividadView
+    rectangle #b5bd68 ActividadController
+    rectangle #F2AC4E ActividadRepository
+    rectangle #F2AC4E Actividad
+}
+
+ActividadAbierta --> PublicarActividadView : publicarActividad()
+
+PublicarActividadView --> ActividadController : cargarActividad(actividadId) : Actividad
+ActividadController   --> ActividadRepository : findById(actividadId) : Actividad
+ActividadRepository   -- Actividad
+
+PublicarActividadView --> ActividadController : validarCampos(actividad) : boolean
+PublicarActividadView --> ActividadController : publicar(actividadId) : void
+ActividadController   --> ActividadRepository : updateEstado(actividadId, DISPONIBLE) : void
+
+PublicarActividadView ..> ActividadesAbiertas : abrirActividadesAbiertas()
+@enduml

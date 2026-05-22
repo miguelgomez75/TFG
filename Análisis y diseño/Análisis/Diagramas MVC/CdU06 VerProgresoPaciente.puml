@@ -1,0 +1,39 @@
+' ════════════════════════════════════════════════════════════
+' CdU-06  Ver progreso paciente
+' Desde: PACIENTE_ABIERTO (Logopeda) o HOME (Familia)
+' Hacia: PACIENTE_ABIERTO o HOME
+' ════════════════════════════════════════════════════════════
+
+@startuml CdU06-verProgresoPaciente-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Paciente Abierto"   as PacienteAbierto
+rectangle #CDEBA5 ":Home"               as Home
+rectangle #CDEBA5 ":Paciente Abierto"   as PacienteAbiertoSalida
+
+package verProgresoPaciente as "verProgresoPaciente()" {
+    rectangle #629EF9 VerProgresoView
+    rectangle #b5bd68 ProgresoController
+    rectangle #b5bd68 SesionController
+    rectangle #b5bd68 AsignacionController
+    rectangle #F2AC4E SesionRepository
+    rectangle #F2AC4E AsignacionRepository
+    rectangle #F2AC4E Sesion
+    rectangle #F2AC4E AsignacionActividad
+}
+
+PacienteAbierto --> VerProgresoView : verProgreso(pacienteId)
+Home            --> VerProgresoView : verProgreso(pacienteId)
+
+VerProgresoView     --> SesionController     : getSesiones(pacienteId) : List<Sesion>
+SesionController    --> SesionRepository     : findByPaciente(pacienteId) : List<Sesion>
+SesionRepository    -- Sesion
+
+VerProgresoView     --> AsignacionController : getAsignaciones(pacienteId) : List<AsignacionActividad>
+AsignacionController --> AsignacionRepository : findByPaciente(pacienteId) : List<AsignacionActividad>
+AsignacionRepository -- AsignacionActividad
+
+VerProgresoView     --> ProgresoController   : calcularMetricas(sesiones, asignaciones) : Metricas
+
+VerProgresoView ..> PacienteAbiertoSalida : abrirPacienteAbierto()
+@enduml

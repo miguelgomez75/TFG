@@ -24,7 +24,7 @@ El desarrollo se ha llevado a cabo en colaboración con Laura, logopeda del caso
 |---------|----------|-----------|
 | [`Marco Teórico/`](doc/README%20Marco%20Teorico.md) | Cap. 1 | Estado del arte, solución propuesta, objetivos y stack tecnológico |
 | [`Requisitos/`](Requisitos/README.md) | Cap. 2 | Modelo de dominio, casos de uso, diagramas de estados y requisitos no funcionales |
-| [`Análisis y diseño/`](Análisis%20y%20diseño/README.md) | Cap. 3 | Análisis de requisitos, Diseño de la solución |
+| [`Análisis y diseño/`](Análisis%20y%20diseño/Análisis/README.md) | Cap. 3 | Análisis de requisitos, Diseño de la solución |
 
 ---
 

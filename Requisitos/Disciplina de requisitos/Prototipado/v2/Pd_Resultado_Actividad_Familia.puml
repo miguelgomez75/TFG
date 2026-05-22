@@ -1,0 +1,28 @@
+@startuml Pd_Resultado_Actividad
+salt
+{+
+  <b>¡Actividad completada!</b>
+  ====
+  {
+    Actividad:         | Animales del campo
+    Duración:          | 8 minutos
+    Aciertos:          | 5 de 6  (83 %)
+    Progreso asignado: | ✅ Completada
+  }
+  ====
+  <b>Detalle por ejercicio</b>
+  {#
+    Ejercicio   | Respuesta  | Resultado
+    🐄 Vaca     | «vaca»     | ✅
+    🐓 Gallo    | «pollo»    | ❌
+    🐑 Oveja    | «oveja»    | ✅
+    🐷 Cerdo    | «cerdo»    | ✅
+    🐴 Caballo  | «caballo»  | ✅
+    🐐 Cabra    | «cabra»    | ✅
+  }
+  ====
+  {
+    [🏠 Volver al inicio] | [🔁 Repetir actividad]
+  }
+}
+@enduml

@@ -1,0 +1,31 @@
+@startuml Pd_Actividad_Editar
+salt
+{+
+  {
+    ← Cancelar | <b>Editar actividad</b> | [Guardar]
+  }
+  ====
+  Título *
+  "Animales del campo            "
+  ----
+  Descripción
+  {SI
+    "Identifica animales típicos del "
+    "entorno rural mediante pictog.  "
+  }
+  ----
+  Categoría *
+  ^Vocabulario^
+  ----
+  Dificultad *
+  () ★☆☆ Fácil   (X) ★★☆ Media   () ★★★ Difícil
+  ----
+  <b>Ejercicios</b>
+  {#
+    # | Pictograma  | Respuesta correcta | Acciones
+    1 | 🐄 Vaca     | «vaca»             | [✏] [🗑]
+    2 | 🐓 Gallo    | «gallo»            | [✏] [🗑]
+  }
+  [+ Añadir ejercicio]
+}
+@enduml

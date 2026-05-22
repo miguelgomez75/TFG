@@ -1,0 +1,21 @@
+@startuml Pd_Actividad_En_Curso
+salt
+{+
+  {
+    ⏸ Pausar | <b>Animales del campo</b> | Ejercicio 2 de 6
+  }
+  ====
+  Progreso: [====    ] 33 %
+  ====
+  <i>¿Qué animal es este?</i>
+  .
+  [ 🐄 ]
+  .
+  ====
+  Elige la respuesta:
+  {
+    [   vaca   ] | [  toro  ]
+    [  caballo ] | [  cerdo ]
+  }
+}
+@enduml

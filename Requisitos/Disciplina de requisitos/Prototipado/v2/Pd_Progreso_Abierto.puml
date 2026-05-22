@@ -1,0 +1,34 @@
+@startuml Pd_Progreso_Abierto
+salt
+{+
+  {
+    ← Volver | <b>Progreso — Ana García</b>
+  }
+  ====
+  Período: ^Últimos 30 días^
+  ====
+  {
+    Sesiones realizadas: | 8
+    Media de aciertos:   | 78 %
+    Actividades:         | 2 completadas / 1 en progreso
+  }
+  ====
+  <b>Evolución de aciertos</b>
+  {
+    100 % |
+     75 % | ▬▬▬▬▬▬▬▬
+     50 % |     ▬▬▬▬▬▬▬▬▬▬▬▬
+     25 % |
+      0 % |________________________
+          | may-1   may-8   may-15
+  }
+  ====
+  <b>Actividades trabajadas</b>
+  {#
+    Actividad           | Progreso   | Últ. sesión
+    Animales del campo  | 83 %       | 15/05/2026
+    Colores y formas    | 100 % ✅   | 10/05/2026
+    Emociones básicas   | —          | pendiente
+  }
+}
+@enduml

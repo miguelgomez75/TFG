@@ -1,0 +1,22 @@
+@startuml Pd_Recomendar_Actividad
+salt
+{+
+  {
+    ← Cancelar | <b>Recomendar actividad</b> | [Guardar]
+  }
+  ====
+  Actividad: <b>Animales del campo</b>
+  ====
+  Paciente *
+  ^Ana García                    ^
+  ----
+  Instrucciones para la familia (opcionales)
+  {SI
+    "Hazla por las tardes, con calma.   "
+    "                                   "
+  }
+  ----
+  <i>La actividad aparecerá en la sección
+  «Actividades recomendadas» de la familia.</i>
+}
+@enduml

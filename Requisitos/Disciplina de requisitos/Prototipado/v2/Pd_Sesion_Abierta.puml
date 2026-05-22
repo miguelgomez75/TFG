@@ -1,0 +1,26 @@
+@startuml Pd_Sesion_Abierta
+salt
+{+
+  {
+    ← Cancelar | <b>Registrar sesión</b> | [Guardar]
+  }
+  ====
+  Paciente *
+  ^Ana García                    ^
+  ----
+  Fecha *
+  "15/05/2026                    "
+  ----
+  Tipo de sesión *
+  (X) Presencial   () Casa
+  ----
+  Observaciones
+  {SI
+    "La paciente ha mejorado la       "
+    "identificación de animales.      "
+    "                                 "
+  }
+  ----
+  Aciertos "5 " | de | Errores "1 "
+}
+@enduml

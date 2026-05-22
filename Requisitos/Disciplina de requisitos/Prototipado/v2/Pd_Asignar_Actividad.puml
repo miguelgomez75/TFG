@@ -1,0 +1,19 @@
+@startuml Pd_Asignar_Actividad
+salt
+{+
+  {
+    ← Cancelar | <b>Asignar actividad</b> | [Confirmar]
+  }
+  ====
+  Paciente *
+  ^Ana García                    ^
+  ----
+  Actividad *
+  ^Animales del campo            ^
+  ----
+  Dificultad de la actividad:  ★★☆
+  ----
+  <i>La actividad quedará en estado PENDIENTE
+  para la familia.</i>
+}
+@enduml

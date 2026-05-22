@@ -1,0 +1,30 @@
+@startuml Pd_Actividad_Abierta_Familia
+salt
+{+
+  {
+    ← Actividades | <b>Animales del campo</b>
+  }
+  ====
+  {
+    Categoría:  | Vocabulario
+    Dificultad: | ★★☆
+    Estado:     | En progreso
+  }
+  ----
+  Descripción:
+  "Identifica animales típicos del entorno rural"
+  ====
+  <b>Instrucciones del logopeda</b>
+  "Hazla por la tarde, con calma."
+  ====
+  <b>Tu progreso</b>
+  {
+    Intentos anteriores: | 1
+    Mejor resultado:     | 67 %
+  }
+  ----
+  {
+    [▶ Iniciar actividad] | [← Volver]
+  }
+}
+@enduml

@@ -98,7 +98,32 @@ Los casos de uso están agrupados por actor y por paquete funcional.
 
 ### Usuario no Autenticado
 ## 2.3. Diagramas de Contexto
+
+Los diagramas de contexto modelan la navegación del sistema como una máquina de estados. Los nombres de estado siguen la convención `ENTIDAD_ESTADO` (p. ej. `PACIENTES_ABIERTO`, `PACIENTE_ABIERTO`). Las transiciones corresponden a los casos de uso.
+
+| Actor | Diagrama | Código |
+|-------|----------|--------|
+| Logopeda | ![ctx1](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Logopeda.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Logopeda.puml) |
+| Familia | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Familia.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Familia.puml) |
+| Usuario no Autenticado | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.puml) |
+
+---
+
 ## 2.4. Casos de Uso Detallados
+
+Cada caso de uso se describe basandose en su posición y como se llegó a ellos en el diagrama de contexto.
+
+| ID | Caso de uso | Diagrama | Código |
+|----|-------------|----------|--------|
+| CdU-01 | Asignar actividad | ![d1](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Asignar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Asignar%20Actividad.puml) |
+| CdU-02 | Publicar actividad | ![d2](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Publicar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Publicar%20Actividad.puml) |
+| CdU-03 | Realizar actividad | ![d3](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Realizar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Realizar%20Actividad.puml) |
+| CdU-04 | Recomendar actividad | ![d4](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Recomendar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Recomendar%20Actividad.puml) |
+| CdU-05 | Registrar sesión | ![d5](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Registrar%20Sesion.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Registrar%20Sesion.puml) |
+| CdU-06 | Ver progreso paciente | ![d6](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Ver%20Progreso%20Paciente.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Ver%20Progreso%20Paciente.puml) |
+
+---
+
 ## 2.5. Prototipado de Casos de Uso
 Una serie de prototipos hechos con la sintaxis salt de plantUML:
 

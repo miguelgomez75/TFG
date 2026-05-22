@@ -1,0 +1,15 @@
+@startuml Pd_Registros_Abiertos_Familia
+salt
+{+
+  {
+    ← Inicio | <b>Registros clínicos</b>
+  }
+  ====
+  {#
+    Tipo          | Fecha       | Título
+    Recomendación | 14/05/2026  | Refuerzo animales del campo
+    Nota          | 12/05/2026  | Buena sesión presencial
+    Recordatorio  | 20/05/2026  | Revisar progreso emociones
+  }
+}
+@enduml

@@ -1,0 +1,21 @@
+@startuml Pd_Sesiones_Abiertas
+salt
+{+
+  {
+    ← Dashboard | <b>Sesiones</b> | [+ Registrar sesión]
+  }
+  ====
+  "🔍 Buscar por paciente...     "
+  ----
+  {#
+    Paciente       | Fecha       | Tipo        | Aciertos | Acciones
+    Ana García     | 15/05/2026  | Presencial  | 85 %     | [Ver] [✏] [🗑]
+    Ana García     | 08/05/2026  | Casa        | 70 %     | [Ver] [✏] [🗑]
+    Tomás Ruiz     | 10/05/2026  | Presencial  | 60 %     | [Ver] [✏] [🗑]
+  }
+  ----
+  {
+    [◀ Anterior] | Página 1 de 2 | [Siguiente ▶]
+  }
+}
+@enduml

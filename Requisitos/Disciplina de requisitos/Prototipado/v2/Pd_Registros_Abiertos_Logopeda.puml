@@ -1,0 +1,21 @@
+@startuml Pd_Registros_Abiertos_Logopeda
+salt
+{+
+  {
+    ← Dashboard | <b>Registros clínicos</b> | [+ Nuevo registro]
+  }
+  ====
+  "🔍 Buscar por paciente...     "
+  ----
+  {#
+    Paciente      | Tipo             | Fecha       | Acciones
+    Ana García    | Recomendación    | 14/05/2026  | [Ver] [✏] [🗑]
+    Tomás Ruiz    | Nota             | 12/05/2026  | [Ver] [✏] [🗑]
+    Laura Vega    | Recordatorio     | 10/05/2026  | [Ver] [✏] [🗑]
+  }
+  ----
+  {
+    [◀ Anterior] | Página 1 de 2 | [Siguiente ▶]
+  }
+}
+@enduml

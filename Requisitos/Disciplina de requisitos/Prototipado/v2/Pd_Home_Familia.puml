@@ -1,0 +1,24 @@
+@startuml Pd_Home_Familia
+salt
+{+
+  {/ <b>Familia García</b> | Hola, Marta }
+  ====
+  <b>Actividades recomendadas</b>
+  {#
+    Actividad           | Estado       | Instrucciones
+    Animales del campo  | En progreso  | «Hazla por la tarde»
+    Emociones básicas   | Pendiente    | «Sin prisa»
+  }
+  ----
+  [▶ Ir a actividades]
+  ====
+  <b>Progreso reciente</b>
+  {
+    Última sesión:   | 14/05/2026
+    Media aciertos:  | 78 %
+  }
+  [📊 Ver progreso completo]
+  ====
+  [📋 Ver registros clínicos] | [🚪 Cerrar sesión]
+}
+@enduml

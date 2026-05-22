@@ -1,0 +1,32 @@
+@startuml Pd_Paciente_Abierto
+salt
+{+
+  {
+    ← Pacientes | <b>Ana García</b> | [✏ Editar] | [🗑 Eliminar]
+  }
+  ====
+  {
+    Fecha de nacimiento: | 14/03/2018
+    Nivel actual:        | 3
+  }
+  ----
+  {
+    [📊 Ver progreso] | [🧩 Asignar actividad]
+  }
+  ====
+  <b>Actividades asignadas</b>
+  {#
+    Actividad           | Estado       | Última práctica
+    Animales del campo  | En progreso  | 14/05/2026
+    Colores y formas    | Completada   | 10/05/2026
+    Emociones básicas   | Pendiente    | —
+  }
+  ====
+  <b>Sesiones recientes</b>
+  {#
+    Fecha       | Tipo        | Aciertos
+    15/05/2026  | Presencial  | 85 %
+    08/05/2026  | Casa        | 70 %
+  }
+}
+@enduml

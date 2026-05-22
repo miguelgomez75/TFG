@@ -1,0 +1,22 @@
+@startuml Pd_Pacientes_Abierto
+salt
+{+
+  {
+    ← Dashboard | <b>Pacientes</b> | [+ Nuevo paciente]
+  }
+  ====
+  "🔍 Buscar paciente...         "
+  ----
+  {#
+    Nombre         | Nivel | Último acceso | Acciones
+    Ana García     | 3     | 15/05/2026    | [Ver] [✏] [🗑]
+    Tomás Ruiz     | 1     | 12/05/2026    | [Ver] [✏] [🗑]
+    Laura Vega     | 4     | 08/05/2026    | [Ver] [✏] [🗑]
+    Marco Sanz     | 2     | 01/05/2026    | [Ver] [✏] [🗑]
+  }
+  ----
+  {
+    [◀ Anterior] | Página 1 de 2 | [Siguiente ▶]
+  }
+}
+@enduml

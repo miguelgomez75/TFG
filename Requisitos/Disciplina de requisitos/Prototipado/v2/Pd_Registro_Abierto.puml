@@ -1,0 +1,30 @@
+@startuml Pd_Registro_Abierto
+salt
+{+
+  {
+    ← Cancelar | <b>Nuevo registro clínico</b> | [Guardar]
+  }
+  ====
+  Paciente *
+  ^Ana García                    ^
+  ----
+  Tipo *
+  () Nota   () Recordatorio   (X) Recomendación
+  ----
+  Título *
+  "Refuerzo animales del campo   "
+  ----
+  Contenido *
+  {SI
+    "Practicar la actividad por las  "
+    "tardes, sin prisa.              "
+    "                                "
+  }
+  ----
+  Actividad relacionada (opcional)
+  ^Animales del campo            ^
+  ----
+  Fecha recordatorio (solo si tipo = Recordatorio)
+  "                              "
+}
+@enduml

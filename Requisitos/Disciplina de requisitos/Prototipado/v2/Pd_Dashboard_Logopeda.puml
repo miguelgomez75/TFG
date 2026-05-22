@@ -1,0 +1,21 @@
+@startuml Pd_Dashboard_Logopeda
+salt
+{+
+  {/ <b>Logopeda</b> | Dra. López }
+  ====
+  {
+    [👥 Pacientes     ] | [🧩 Actividades   ]
+    [📋 Sesiones      ] | [📝 Registros     ]
+  }
+  ====
+  <b>Resumen reciente</b>
+  {#
+    Paciente       | Última sesión | Progreso
+    Ana García     | 15/05/2026    | 80 %
+    Tomás Ruiz     | 12/05/2026    | 45 %
+    Laura Vega     | 08/05/2026    | 92 %
+  }
+  ----
+  [  Cerrar sesión  ]
+}
+@enduml

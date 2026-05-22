@@ -1,0 +1,15 @@
+@startuml Pd_Actividades_Abiertas_Familia
+salt
+{+
+  {
+    ← Inicio | <b>Actividades recomendadas</b>
+  }
+  ====
+  {#
+    Actividad           | Estado       | Instrucciones del logopeda
+    Animales del campo  | En progreso  | «Hazla por la tarde»
+    Emociones básicas   | Pendiente    | «Sin prisa»
+    Colores y formas    | Completada   | —
+  }
+}
+@enduml

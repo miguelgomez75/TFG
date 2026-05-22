@@ -1,0 +1,19 @@
+' ─────────────────────────────────────────────────────────────
+' SESION_CERRADA  →  (compartido Logopeda y Familia)
+' ─────────────────────────────────────────────────────────────
+
+@startuml Pd_Autenticacion
+salt
+{+
+  <b>Sistema CAA</b>
+  ====
+  Correo electrónico *
+  "usuario@ejemplo.com          "
+  Contraseña *
+  "**********                   "
+  ----
+  [        Iniciar sesión        ]
+  ----
+  "¿No tienes cuenta? Regístrate"
+}
+@enduml

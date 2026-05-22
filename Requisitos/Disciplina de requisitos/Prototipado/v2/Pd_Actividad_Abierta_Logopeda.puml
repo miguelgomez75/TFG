@@ -1,0 +1,30 @@
+@startuml Pd_Actividad_Abierta_Logopeda
+salt
+{+
+  {
+    ← Actividades | <b>Animales del campo</b> | Estado: Disponible
+  }
+  ====
+  {
+    Categoría:  | Vocabulario
+    Dificultad: | ★★☆
+  }
+  Descripción:
+  "Identifica animales típicos del entorno rural   "
+  "mediante pictogramas.                           "
+  ====
+  <b>Acciones</b>
+  {
+    [✏ Editar] | [📌 Asignar] | [💬 Recomendar] | [🗃 Archivar]
+  }
+  ====
+  <b>Ejercicios (6)</b>
+  {#
+    # | Pictograma  | Respuesta correcta
+    1 | 🐄 Vaca     | «vaca»
+    2 | 🐓 Gallo    | «gallo»
+    3 | 🐑 Oveja    | «oveja»
+  }
+  "... y 3 más"
+}
+@enduml

@@ -97,51 +97,47 @@ Los casos de uso están agrupados por actor y por paquete funcional.
 | ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4/DDCdU%20Familia1.svg) | ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4/DDCdU%20Familia2.svg) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4) |
 
 ### Usuario no Autenticado
-
-| Diagrama | Código |
-|----------|--------|
-| ![cuUnA](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso//DDCdU%20UsuarioNoAutenticado.svg) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDCdU%20UsuarioNoAutenticado.puml) |
-
----
-
 ## 2.3. Diagramas de Contexto
-
-Los diagramas de contexto modelan la navegación del sistema como una máquina de estados. Los nombres de estado siguen la convención `ENTIDAD_ESTADO` (p. ej. `PACIENTES_ABIERTO`, `PACIENTE_ABIERTO`). Las transiciones corresponden a los casos de uso.
-
-| Actor | Diagrama | Código |
-|-------|----------|--------|
-| Logopeda | ![ctx1](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Logopeda.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Logopeda.puml) |
-| Familia | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Familia.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Familia.puml) |
-| Usuario no Autenticado | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.puml) |
-
----
-
 ## 2.4. Casos de Uso Detallados
-
-Cada caso de uso se describe basandose en su posición y como se llegó a ellos en el diagrama de contexto.
-
-| ID | Caso de uso | Diagrama | Código |
-|----|-------------|----------|--------|
-| CdU-01 | Asignar actividad | ![d1](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Asignar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Asignar%20Actividad.puml) |
-| CdU-02 | Publicar actividad | ![d2](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Publicar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Publicar%20Actividad.puml) |
-| CdU-03 | Realizar actividad | ![d3](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Realizar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Realizar%20Actividad.puml) |
-| CdU-04 | Recomendar actividad | ![d4](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Recomendar%20Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Recomendar%20Actividad.puml) |
-| CdU-05 | Registrar sesión | ![d5](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Registrar%20Sesion.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Registrar%20Sesion.puml) |
-| CdU-06 | Ver progreso paciente | ![d6](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Ver%20Progreso%20Paciente.svg) | [PUML](Disciplina%20de%20requisitos/Detallado%20de%20los%20casos%20de%20uso/v4/Ver%20Progreso%20Paciente.puml) |
-
----
-
 ## 2.5. Prototipado de Casos de Uso
 Una serie de prototipos hechos con la sintaxis salt de plantUML:
 
-| ID | Caso de uso | Diagrama | Código |
-|----|-------------|----------|--------|
-| CdU-01 | Sign in/Log in | ![d1](Disciplina%20de%20requisitos/Prototipado/PdCdU01%20Signin_Login.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU01%20Signin_Login.puml) |
-| CdU-02 | Abrir Pacientes (Logopeda) | ![d2](Disciplina%20de%20requisitos/Prototipado/PdCdU02%20LAbrirPacientes.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU02%20LAbrirPacientes.puml) |
-| CdU-03 | Abrir Paciente (Logopeda) | ![d3](Disciplina%20de%20requisitos/Prototipado/PdCdU03%20AbrirPaciente.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU03%20AbrirPaciente.puml) |
-| CdU-04 | Abrir Actividades (Logopeda) | ![d4](Disciplina%20de%20requisitos/Prototipado/PdCdU04%20AbrirActividades.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU04%20AbrirActividades.puml) |
-| CdU-05 | Realizar Actividad | ![d5](Disciplina%20de%20requisitos/Prototipado/PdCdU05%20RealizarActividad.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU05%20RealizarActividad.puml) |
-| CdU-06 | Ver progreso paciente | ![d6](Disciplina%20de%20requisitos/Prototipado/PdCdU06%20verProgreso.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/PdCdU06%20verProgreso.puml) |
+### 2.5.1 CdU-01 Asignar Actividad
+
+| Diagrama | Código |
+|----------|--------|
+| ![d1](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Asignar_Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Asignar_Actividad.puml) |
+
+### 2.5.2 CdU-02 Publicar Actividad
+
+| Diagrama | Código |
+|----------|--------|
+| ![d1](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Actividad_Editar_Logopeda.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Actividad_Editar_Logopeda.puml) |
+
+### 2.5.3 CdU-03 Realizar Actividad
+
+| Diagrama 1 | Diagrama 2 | Diagrama 3 |
+|------------|------------|------------|
+| ![d1](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Actividad_Abierta_Familia.svg) | ![d2](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Actividad_En_Curso_Familia.svg) | ![d3](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Resultado_Actividad_Familia.svg) |
+| [PUML1](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Actividad_Abierta_Familia.puml) | [PUML2](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Actividad_En_Curso_Familia.puml) | [PUML3](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Resultado_Actividad_Familia.puml) |
+
+### 2.5.4 CdU-04 Recomendar Actividad
+
+| Diagrama | Código |
+|----------|--------|
+| ![d1](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Recomendar_Actividad.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Recomendar_Actividad.puml) |
+
+### 2.5.5 CdU-05 Registrar Sesión
+
+| Diagrama | Código |
+|----------|--------|
+| ![d1](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Sesion_Abierta.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Sesion_Abierta.puml) |
+
+### 2.5.6 CdU-06 Ver Progreso Paciente
+
+| Diagrama | Código |
+|----------|--------|
+| ![d1](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Progreso_Abierto.svg) | [PUML](Disciplina%20de%20requisitos/Prototipado/v2/Pd_Progreso_Abierto.puml) |
 
 ## 2.6. Glosario
 

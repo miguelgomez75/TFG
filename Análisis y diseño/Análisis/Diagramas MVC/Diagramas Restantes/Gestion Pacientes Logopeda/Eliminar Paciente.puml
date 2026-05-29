@@ -1,0 +1,27 @@
+' ────────────────────────────────────────────────────────────
+' eliminarPaciente()
+' Desde: PACIENTES_ABIERTO (acción en línea)
+' Hacia: PACIENTES_ABIERTO
+' ────────────────────────────────────────────────────────────
+
+@startuml eliminarPaciente-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Pacientes Abierto"   as PacientesAbiertoEntrada
+rectangle #CDEBA5 ":Pacientes Abierto"   as PacientesAbiertoSalida
+
+package eliminarPaciente as "eliminarPaciente()" {
+    rectangle #629EF9 PacientesAbiertosView
+    rectangle #b5bd68 PacienteController
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E Paciente
+}
+
+PacientesAbiertoEntrada --> PacientesAbiertosView : eliminarPaciente(pacienteId)
+
+PacientesAbiertosView --> PacienteController : eliminarPaciente(pacienteId) : void
+PacienteController     --> PacienteRepository : deleteById(pacienteId) : void
+PacienteRepository     -- Paciente
+
+PacientesAbiertosView ..> PacientesAbiertoSalida : abrirPacientesAbierto()
+@enduml

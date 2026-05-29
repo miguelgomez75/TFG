@@ -1,0 +1,31 @@
+' ────────────────────────────────────────────────────────────
+' editarPaciente()
+' Desde: PACIENTE_ABIERTO
+' Hacia: PACIENTE_ABIERTO
+' ────────────────────────────────────────────────────────────
+
+@startuml editarPaciente-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Paciente Abierto"   as PacienteAbiertoEntrada
+rectangle #CDEBA5 ":Paciente Abierto"   as PacienteAbiertoSalida
+
+package editarPaciente as "editarPaciente()" {
+    rectangle #629EF9 EditarPacienteView
+    rectangle #b5bd68 PacienteController
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E Paciente
+}
+
+PacienteAbiertoEntrada --> EditarPacienteView : editarPaciente(pacienteId)
+
+EditarPacienteView --> PacienteController : cargarPaciente(pacienteId) : Paciente
+PacienteController  --> PacienteRepository : findById(pacienteId) : Paciente
+PacienteRepository  -- Paciente
+
+EditarPacienteView --> PacienteController : validarDatos(paciente) : boolean
+EditarPacienteView --> PacienteController : actualizarPaciente(paciente) : void
+PacienteController  --> PacienteRepository : update(paciente) : void
+
+EditarPacienteView ..> PacienteAbiertoSalida : abrirPacienteAbierto()
+@enduml

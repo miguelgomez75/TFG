@@ -1,0 +1,28 @@
+' ────────────────────────────────────────────────────────────
+' crearPaciente()
+' Desde: PACIENTES_ABIERTO
+' Hacia: PACIENTES_ABIERTO
+' ────────────────────────────────────────────────────────────
+
+@startuml crearPaciente-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Pacientes Abierto"   as PacientesAbiertoEntrada
+rectangle #CDEBA5 ":Pacientes Abierto"   as PacientesAbiertoSalida
+
+package crearPaciente as "crearPaciente()" {
+    rectangle #629EF9 CrearPacienteView
+    rectangle #b5bd68 PacienteController
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E Paciente
+}
+
+PacientesAbiertoEntrada --> CrearPacienteView : crearPaciente()
+
+CrearPacienteView --> PacienteController : validarDatos(paciente) : boolean
+CrearPacienteView --> PacienteController : guardarPaciente(nombre, fechaNacimiento, nivelActual) : void
+PacienteController  --> PacienteRepository : save(paciente) : void
+PacienteRepository  -- Paciente
+
+CrearPacienteView ..> PacientesAbiertoSalida : abrirPacientesAbierto()
+@enduml

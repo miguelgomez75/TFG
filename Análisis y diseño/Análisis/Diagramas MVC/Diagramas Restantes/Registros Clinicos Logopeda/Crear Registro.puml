@@ -1,0 +1,42 @@
+' ────────────────────────────────────────────────────────────
+' crearRegistro()
+' Desde: REGISTROS_ABIERTOS
+' Hacia: REGISTROS_ABIERTOS
+' ────────────────────────────────────────────────────────────
+
+@startuml crearRegistro-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Registros Abiertos"   as RegistrosAbiertos
+rectangle #CDEBA5 ":Registros Abiertos"   as RegistrosAbiertos2
+
+package crearRegistro as "crearRegistro()" {
+    rectangle #629EF9 CrearRegistroView
+    rectangle #b5bd68 RegistroClinicoController
+    rectangle #b5bd68 PacienteController
+    rectangle #b5bd68 ActividadController
+    rectangle #F2AC4E RegistroClinicoRepository
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E ActividadRepository
+    rectangle #F2AC4E RegistroClinico
+    rectangle #F2AC4E Paciente
+    rectangle #F2AC4E Actividad
+}
+
+RegistrosAbiertos --> CrearRegistroView : crearRegistro()
+
+CrearRegistroView --> PacienteController          : listarPacientesActivos() : List<Paciente>
+PacienteController --> PacienteRepository          : findActivos() : List<Paciente>
+PacienteRepository -- Paciente
+
+CrearRegistroView --> ActividadController          : listarDisponibles() : List<Actividad>
+ActividadController --> ActividadRepository         : findDisponibles() : List<Actividad>
+ActividadRepository -- Actividad
+
+CrearRegistroView --> RegistroClinicoController    : validarDatos(registro) : boolean
+CrearRegistroView --> RegistroClinicoController    : guardarRegistro(pacienteId, tipo, titulo, contenido, actividadId) : void
+RegistroClinicoController --> RegistroClinicoRepository : save(registro) : void
+RegistroClinicoRepository -- RegistroClinico
+
+CrearRegistroView ..> RegistrosAbiertos2 : abrirRegistrosAbiertos()
+@enduml

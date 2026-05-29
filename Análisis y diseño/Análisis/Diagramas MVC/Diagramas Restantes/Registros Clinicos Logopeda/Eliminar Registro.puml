@@ -1,0 +1,27 @@
+' ────────────────────────────────────────────────────────────
+' eliminarRegistro()
+' Desde: REGISTROS_ABIERTOS (acción en línea)
+' Hacia: REGISTROS_ABIERTOS
+' ────────────────────────────────────────────────────────────
+
+@startuml eliminarRegistro-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Registros Abiertos"   as RegistrosAbiertosEntrada
+rectangle #CDEBA5 ":Registros Abiertos"   as RegistrosAbiertos2
+
+package eliminarRegistro as "eliminarRegistro()" {
+    rectangle #629EF9 RegistrosAbiertosView
+    rectangle #b5bd68 RegistroClinicoController
+    rectangle #F2AC4E RegistroClinicoRepository
+    rectangle #F2AC4E RegistroClinico
+}
+
+RegistrosAbiertosEntrada --> RegistrosAbiertosView : eliminarRegistro(registroId)
+
+RegistrosAbiertosView --> RegistroClinicoController    : eliminarRegistro(registroId) : void
+RegistroClinicoController --> RegistroClinicoRepository : deleteById(registroId) : void
+RegistroClinicoRepository -- RegistroClinico
+
+RegistrosAbiertosView ..> RegistrosAbiertos2 : abrirRegistrosAbiertos()
+@enduml

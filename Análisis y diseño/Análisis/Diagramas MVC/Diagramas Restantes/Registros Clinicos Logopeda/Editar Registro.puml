@@ -1,0 +1,31 @@
+' ────────────────────────────────────────────────────────────
+' editarRegistro()
+' Desde: REGISTRO_ABIERTO
+' Hacia: REGISTRO_ABIERTO
+' ────────────────────────────────────────────────────────────
+
+@startuml editarRegistro-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Registro Abierto"   as RegistroAbiertoEntrada
+rectangle #CDEBA5 ":Registro Abierto"   as RegistroAbiertoSalida
+
+package editarRegistro as "editarRegistro()" {
+    rectangle #629EF9 EditarRegistroView
+    rectangle #b5bd68 RegistroClinicoController
+    rectangle #F2AC4E RegistroClinicoRepository
+    rectangle #F2AC4E RegistroClinico
+}
+
+RegistroAbiertoEntrada --> EditarRegistroView : editarRegistro(registroId)
+
+EditarRegistroView --> RegistroClinicoController    : cargarRegistro(registroId) : RegistroClinico
+RegistroClinicoController --> RegistroClinicoRepository : findById(registroId) : RegistroClinico
+RegistroClinicoRepository -- RegistroClinico
+
+EditarRegistroView --> RegistroClinicoController    : validarDatos(registro) : boolean
+EditarRegistroView --> RegistroClinicoController    : actualizarRegistro(registro) : void
+RegistroClinicoController --> RegistroClinicoRepository : update(registro) : void
+
+EditarRegistroView ..> RegistroAbiertoSalida : abrirRegistroAbierto()
+@enduml

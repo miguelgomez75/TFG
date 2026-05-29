@@ -1,0 +1,27 @@
+' ────────────────────────────────────────────────────────────
+' verRegistros()
+' Desde: HOME
+' Hacia: HOME
+' ────────────────────────────────────────────────────────────
+
+@startuml verRegistros-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Home"   as HomeEntrada
+rectangle #CDEBA5 ":Home"   as HomeSalida
+
+package verRegistros as "verRegistros()" {
+    rectangle #629EF9 RegistrosView
+    rectangle #b5bd68 RegistroClinicoController
+    rectangle #F2AC4E RegistroClinicoRepository
+    rectangle #F2AC4E RegistroClinico
+}
+
+HomeEntrada --> RegistrosView : verRegistros(pacienteId)
+
+RegistrosView --> RegistroClinicoController    : getRegistros(pacienteId) : List<RegistroClinico>
+RegistroClinicoController --> RegistroClinicoRepository : findByPaciente(pacienteId) : List<RegistroClinico>
+RegistroClinicoRepository -- RegistroClinico
+
+RegistrosView ..> HomeSalida : completarConsulta()
+@enduml

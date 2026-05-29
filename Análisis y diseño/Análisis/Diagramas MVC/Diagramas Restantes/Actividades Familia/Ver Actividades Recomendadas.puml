@@ -1,0 +1,34 @@
+' ────────────────────────────────────────────────────────────
+' verActividadesRecomendadas()
+' Desde: HOME
+' Hacia: HOME
+' ────────────────────────────────────────────────────────────
+
+@startuml verActividadesRecomendadas-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Home"   as HomeEntrada
+rectangle #CDEBA5 ":Home"   as HomeSalida
+
+package verActividadesRecomendadas as "verActividadesRecomendadas()" {
+    rectangle #629EF9 ActividadesRecomendadasView
+    rectangle #b5bd68 AsignacionController
+    rectangle #b5bd68 RegistroClinicoController
+    rectangle #F2AC4E AsignacionRepository
+    rectangle #F2AC4E RegistroClinicoRepository
+    rectangle #F2AC4E AsignacionActividad
+    rectangle #F2AC4E RegistroClinico
+}
+
+HomeEntrada --> ActividadesRecomendadasView : verActividadesRecomendadas(pacienteId)
+
+ActividadesRecomendadasView --> AsignacionController      : getAsignacionesActivas(pacienteId) : List<AsignacionActividad>
+AsignacionController         --> AsignacionRepository      : findByPacienteAndEstado(pacienteId) : List<AsignacionActividad>
+AsignacionRepository         -- AsignacionActividad
+
+ActividadesRecomendadasView --> RegistroClinicoController  : getRecomendaciones(pacienteId) : List<RegistroClinico>
+RegistroClinicoController    --> RegistroClinicoRepository : findRecomendacionesByPaciente(pacienteId) : List<RegistroClinico>
+RegistroClinicoRepository    -- RegistroClinico
+
+ActividadesRecomendadasView ..> HomeSalida : completarNavegacion()
+@enduml

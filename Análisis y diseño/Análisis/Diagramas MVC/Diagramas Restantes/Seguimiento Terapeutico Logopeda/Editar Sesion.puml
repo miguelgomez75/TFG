@@ -1,0 +1,38 @@
+' ────────────────────────────────────────────────────────────
+' editarSesion()
+' Desde: SESION_ABIERTA
+' Hacia: SESION_ABIERTA
+' ────────────────────────────────────────────────────────────
+
+@startuml editarSesion-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Sesion Abierta"   as SesionAbiertoEntrada
+rectangle #CDEBA5 ":Sesion Abierta"   as SesionAbiertoSalida
+
+package editarSesion as "editarSesion()" {
+    rectangle #629EF9 EditarSesionView
+    rectangle #b5bd68 SesionController
+    rectangle #b5bd68 PacienteController
+    rectangle #F2AC4E SesionRepository
+    rectangle #F2AC4E PacienteRepository
+    rectangle #F2AC4E Sesion
+    rectangle #F2AC4E Paciente
+}
+
+SesionAbiertoEntrada --> EditarSesionView : editarSesion(sesionId)
+
+EditarSesionView --> SesionController    : cargarSesion(sesionId) : Sesion
+SesionController  --> SesionRepository   : findById(sesionId) : Sesion
+SesionRepository  -- Sesion
+
+EditarSesionView --> PacienteController  : listarPacientesActivos() : List<Paciente>
+PacienteController --> PacienteRepository : findActivos() : List<Paciente>
+PacienteRepository -- Paciente
+
+EditarSesionView --> SesionController    : validarDatos(sesion) : boolean
+EditarSesionView --> SesionController    : actualizarSesion(sesion) : void
+SesionController  --> SesionRepository   : update(sesion) : void
+
+EditarSesionView ..> SesionAbiertoSalida : abrirSesionAbierta()
+@enduml

@@ -1,0 +1,27 @@
+' ────────────────────────────────────────────────────────────
+' eliminarSesion()
+' Desde: SESIONES_ABIERTAS (acción en línea)
+' Hacia: SESIONES_ABIERTAS
+' ────────────────────────────────────────────────────────────
+
+@startuml eliminarSesion-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Sesiones Abiertas"   as SesionesAbiertasEntrada
+rectangle #CDEBA5 ":Sesiones Abiertas"   as SesionesAbiertasSalida
+
+package eliminarSesion as "eliminarSesion()" {
+    rectangle #629EF9 SesionesAbiertasView
+    rectangle #b5bd68 SesionController
+    rectangle #F2AC4E SesionRepository
+    rectangle #F2AC4E Sesion
+}
+
+SesionesAbiertasEntrada --> SesionesAbiertasView : eliminarSesion(sesionId)
+
+SesionesAbiertasView --> SesionController  : eliminarSesion(sesionId) : void
+SesionController      --> SesionRepository : deleteById(sesionId) : void
+SesionRepository      -- Sesion
+
+SesionesAbiertasView ..> SesionesAbiertasSalida : abrirSesionesAbiertas()
+@enduml

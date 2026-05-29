@@ -1,0 +1,79 @@
+@startuml MVC_CAA_Completo
+skinparam linetype polyline
+
+' ════════════════════════════════════════════════════════════
+' VIEWS
+' ════════════════════════════════════════════════════════════
+package "Views" {
+    ' Autenticación
+    component [AutenticacionView]
+
+    ' Logopeda — Pacientes
+    component [PacientesAbiertosView]
+    component [CrearPacienteView]
+    component [EditarPacienteView]
+
+    ' Logopeda — Actividades
+    component [ActividadesAbiertasView]
+    component [ActividadAbiertaView]
+    component [CrearActividadView]
+    component [EditarActividadView]
+    component [PublicarActividadView]
+    component [AsignarActividadView]
+    component [RecomendarActividadView]
+
+    ' Logopeda — Seguimiento
+    component [SesionesAbiertasView]
+    component [RegistrarSesionView]
+    component [EditarSesionView]
+
+    ' Logopeda — Registros clínicos
+    component [RegistrosAbiertosView]
+    component [CrearRegistroView]
+    component [EditarRegistroView]
+
+    ' Logopeda — Progreso
+    component [VerProgresoView]
+
+    ' Familia
+    component [HomeFamiliaView]
+    component [ActividadesRecomendadasView]
+    component [ActividadAbiertaFamiliaView]
+    component [RealizarActividadView]
+    component [ResultadoActividadView]
+    component [RegistrosFamiliaView]
+
+    ' Compartida
+    component [DashboardLogopedaView]
+}
+
+' ════════════════════════════════════════════════════════════
+' CONTROLLERS
+' ════════════════════════════════════════════════════════════
+package "Controllers" {
+    component [AuthController]
+    component [PacienteController]
+    component [ActividadController]
+    component [CategoriaController]
+    component [AsignacionController]
+    component [SesionController]
+    component [RegistroClinicoController]
+    component [ProgresoController]
+}
+
+' ════════════════════════════════════════════════════════════
+' MODELS
+' ════════════════════════════════════════════════════════════
+package "Models" {
+    component [Usuario]
+    component [Paciente]
+    component [Actividad]
+    component [Categoria]
+    component [TipoActividad]
+    component [Pictograma]
+    component [AsignacionActividad]
+    component [Sesion]
+    component [RegistroClinico]
+}
+
+@enduml

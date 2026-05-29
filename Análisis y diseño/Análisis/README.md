@@ -7,6 +7,7 @@
 
 
 # 1. Diagramas MVC
+Diagramas de ejemplo de los casos de uso más destacables
 
 | ID | Caso de uso | Diagrama | Código |
 |----|-------------|----------|--------|
@@ -17,4 +18,10 @@
 | CdU-05 | Registrar sesión | ![d5](Diagramas%20MVC/CdU05%20RegistrarSesion.svg) | [PUML](Diagramas%20MVC/CdU05%20RegistrarSesion.puml) |
 | CdU-06 | Ver progreso paciente | ![d6](Diagramas%20MVC/CdU06%20VerProgresoPaciente.svg) | [PUML](Diagramas%20MVC/CdU06%20VerProgresoPaciente.puml)|
 
-/Análisis/Diagramas%20MVC/
+# 2. MVC Completo
+Diagrama con todas las vistas, modelos y controladores de la aplicación:
+| Diagrama | Código |
+|----------|--------|
+| ![d1](Diagramas%20MVC/MVC/MVC.svg) | [PUML](Diagramas%20MVC/MVC/MVC.puml) |
+
+

@@ -1,0 +1,27 @@
+' ────────────────────────────────────────────────────────────
+' eliminarActividad()
+' Desde: ACTIVIDADES_ABIERTAS (acción en línea)
+' Hacia: ACTIVIDADES_ABIERTAS
+' ────────────────────────────────────────────────────────────
+
+@startuml eliminarActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividades Abiertas"   as ActividadesAbiertas
+rectangle #CDEBA5 ":Actividades Abiertas"   as ActividadesAbiertasSalida
+
+package eliminarActividad as "eliminarActividad()" {
+    rectangle #629EF9 ActividadesAbiertasView
+    rectangle #b5bd68 ActividadController
+    rectangle #F2AC4E ActividadRepository
+    rectangle #F2AC4E Actividad
+}
+
+ActividadesAbiertas --> ActividadesAbiertasView : eliminarActividad(actividadId)
+
+ActividadesAbiertasView --> ActividadController  : eliminarActividad(actividadId) : void
+ActividadController      --> ActividadRepository : deleteById(actividadId) : void
+ActividadRepository      -- Actividad
+
+ActividadesAbiertasView ..> ActividadesAbiertasSalida : abrirActividadesAbiertas()
+@enduml

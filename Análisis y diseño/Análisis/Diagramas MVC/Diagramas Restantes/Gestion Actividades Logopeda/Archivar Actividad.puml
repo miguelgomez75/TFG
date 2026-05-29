@@ -1,0 +1,27 @@
+' ────────────────────────────────────────────────────────────
+' archivarActividad()
+' Desde: ACTIVIDAD_ABIERTA
+' Hacia: ACTIVIDADES_ABIERTAS
+' ────────────────────────────────────────────────────────────
+
+@startuml archivarActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividad Abierta"      as ActividadAbierta
+rectangle #CDEBA5 ":Actividades Abiertas"   as ActividadesAbiertas
+
+package archivarActividad as "archivarActividad()" {
+    rectangle #629EF9 ActividadAbiertoView
+    rectangle #b5bd68 ActividadController
+    rectangle #F2AC4E ActividadRepository
+    rectangle #F2AC4E Actividad
+}
+
+ActividadAbierta --> ActividadAbiertoView : archivarActividad(actividadId)
+
+ActividadAbiertoView --> ActividadController  : archivar(actividadId) : void
+ActividadController   --> ActividadRepository : updateEstado(actividadId, ARCHIVADA) : void
+ActividadRepository   -- Actividad
+
+ActividadAbiertoView ..> ActividadesAbiertas : abrirActividadesAbiertas()
+@enduml

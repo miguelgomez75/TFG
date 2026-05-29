@@ -1,0 +1,35 @@
+' ────────────────────────────────────────────────────────────
+' crearActividad()
+' Desde: ACTIVIDADES_ABIERTAS
+' Hacia: ACTIVIDADES_ABIERTAS
+' ────────────────────────────────────────────────────────────
+
+@startuml crearActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividades Abiertas"   as ActividadesAbiertas
+rectangle #CDEBA5 ":Actividades Abiertas"   as ActividadesAbiertasSalida
+
+package crearActividad as "crearActividad()" {
+    rectangle #629EF9 CrearActividadView
+    rectangle #b5bd68 ActividadController
+    rectangle #b5bd68 CategoriaController
+    rectangle #F2AC4E ActividadRepository
+    rectangle #F2AC4E CategoriaRepository
+    rectangle #F2AC4E Actividad
+    rectangle #F2AC4E Categoria
+}
+
+ActividadesAbiertas --> CrearActividadView : crearActividad()
+
+CrearActividadView --> CategoriaController  : listarCategorias() : List<Categoria>
+CategoriaController --> CategoriaRepository : findAll() : List<Categoria>
+CategoriaRepository -- Categoria
+
+CrearActividadView --> ActividadController  : validarDatos(actividad) : boolean
+CrearActividadView --> ActividadController  : guardarActividad(titulo, descripcion, categoriaId, nivelDificultad) : void
+ActividadController --> ActividadRepository : save(actividad) : void
+ActividadRepository -- Actividad
+
+CrearActividadView ..> ActividadesAbiertasSalida : abrirActividadesAbiertas()
+@enduml

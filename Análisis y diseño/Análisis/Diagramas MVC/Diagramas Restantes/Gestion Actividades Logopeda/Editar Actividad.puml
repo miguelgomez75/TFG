@@ -1,0 +1,38 @@
+' ────────────────────────────────────────────────────────────
+' editarActividad()
+' Desde: ACTIVIDAD_ABIERTA
+' Hacia: ACTIVIDAD_ABIERTA
+' ────────────────────────────────────────────────────────────
+
+@startuml editarActividad-analisis
+skinparam linetype polyline
+
+rectangle #CDEBA5 ":Actividad Abierta"   as ActividadAbiertoEntrada
+rectangle #CDEBA5 ":Actividad Abierta"   as ActividadAbiertoSalida
+
+package editarActividad as "editarActividad()" {
+    rectangle #629EF9 EditarActividadView
+    rectangle #b5bd68 ActividadController
+    rectangle #b5bd68 CategoriaController
+    rectangle #F2AC4E ActividadRepository
+    rectangle #F2AC4E CategoriaRepository
+    rectangle #F2AC4E Actividad
+    rectangle #F2AC4E Categoria
+}
+
+ActividadAbiertoEntrada --> EditarActividadView : editarActividad(actividadId)
+
+EditarActividadView --> ActividadController  : cargarActividad(actividadId) : Actividad
+ActividadController  --> ActividadRepository : findById(actividadId) : Actividad
+ActividadRepository  -- Actividad
+
+EditarActividadView --> CategoriaController  : listarCategorias() : List<Categoria>
+CategoriaController  --> CategoriaRepository : findAll() : List<Categoria>
+CategoriaRepository  -- Categoria
+
+EditarActividadView --> ActividadController  : validarDatos(actividad) : boolean
+EditarActividadView --> ActividadController  : actualizarActividad(actividad) : void
+ActividadController  --> ActividadRepository : update(actividad) : void
+
+EditarActividadView ..> ActividadAbiertoSalida : abrirActividadAbierta()
+@enduml

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Resultado</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8;--green:#059669;--red:#dc2626}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+    header{background:var(--accent);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
+    .container{max-width:560px;margin:60px auto;padding:0 24px;flex:1;text-align:center}
+    .trophy{font-size:4rem;margin-bottom:20px;line-height:1}
+    h1{font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:10px}
+    .sub{color:var(--muted);font-size:.93rem;margin-bottom:40px}
+    .result-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:28px}
+    .score{font-size:3.5rem;font-weight:700;color:var(--accent);line-height:1;margin-bottom:6px}
+    .score-lbl{font-size:.9rem;color:var(--muted);margin-bottom:28px}
+    .stats-row{display:flex;justify-content:center;gap:40px}
+    .stat-item .num{font-size:2rem;font-weight:700}
+    .stat-item .lbl{font-size:.78rem;color:var(--muted);margin-top:3px}
+    .stat-item.acierto .num{color:var(--green)}
+    .stat-item.error   .num{color:var(--red)}
+    .msg{font-size:.9rem;color:var(--muted);margin-bottom:32px;line-height:1.6}
+    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:9px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.95rem}
+    .btn-primary:hover{opacity:.9}
+    .btn-secondary{background:#fff;border:2px solid var(--accent);color:var(--accent);padding:11px 26px;border-radius:9px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.92rem}
+    .btn-secondary:hover{background:var(--light)}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Resultado</span>
+  </header>
+  <div class="container">
+    <div class="trophy" id="emoji">🎉</div>
+    <h1 id="titulo">¡Sesión completada!</h1>
+    <p class="sub">Aquí tienes el resumen de la práctica de hoy.</p>
+
+    <div class="result-card">
+      <div class="score" id="porcentaje">—%</div>
+      <div class="score-lbl">de aciertos</div>
+      <div class="stats-row">
+        <div class="stat-item acierto"><div class="num" id="aciertos">0</div><div class="lbl">Aciertos</div></div>
+        <div class="stat-item error">  <div class="num" id="errores">0</div> <div class="lbl">Errores</div></div>
+      </div>
+    </div>
+
+    <p class="msg" id="mensaje">¡Buen trabajo! Sigue practicando cada día para mejorar.</p>
+
+    <div class="actions">
+      <button class="btn-primary"    onclick="window.location.href='/familia/realizar-actividad.html'">Hacer otra actividad</button>
+      <button class="btn-secondary"  onclick="window.location.href='/familia/dashboard.html'">Volver al inicio</button>
+    </div>
+  </div>
+
+  <script>
+    // RUP CdU-03: mostrarResultado(sesionId) — datos llegados desde realizar-actividad
+    const raw = localStorage.getItem('resultado');
+    if (raw) {
+      try {
+        const data = JSON.parse(raw);
+        const pct  = data.porcentajeAciertos ?? 0;
+        const ses  = data.sesion ?? {};
+
+        document.getElementById('porcentaje').textContent = pct + '%';
+        document.getElementById('aciertos').textContent   = ses.aciertos ?? 0;
+        document.getElementById('errores').textContent    = ses.errores  ?? 0;
+
+        // Mensaje y emoji adaptativos según rendimiento
+        if (pct >= 80) {
+          document.getElementById('emoji').textContent   = '🏆';
+          document.getElementById('titulo').textContent  = '¡Excelente trabajo!';
+          document.getElementById('mensaje').textContent = 'Has conseguido un resultado muy bueno. ¡Sigue así!';
+        } else if (pct >= 50) {
+          document.getElementById('emoji').textContent   = '👍';
+          document.getElementById('titulo').textContent  = '¡Bien hecho!';
+          document.getElementById('mensaje').textContent = 'Buen resultado. Con un poco más de práctica lo conseguirás aún mejor.';
+        } else {
+          document.getElementById('emoji').textContent   = '💪';
+          document.getElementById('titulo').textContent  = '¡Ánimo!';
+          document.getElementById('mensaje').textContent = 'No te preocupes, cada sesión es un paso adelante. ¡Vuelve a intentarlo!';
+        }
+
+        localStorage.removeItem('resultado');
+      } catch { /* si el JSON falla, muestra valores por defecto */ }
+    }
+  </script>
+</body>
+</html>

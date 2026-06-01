@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Categorías</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#3b5bdb;--surface:#f8f9ff;--border:#e5e7f0;--red:#dc2626}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
+    header{background:var(--ink);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
+    .btn-back{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
+    .container{max-width:700px;margin:36px auto;padding:0 24px}
+    h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
+    .btn-primary:hover{opacity:.9}
+    .cat-item{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+    .cat-item h3{font-size:.95rem;font-weight:700}
+    .cat-item p{font-size:.82rem;color:var(--muted);margin-top:3px}
+    .btn-sm{padding:5px 12px;border-radius:6px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;margin-left:6px}
+    .btn-sm.danger{border-color:var(--red);color:var(--red)}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+    .overlay.open{display:flex}
+    .modal{background:#fff;border-radius:14px;padding:32px;width:100%;max-width:420px}
+    .modal h2{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:24px}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
+    .field input,.field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:var(--surface)}
+    .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+    .field textarea{min-height:60px;resize:vertical}
+    .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
+    .btn-cancel{background:none;border:1.5px solid var(--border);color:var(--muted);padding:9px 18px;border-radius:7px;font-family:inherit;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Categorías</span>
+    <button class="btn-back" onclick="window.location.href='/logopeda/dashboard.html'">← Volver</button>
+  </header>
+  <div class="container">
+    <h1>Categorías de actividad</h1>
+    <p class="subtitle">Organiza las actividades CAA en categorías temáticas reutilizables.</p>
+    <div class="toolbar">
+      <span id="countLabel" style="font-size:.85rem;color:var(--muted)"></span>
+      <button class="btn-primary" onclick="abrirNueva()">+ Nueva categoría</button>
+    </div>
+    <div id="lista"></div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2 id="modalTitle">Nueva categoría</h2>
+      <input type="hidden" id="catId">
+      <div class="field"><label>Nombre</label><input id="nombre" placeholder="Ej: Comunicación diaria"></div>
+      <div class="field"><label>Descripción</label><textarea id="descripcion" placeholder="Descripción opcional…"></textarea></div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="cerrar()">Cancelar</button>
+        <button class="btn-primary" onclick="guardar()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+
+    async function api(url,opts={}) {
+      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...opts});
+      return r.json();
+    }
+
+    // RUP: CategoriaController.listarCategorias() → CategoriaRepository.findAll()
+    async function cargar() {
+      const cats = await api('/api/logopeda/categorias');
+      document.getElementById('countLabel').textContent=`${cats.length} categoría(s)`;
+      document.getElementById('lista').innerHTML = cats.length
+        ? cats.map(c=>`
+          <div class="cat-item">
+            <div><h3>${c.nombre}</h3><p>${c.descripcion||'Sin descripción'}</p></div>
+            <div>
+              <button class="btn-sm" onclick="abrirEditar('${c._id}','${c.nombre}','${c.descripcion||''}')">Editar</button>
+            </div>
+          </div>`).join('')
+        : '<p style="color:var(--muted);font-style:italic">Sin categorías aún.</p>';
+    }
+
+    function abrirNueva() {
+      document.getElementById('catId').value='';
+      document.getElementById('modalTitle').textContent='Nueva categoría';
+      document.getElementById('nombre').value='';
+      document.getElementById('descripcion').value='';
+      document.getElementById('overlay').classList.add('open');
+    }
+
+    function abrirEditar(id,nombre,descripcion) {
+      document.getElementById('catId').value=id;
+      document.getElementById('modalTitle').textContent='Editar categoría';
+      document.getElementById('nombre').value=nombre;
+      document.getElementById('descripcion').value=descripcion;
+      document.getElementById('overlay').classList.add('open');
+    }
+
+    function cerrar() { document.getElementById('overlay').classList.remove('open'); }
+
+    async function guardar() {
+      const id=document.getElementById('catId').value;
+      const body={nombre:document.getElementById('nombre').value,descripcion:document.getElementById('descripcion').value};
+      if(id) await api(`/api/logopeda/categorias/${id}`,{method:'PUT',body:JSON.stringify(body)});
+      else   await api('/api/logopeda/categorias',{method:'POST',body:JSON.stringify(body)});
+      cerrar(); cargar();
+    }
+
+    cargar();
+  </script>
+</body>
+</html>

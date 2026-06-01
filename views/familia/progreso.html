@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Mi progreso</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8;--green:#059669}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
+    header{background:var(--accent);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
+    .btn-back{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
+    .container{max-width:800px;margin:36px auto;padding:0 24px}
+    h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
+    .field{margin-bottom:24px;max-width:320px}
+    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
+    .field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
+    .field input:focus{outline:none;border-color:var(--accent)}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
+    .btn-primary:hover{opacity:.9}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:32px}
+    .stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+    .stat .val{font-size:2.2rem;font-weight:700;color:var(--accent)}
+    .stat .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
+    .section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+    .chart-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px}
+    .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .bar-label{width:80px;font-size:.77rem;color:var(--muted);text-align:right;flex-shrink:0}
+    .bar-track{flex:1;background:var(--surface);border-radius:20px;height:16px;overflow:hidden}
+    .bar-fill{height:100%;border-radius:20px;background:var(--accent);transition:width .5s ease}
+    .bar-val{width:38px;font-size:.8rem;font-weight:700;color:var(--ink)}
+    .progress-ring-wrap{text-align:center;margin-bottom:28px}
+    .ring-lbl{font-size:.85rem;color:var(--muted);margin-top:8px}
+    .asig-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+    .asig-block{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 22px;flex:1;min-width:120px;text-align:center}
+    .asig-block .num{font-size:2rem;font-weight:700}
+    .asig-block .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
+    .asig-block.completadas .num{color:var(--green)}
+    .asig-block.pendientes  .num{color:#f59e0b}
+    #placeholder{color:var(--muted);font-style:italic}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Mi progreso</span>
+    <button class="btn-back" onclick="window.location.href='/familia/dashboard.html'">← Volver</button>
+  </header>
+  <div class="container">
+    <h1>Progreso</h1>
+    <p class="subtitle">Consulta la evolución de las sesiones y actividades completadas — CdU-06 RUP.</p>
+
+    <div class="field">
+      <label>ID del paciente</label>
+      <input id="pacienteId" placeholder="Introduce el ID del paciente">
+    </div>
+    <button class="btn-primary" onclick="cargar()" style="margin-bottom:32px">Ver progreso</button>
+
+    <div id="contenido" style="display:none">
+      <div class="stats-grid">
+        <div class="stat"><div class="val" id="totalSesiones">0</div><div class="lbl">Sesiones</div></div>
+        <div class="stat"><div class="val" id="promedio">0%</div><div class="lbl">Promedio aciertos</div></div>
+        <div class="stat"><div class="val" id="totalAsig">0</div><div class="lbl">Actividades asignadas</div></div>
+      </div>
+
+      <div class="section-title">Actividades por estado</div>
+      <div class="asig-row">
+        <div class="asig-block completadas"><div class="num" id="completas">0</div><div class="lbl">Completadas</div></div>
+        <div class="asig-block pendientes"> <div class="num" id="pendientes">0</div><div class="lbl">Pendientes</div></div>
+      </div>
+
+      <div class="section-title">Evolución de aciertos por sesión</div>
+      <div class="chart-wrap" id="chart">
+        <p style="color:var(--muted);font-style:italic">Sin sesiones finalizadas aún.</p>
+      </div>
+    </div>
+    <p id="placeholder">Introduce el ID del paciente para ver el progreso.</p>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+
+    async function api(url) {
+      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+      return r.json();
+    }
+
+    // RUP CdU-06: ProgresoController.getProgreso → calcularMetricas
+    async function cargar() {
+      const pid = document.getElementById('pacienteId').value.trim();
+      if (!pid) { alert('Introduce un ID de paciente.'); return; }
+
+      const data = await api(`/api/familia/progreso/${pid}`);
+      if (data.error) { alert(data.error); return; }
+
+      const m = data.metricas;
+      document.getElementById('placeholder').style.display = 'none';
+      document.getElementById('contenido').style.display   = 'block';
+
+      document.getElementById('totalSesiones').textContent = m.totalSesiones;
+      document.getElementById('promedio').textContent      = m.promedioAciertos + '%';
+      document.getElementById('totalAsig').textContent     = m.totalAsignaciones;
+      document.getElementById('completas').textContent     = m.asignacionesCompletas;
+      document.getElementById('pendientes').textContent    = m.asignacionesPendientes;
+
+      const chart = document.getElementById('chart');
+      if (!m.evolucion?.length) {
+        chart.innerHTML = '<p style="color:var(--muted);font-style:italic">Sin sesiones finalizadas aún.</p>';
+        return;
+      }
+      chart.innerHTML = m.evolucion.map(e => `
+        <div class="bar-row">
+          <span class="bar-label">${new Date(e.fecha).toLocaleDateString('es-ES',{day:'2-digit',month:'short'})}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${e.porcentaje}%"></div></div>
+          <span class="bar-val">${e.porcentaje}%</span>
+        </div>`).join('');
+    }
+
+    const pidGuardado = localStorage.getItem('practicaPacienteId');
+    if (pidGuardado) document.getElementById('pacienteId').value = pidGuardado;
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Registros clínicos</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#3b5bdb;--light:#eef1ff;--surface:#f8f9ff;--border:#e5e7f0;--red:#dc2626;--green:#059669}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
+    header{background:var(--ink);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
+    .btn-back{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
+    .container{max-width:900px;margin:36px auto;padding:0 24px}
+    h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
+    .btn-primary:hover{opacity:.9}
+    .field-inline{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .field-inline select{padding:8px 12px;border:1.5px solid var(--border);border-radius:7px;font-family:inherit;font-size:.85rem;background:#fff}
+    .reg-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+    .reg-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+    .reg-card h3{font-size:.95rem;font-weight:700}
+    .reg-card .meta{font-size:.8rem;color:var(--muted);margin-top:4px}
+    .reg-card .body{font-size:.87rem;color:var(--ink);margin-top:8px;line-height:1.5}
+    .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:700;margin-left:6px}
+    .badge.REGISTRO    {background:var(--light);color:var(--accent)}
+    .badge.RECOMENDACION{background:#d1fae5;color:#065f46}
+    .badge.NOTA        {background:#fef9c3;color:#854d0e}
+    .reg-actions{display:flex;gap:6px}
+    .btn-sm{padding:5px 12px;border-radius:6px;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff}
+    .btn-sm.danger{border-color:var(--red);color:var(--red)}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+    .overlay.open{display:flex}
+    .modal{background:#fff;border-radius:14px;padding:32px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+    .modal h2{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:24px}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:var(--surface)}
+    .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+    .field textarea{min-height:80px;resize:vertical}
+    .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
+    .btn-cancel{background:none;border:1.5px solid var(--border);color:var(--muted);padding:9px 18px;border-radius:7px;font-family:inherit;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Registros clínicos</span>
+    <button class="btn-back" onclick="window.location.href='/logopeda/dashboard.html'">← Volver</button>
+  </header>
+  <div class="container">
+    <h1>Registros clínicos</h1>
+    <p class="subtitle">Crea notas clínicas y recomendaciones de actividad para la familia.</p>
+
+    <div class="field-inline" style="margin-bottom:24px">
+      <select id="selPaciente" onchange="cargarRegistros()">
+        <option value="">— Selecciona un paciente —</option>
+      </select>
+      <select id="filtroTipo" onchange="cargarRegistros()">
+        <option value="">Todos los tipos</option>
+        <option value="REGISTRO">Registro</option>
+        <option value="RECOMENDACION">Recomendación</option>
+        <option value="NOTA">Nota</option>
+      </select>
+    </div>
+
+    <div class="toolbar">
+      <span id="countLabel" style="font-size:.85rem;color:var(--muted)"></span>
+      <button class="btn-primary" onclick="abrirNuevo()">+ Nuevo registro</button>
+    </div>
+    <div id="lista"><p style="color:var(--muted);font-style:italic">Selecciona un paciente.</p></div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2 id="modalTitle">Nuevo registro</h2>
+      <input type="hidden" id="regId">
+      <div class="field"><label>Paciente</label>
+        <select id="pacienteModal"></select>
+      </div>
+      <div class="field"><label>Tipo</label>
+        <select id="tipo">
+          <option value="REGISTRO">Registro clínico</option>
+          <option value="RECOMENDACION">Recomendación de actividad</option>
+          <option value="NOTA">Nota</option>
+        </select>
+      </div>
+      <div class="field"><label>Actividad relacionada (opcional)</label>
+        <select id="actividadId"><option value="">— Ninguna —</option></select>
+      </div>
+      <div class="field"><label>Título</label><input id="titulo" placeholder="Título del registro"></div>
+      <div class="field"><label>Contenido</label>
+        <textarea id="contenido" placeholder="Escribe aquí las observaciones o instrucciones…"></textarea>
+      </div>
+      <div class="field"><label>Email familia (para notificación)</label>
+        <input type="email" id="emailFamilia" placeholder="familia@ejemplo.com">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="cerrar()">Cancelar</button>
+        <button class="btn-primary" onclick="guardar()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+    let pacientes = [], actividades = [];
+
+    async function api(url,opts={}) {
+      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...opts});
+      return r.json();
+    }
+
+    // RUP crearRegistro: listarPacientesActivos + listarDisponibles al abrir modal
+    async function init() {
+      [pacientes, actividades] = await Promise.all([
+        api('/api/logopeda/pacientes/activos'),
+        api('/api/logopeda/actividades/disponibles')
+      ]);
+      const selFiltro = document.getElementById('selPaciente');
+      pacientes.forEach(p => {
+        const o=document.createElement('option'); o.value=p._id; o.textContent=p.nombre;
+        selFiltro.appendChild(o);
+      });
+    }
+
+    async function cargarRegistros() {
+      const pid   = document.getElementById('selPaciente').value;
+      const tipo  = document.getElementById('filtroTipo').value;
+      if (!pid) return;
+      let registros = await api(`/api/logopeda/registros/${pid}`);
+      if (tipo) registros = registros.filter(r=>r.tipo===tipo);
+      document.getElementById('countLabel').textContent=`${registros.length} registro(s)`;
+      document.getElementById('lista').innerHTML = registros.length
+        ? registros.map(r=>`
+          <div class="reg-card">
+            <div class="reg-card-header">
+              <div>
+                <h3>${r.titulo}<span class="badge ${r.tipo}">${r.tipo}</span></h3>
+                <div class="meta">${new Date(r.fecha).toLocaleDateString('es-ES')}</div>
+              </div>
+              <div class="reg-actions">
+                <button class="btn-sm" onclick="abrirEditar('${r._id}','${r.titulo}','${r.tipo}','${r.contenido||''}','${r.actividadId||''}')">Editar</button>
+                <button class="btn-sm danger" onclick="eliminar('${r._id}')">Eliminar</button>
+              </div>
+            </div>
+            <div class="body">${r.contenido||''}</div>
+          </div>`).join('')
+        : '<p style="color:var(--muted);font-style:italic">Sin registros para este filtro.</p>';
+    }
+
+    function poblarModal() {
+      const pSel = document.getElementById('pacienteModal');
+      const aSel = document.getElementById('actividadId');
+      pSel.innerHTML=''; aSel.innerHTML='<option value="">— Ninguna —</option>';
+      pacientes.forEach(p=>{const o=document.createElement('option');o.value=p._id;o.textContent=p.nombre;pSel.appendChild(o);});
+      actividades.forEach(a=>{const o=document.createElement('option');o.value=a._id;o.textContent=a.titulo;aSel.appendChild(o);});
+      const pid=document.getElementById('selPaciente').value;
+      if (pid) pSel.value=pid;
+    }
+
+    function abrirNuevo() {
+      document.getElementById('regId').value='';
+      document.getElementById('modalTitle').textContent='Nuevo registro';
+      ['titulo','contenido','emailFamilia'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('tipo').value='REGISTRO';
+      poblarModal();
+      document.getElementById('overlay').classList.add('open');
+    }
+
+    function abrirEditar(id,titulo,tipo,contenido,actId) {
+      document.getElementById('regId').value=id;
+      document.getElementById('modalTitle').textContent='Editar registro';
+      document.getElementById('titulo').value=titulo;
+      document.getElementById('tipo').value=tipo;
+      document.getElementById('contenido').value=contenido;
+      poblarModal();
+      document.getElementById('actividadId').value=actId;
+      document.getElementById('overlay').classList.add('open');
+    }
+
+    function cerrar() { document.getElementById('overlay').classList.remove('open'); }
+
+    // RUP: guardarRegistro(pacienteId, tipo, titulo, contenido, actividadId)
+    async function guardar() {
+      const id=document.getElementById('regId').value;
+      const body={
+        pacienteId:  document.getElementById('pacienteModal').value,
+        tipo:        document.getElementById('tipo').value,
+        titulo:      document.getElementById('titulo').value,
+        contenido:   document.getElementById('contenido').value,
+        actividadId: document.getElementById('actividadId').value||undefined,
+        emailFamilia:document.getElementById('emailFamilia').value||undefined
+      };
+      if(id) await api(`/api/logopeda/registros/${id}`,{method:'PUT',body:JSON.stringify(body)});
+      else   await api('/api/logopeda/registros',{method:'POST',body:JSON.stringify(body)});
+      cerrar(); cargarRegistros();
+    }
+
+    // RUP eliminarRegistro: deleteById
+    async function eliminar(id) {
+      if(!confirm('¿Eliminar este registro?')) return;
+      await api(`/api/logopeda/registros/${id}`,{method:'DELETE'});
+      cargarRegistros();
+    }
+
+    init();
+  </script>
+</body>
+</html>

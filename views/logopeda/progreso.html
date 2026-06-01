@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Progreso</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#3b5bdb;--light:#eef1ff;--surface:#f8f9ff;--border:#e5e7f0;--green:#059669}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
+    header{background:var(--ink);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
+    .btn-back{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
+    .container{max-width:860px;margin:36px auto;padding:0 24px}
+    h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
+    .field{margin-bottom:24px;max-width:320px}
+    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
+    .field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
+    .field select:focus{outline:none;border-color:var(--accent)}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:32px}
+    .stat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px 24px}
+    .stat .val{font-size:2rem;font-weight:700;color:var(--accent)}
+    .stat .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
+    .section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+    .chart-wrap{background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:28px}
+    .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .bar-label{width:90px;font-size:.78rem;color:var(--muted);text-align:right;flex-shrink:0}
+    .bar-track{flex:1;background:var(--surface);border-radius:20px;height:14px;overflow:hidden}
+    .bar-fill{height:100%;border-radius:20px;background:var(--accent);transition:width .4s ease}
+    .bar-val{width:40px;font-size:.78rem;font-weight:700;color:var(--ink)}
+    #placeholder{color:var(--muted);font-style:italic}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Progreso</span>
+    <button class="btn-back" onclick="window.location.href='/logopeda/dashboard.html'">← Volver</button>
+  </header>
+  <div class="container">
+    <h1>Progreso del paciente</h1>
+    <p class="subtitle">Métricas calculadas a partir de las sesiones finalizadas — CdU-06 RUP.</p>
+
+    <div class="field">
+      <label>Paciente</label>
+      <select id="selPaciente" onchange="cargarProgreso()">
+        <option value="">— Selecciona un paciente —</option>
+      </select>
+    </div>
+
+    <div id="contenido" style="display:none">
+      <div class="stats-grid">
+        <div class="stat"><div class="val" id="totalSesiones">0</div><div class="lbl">Sesiones finalizadas</div></div>
+        <div class="stat"><div class="val" id="promedio">0%</div><div class="lbl">Promedio de aciertos</div></div>
+        <div class="stat"><div class="val" id="totalAsig">0</div><div class="lbl">Actividades asignadas</div></div>
+        <div class="stat"><div class="val" id="completas">0</div><div class="lbl">Completadas</div></div>
+        <div class="stat"><div class="val" id="pendientes">0</div><div class="lbl">Pendientes</div></div>
+      </div>
+
+      <div class="section-title">Evolución por sesión</div>
+      <div class="chart-wrap" id="chart">
+        <p id="sinDatos" style="color:var(--muted);font-style:italic">Sin sesiones finalizadas aún.</p>
+      </div>
+    </div>
+    <p id="placeholder">Selecciona un paciente para ver sus métricas.</p>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+
+    async function api(url) {
+      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+      return r.json();
+    }
+
+    async function init() {
+      const pacientes = await api('/api/logopeda/pacientes/activos');
+      const sel = document.getElementById('selPaciente');
+      pacientes.forEach(p=>{const o=document.createElement('option');o.value=p._id;o.textContent=p.nombre;sel.appendChild(o);});
+    }
+
+    // RUP CdU-06: ProgresoController.getProgreso → calcularMetricas(sesiones, asignaciones)
+    async function cargarProgreso() {
+      const pid = document.getElementById('selPaciente').value;
+      if (!pid) return;
+      const {metricas} = await api(`/api/logopeda/progreso/${pid}`);
+      document.getElementById('placeholder').style.display='none';
+      document.getElementById('contenido').style.display='block';
+
+      document.getElementById('totalSesiones').textContent = metricas.totalSesiones;
+      document.getElementById('promedio').textContent       = metricas.promedioAciertos + '%';
+      document.getElementById('totalAsig').textContent      = metricas.totalAsignaciones;
+      document.getElementById('completas').textContent      = metricas.asignacionesCompletas;
+      document.getElementById('pendientes').textContent     = metricas.asignacionesPendientes;
+
+      const chart = document.getElementById('chart');
+      if (!metricas.evolucion?.length) {
+        chart.innerHTML='<p style="color:var(--muted);font-style:italic">Sin sesiones finalizadas aún.</p>';
+        return;
+      }
+      chart.innerHTML = metricas.evolucion.map((e,i) => `
+        <div class="bar-row">
+          <span class="bar-label">${new Date(e.fecha).toLocaleDateString('es-ES',{day:'2-digit',month:'short'})}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${e.porcentaje}%"></div></div>
+          <span class="bar-val">${e.porcentaje}%</span>
+        </div>`).join('');
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Actividades recomendadas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
+    header{background:var(--accent);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
+    .btn-back{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
+    .container{max-width:800px;margin:36px auto;padding:0 24px}
+    h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
+    .field{margin-bottom:24px;max-width:320px}
+    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
+    .field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
+    .field select:focus{outline:none;border-color:var(--accent)}
+    .section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:28px}
+    .act-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .act-card h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+    .act-card p{font-size:.82rem;color:var(--muted)}
+    .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:700;margin-left:6px}
+    .badge.PENDIENTE  {background:#fef3c7;color:#92400e}
+    .badge.EN_PROGRESO{background:#dbeafe;color:#1e40af}
+    .badge.COMPLETADA {background:#d1fae5;color:#065f46}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.88rem;white-space:nowrap}
+    .btn-primary:hover{opacity:.9}
+    .rec-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px}
+    .rec-card h4{font-size:.9rem;font-weight:700;margin-bottom:4px}
+    .rec-card p{font-size:.82rem;color:var(--muted);line-height:1.4}
+    .rec-card .fecha{font-size:.75rem;color:var(--muted);margin-top:6px}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Actividades recomendadas</span>
+    <button class="btn-back" onclick="window.location.href='/familia/dashboard.html'">← Volver</button>
+  </header>
+  <div class="container">
+    <h1>Actividades recomendadas</h1>
+    <p class="subtitle">Actividades asignadas por el logopeda para practicar en casa.</p>
+
+    <div class="field">
+      <label>Paciente</label>
+      <select id="selPaciente" onchange="cargar()">
+        <option value="">— Selecciona —</option>
+      </select>
+    </div>
+
+    <!-- RUP: getAsignacionesActivas(pacienteId) -->
+    <div id="secAsignaciones" style="display:none">
+      <div class="section-title">Actividades asignadas activas</div>
+      <div id="listaAsig"><p style="color:var(--muted);font-style:italic">Sin asignaciones activas.</p></div>
+
+      <!-- RUP: getRecomendaciones(pacienteId) -->
+      <div class="section-title">Recomendaciones del logopeda</div>
+      <div id="listaRec"><p style="color:var(--muted);font-style:italic">Sin recomendaciones.</p></div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+
+    async function api(url) {
+      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+      return r.json();
+    }
+
+    async function init() {
+      // Para el selector de paciente la familia usa las actividades disponibles
+      // (no tiene endpoint de pacientes propios); cargamos asignaciones en blanco
+      // y el pacienteId lo guarda el logopeda en la asignación.
+      // En producción el usuario familia tendría su pacienteId en el token.
+      // Aquí permitimos seleccionarlo manualmente.
+      const acts = await api('/api/familia/actividades');
+      // Construir lista de pacienteIds únicos desde asignaciones (simplificado)
+      const sel  = document.getElementById('selPaciente');
+      // Añadimos opción manual: el usuario introduce el ID
+      sel.innerHTML = '<option value="">— Introduce el ID del paciente —</option>';
+      // En integración real, el token familia llevaría pacienteId.
+    }
+
+    async function cargar() {
+      const pid = document.getElementById('selPaciente').value;
+      if (!pid) return;
+      document.getElementById('secAsignaciones').style.display='block';
+
+      // RUP verActividadesRecomendadas: getAsignacionesActivas + getRecomendaciones
+      const [asig, recs] = await Promise.all([
+        api(`/api/familia/actividades/recomendadas/${pid}`),
+        api(`/api/familia/registros/recomendaciones/${pid}`)
+      ]);
+
+      document.getElementById('listaAsig').innerHTML = asig.length
+        ? asig.map(a=>`
+          <div class="act-card">
+            <div>
+              <h3>${a.actividadId?.titulo || 'Actividad'}<span class="badge ${a.estado}">${a.estado}</span></h3>
+              <p>${a.actividadId?.descripcion || ''}</p>
+            </div>
+            <button class="btn-primary" onclick="practicar('${a.actividadId?._id}','${pid}')">Practicar</button>
+          </div>`).join('')
+        : '<p style="color:var(--muted);font-style:italic">Sin asignaciones activas.</p>';
+
+      document.getElementById('listaRec').innerHTML = recs.length
+        ? recs.map(r=>`
+          <div class="rec-card">
+            <h4>${r.titulo}</h4>
+            <p>${r.contenido||''}</p>
+            <div class="fecha">${new Date(r.fecha).toLocaleDateString('es-ES')}</div>
+          </div>`).join('')
+        : '<p style="color:var(--muted);font-style:italic">Sin recomendaciones.</p>';
+    }
+
+    function practicar(actId, pacienteId) {
+      localStorage.setItem('practicaActId', actId);
+      localStorage.setItem('practicaPacienteId', pacienteId);
+      window.location.href='/familia/realizar-actividad.html';
+    }
+
+    // Selector manual por ID (simplificado para demo)
+    document.getElementById('selPaciente').addEventListener('change', cargar);
+    // Permitir también introducir ID como option dinámica
+    const sel = document.getElementById('selPaciente');
+    const input = document.createElement('input');
+    input.placeholder='ID del paciente'; input.style.cssText='margin-top:8px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;width:100%;display:block';
+    sel.parentElement.appendChild(input);
+    input.addEventListener('change', () => {
+      const val = input.value.trim();
+      if (!val) return;
+      let opt = document.getElementById('dynOpt');
+      if (!opt) { opt=document.createElement('option'); opt.id='dynOpt'; sel.appendChild(opt); }
+      opt.value=val; opt.textContent=`ID: ${val}`;
+      sel.value=val; cargar();
+    });
+
+    init();
+  </script>
+</body>
+</html>

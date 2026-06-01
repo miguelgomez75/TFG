@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Realizar actividad</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8;--green:#059669;--red:#dc2626}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
+    header{background:var(--accent);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
+    .btn-back{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
+    .container{max-width:700px;margin:40px auto;padding:0 24px}
+    h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin-bottom:32px;font-size:.9rem}
+
+    /* Selección de actividad */
+    .field{margin-bottom:20px}
+    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
+    .field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
+    .field select:focus{outline:none;border-color:var(--accent)}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:9px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.95rem}
+    .btn-primary:hover{opacity:.9}
+
+    /* Panel sesión activa */
+    #panelSesion{display:none}
+    .sesion-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:20px;text-align:center}
+    .sesion-card h2{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:8px}
+    .sesion-card p{color:var(--muted);font-size:.88rem;margin-bottom:24px}
+    .marcador{display:flex;justify-content:center;gap:40px;margin-bottom:28px}
+    .marcador .item .num{font-size:2.5rem;font-weight:700}
+    .marcador .item .lbl{font-size:.78rem;color:var(--muted);margin-top:2px}
+    .marcador .item.acierto .num{color:var(--green)}
+    .marcador .item.error   .num{color:var(--red)}
+    .respuesta-btns{display:flex;gap:14px;justify-content:center;margin-bottom:28px}
+    .btn-acierto{background:var(--green);color:#fff;border:none;padding:14px 32px;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;font-size:1rem}
+    .btn-error  {background:var(--red);  color:#fff;border:none;padding:14px 32px;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;font-size:1rem}
+    .btn-acierto:hover,.btn-error:hover{opacity:.88}
+    .btn-finalizar{background:#fff;border:2px solid var(--accent);color:var(--accent);padding:11px 26px;border-radius:9px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
+    .btn-finalizar:hover{background:var(--light)}
+    .estado-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;background:var(--light);color:var(--accent);margin-bottom:16px}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Realizar actividad</span>
+    <button class="btn-back" onclick="window.location.href='/familia/dashboard.html'">← Volver</button>
+  </header>
+  <div class="container">
+    <h1>Realizar actividad</h1>
+    <p class="subtitle">Selecciona una actividad disponible e inicia la sesión de práctica — CdU-03.</p>
+
+    <!-- Paso 1: selección -->
+    <div id="paso1">
+      <div class="field">
+        <label>Actividad disponible</label>
+        <select id="selAct"><option value="">— Selecciona una actividad —</option></select>
+      </div>
+      <div class="field">
+        <label>ID del paciente</label>
+        <input id="pacienteId" placeholder="ID del paciente" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff">
+      </div>
+      <button class="btn-primary" onclick="iniciar()">Iniciar sesión</button>
+    </div>
+
+    <!-- Paso 2: sesión activa -->
+    <div id="panelSesion">
+      <div class="sesion-card">
+        <div class="estado-badge">Sesión en curso</div>
+        <h2 id="actTitulo">Actividad</h2>
+        <p id="actDesc"></p>
+        <div class="marcador">
+          <div class="item acierto"><div class="num" id="numAciertos">0</div><div class="lbl">Aciertos</div></div>
+          <div class="item error">  <div class="num" id="numErrores">0</div> <div class="lbl">Errores</div></div>
+        </div>
+        <div class="respuesta-btns">
+          <button class="btn-acierto" onclick="responder(true)">✓ Acierto</button>
+          <button class="btn-error"   onclick="responder(false)">✗ Error</button>
+        </div>
+        <button class="btn-finalizar" onclick="finalizar()">Finalizar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+    let sesionId = null;
+    let aciertos = 0, errores = 0;
+
+    async function api(url, opts={}) {
+      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...opts});
+      return r.json();
+    }
+
+    async function init() {
+      // Pre-rellenar desde localStorage si viene de actividades-recomendadas
+      const actId  = localStorage.getItem('practicaActId');
+      const pacId  = localStorage.getItem('practicaPacienteId');
+      if (pacId) document.getElementById('pacienteId').value = pacId;
+
+      const acts = await api('/api/familia/actividades');
+      const sel  = document.getElementById('selAct');
+      acts.forEach(a => {
+        const o=document.createElement('option'); o.value=a._id; o.textContent=a.titulo; sel.appendChild(o);
+      });
+      if (actId) sel.value = actId;
+    }
+
+    // RUP CdU-03: crearSesion(asignacionId) → iniciarSesion
+    async function iniciar() {
+      const actividadId = document.getElementById('selAct').value;
+      const pacienteId  = document.getElementById('pacienteId').value.trim();
+      if (!actividadId || !pacienteId) { alert('Selecciona actividad e introduce el ID del paciente.'); return; }
+
+      const sesion = await api('/api/familia/practica', {
+        method:'POST', body:JSON.stringify({ pacienteId, actividadId })
+      });
+      if (sesion.error) { alert(sesion.error); return; }
+      sesionId = sesion._id;
+      aciertos = 0; errores = 0;
+      document.getElementById('numAciertos').textContent = 0;
+      document.getElementById('numErrores').textContent  = 0;
+
+      // Cargar info de la actividad seleccionada
+      const actData = await api(`/api/familia/actividades/${actividadId}`);
+      document.getElementById('actTitulo').textContent = actData.actividad?.titulo || 'Actividad';
+      document.getElementById('actDesc').textContent   = actData.actividad?.descripcion || '';
+
+      document.getElementById('paso1').style.display     = 'none';
+      document.getElementById('panelSesion').style.display = 'block';
+      localStorage.removeItem('practicaActId');
+      localStorage.removeItem('practicaPacienteId');
+    }
+
+    // RUP CdU-03: registrarRespuesta(sesionId, ejercicioId, respuesta)
+    async function responder(esAcierto) {
+      if (!sesionId) return;
+      await api(`/api/familia/practica/${sesionId}/respuesta`, {
+        method:'PUT', body:JSON.stringify({ esAcierto })
+      });
+      if (esAcierto) { aciertos++; document.getElementById('numAciertos').textContent = aciertos; }
+      else           { errores++;  document.getElementById('numErrores').textContent  = errores;  }
+    }
+
+    // RUP CdU-03: finalizarSesion + marcarCompletada → ResultadoActividad
+    async function finalizar() {
+      if (!sesionId) return;
+      const resultado = await api(`/api/familia/practica/${sesionId}/finalizar`, { method:'PUT' });
+      localStorage.setItem('resultado', JSON.stringify(resultado));
+      window.location.href = '/familia/resultado-actividad.html';
+    }
+
+    init();
+  </script>
+</body>
+</html>

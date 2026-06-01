@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAA — Sesiones</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --ink:#1a1f2e; --muted:#6b7280; --accent:#3b5bdb; --light:#eef1ff; --surface:#f8f9ff; --border:#e5e7f0; --red:#dc2626; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); }
+    header { background: var(--ink); color: #fff; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+    .btn-back { background: none; border: 1px solid rgba(255,255,255,.3); color: #fff; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: .85rem; }
+    .container { max-width: 900px; margin: 36px auto; padding: 0 24px; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 6px; }
+    .subtitle { color: var(--muted); margin-bottom: 28px; font-size: .9rem; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .btn-primary { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-family: inherit; font-weight: 700; cursor: pointer; font-size: .9rem; }
+    .btn-primary:hover { opacity: .9; }
+    .sesion-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      padding: 18px 20px; margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sesion-info h3 { font-size: .95rem; font-weight: 700; }
+    .sesion-info p  { font-size: .82rem; color: var(--muted); margin-top: 4px; }
+    .sesion-actions { display: flex; gap: 8px; }
+    .btn-sm { padding: 6px 14px; border-radius: 6px; font-family: inherit; font-size: .82rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: #fff; }
+    .btn-sm.danger { border-color: var(--red); color: var(--red); }
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: .75rem; font-weight: 700; margin-left: 8px; }
+    .badge.FINALIZADA  { background: #d1fae5; color: #065f46; }
+    .badge.INICIADA    { background: #fef3c7; color: #92400e; }
+    .badge.EN_CURSO    { background: #dbeafe; color: #1e40af; }
+    .badge.PAUSADA     { background: #f3f4f6; color: #6b7280; }
+    .badge.ABANDONADA  { background: #fee2e2; color: #991b1b; }
+
+    /* Modal */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100; align-items: center; justify-content: center; }
+    .overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 14px; padding: 32px; width: 100%; max-width: 480px; }
+    .modal h2 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 24px; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: 6px; }
+    .field select, .field input, .field textarea {
+      width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: .9rem; background: var(--surface);
+    }
+    .field select:focus, .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+    .field textarea { min-height: 70px; resize: vertical; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+    .btn-cancel { background: none; border: 1.5px solid var(--border); color: var(--muted); padding: 9px 18px; border-radius: 7px; font-family: inherit; cursor: pointer; }
+    #empty { color: var(--muted); font-style: italic; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">CAA · Sesiones</span>
+    <button class="btn-back" onclick="window.location.href='/logopeda/dashboard.html'">← Volver</button>
+  </header>
+  <div class="container">
+    <h1>Sesiones clínicas</h1>
+    <p class="subtitle">Registra y gestiona las sesiones terapéuticas presenciales.</p>
+
+    <!-- Selector de paciente -->
+    <div class="field" style="max-width:320px;margin-bottom:24px">
+      <label>Paciente</label>
+      <select id="selPaciente" onchange="cargarSesiones()">
+        <option value="">— Selecciona un paciente —</option>
+      </select>
+    </div>
+
+    <div class="toolbar">
+      <span id="countLabel" style="font-size:.85rem;color:var(--muted)"></span>
+      <button class="btn-primary" onclick="abrirModalNueva()">+ Nueva sesión</button>
+    </div>
+    <div id="lista"><p id="empty">Selecciona un paciente para ver sus sesiones.</p></div>
+  </div>
+
+  <!-- Modal registrar / editar sesión -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2 id="modalTitle">Registrar sesión</h2>
+      <input type="hidden" id="sesionId">
+      <div class="field">
+        <label>Fecha</label>
+        <input type="date" id="fecha">
+      </div>
+      <div class="field">
+        <label>Tipo</label>
+        <select id="tipo">
+          <option value="PRESENCIAL">Presencial</option>
+          <option value="CASA">Casa</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Aciertos</label>
+        <input type="number" id="aciertos" value="0" min="0">
+      </div>
+      <div class="field">
+        <label>Errores</label>
+        <input type="number" id="errores" value="0" min="0">
+      </div>
+      <div class="field">
+        <label>Notas</label>
+        <textarea id="notas" placeholder="Observaciones de la sesión…"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn-primary" onclick="guardar()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/compartida/login.html';
+
+    async function api(url, opts = {}) {
+      const r = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        ...opts
+      });
+      return r.json();
+    }
+
+    // RUP: listarPacientesActivos() al cargar la vista
+    async function init() {
+      const pacientes = await api('/api/logopeda/pacientes/activos');
+      const sel = document.getElementById('selPaciente');
+      pacientes.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p._id; o.textContent = p.nombre;
+        sel.appendChild(o);
+      });
+    }
+
+    // RUP: getSesiones(pacienteId) → findByPaciente
+    async function cargarSesiones() {
+      const pid = document.getElementById('selPaciente').value;
+      if (!pid) return;
+      const sesiones = await api(`/api/logopeda/sesiones/${pid}`);
+      const lista = document.getElementById('lista');
+      document.getElementById('countLabel').textContent = `${sesiones.length} sesión(es)`;
+      if (!sesiones.length) { lista.innerHTML = '<p id="empty">Sin sesiones registradas.</p>'; return; }
+      lista.innerHTML = sesiones.map(s => `
+        <div class="sesion-card">
+          <div class="sesion-info">
+            <h3>${new Date(s.fecha).toLocaleDateString('es-ES')} — ${s.tipo}
+              <span class="badge ${s.estado}">${s.estado}</span>
+            </h3>
+            <p>Aciertos: ${s.aciertos} · Errores: ${s.errores}${s.notas ? ` · ${s.notas}` : ''}</p>
+          </div>
+          <div class="sesion-actions">
+            <button class="btn-sm" onclick="abrirModalEditar('${s._id}','${s.tipo}','${s.aciertos}','${s.errores}','${s.notas||''}')">Editar</button>
+            <button class="btn-sm danger" onclick="eliminar('${s._id}')">Eliminar</button>
+          </div>
+        </div>`).join('');
+    }
+
+    function abrirModalNueva() {
+      document.getElementById('sesionId').value = '';
+      document.getElementById('modalTitle').textContent = 'Registrar sesión';
+      document.getElementById('fecha').value     = new Date().toISOString().split('T')[0];
+      document.getElementById('tipo').value      = 'PRESENCIAL';
+      document.getElementById('aciertos').value  = 0;
+      document.getElementById('errores').value   = 0;
+      document.getElementById('notas').value     = '';
+      document.getElementById('overlay').classList.add('open');
+    }
+
+    function abrirModalEditar(id, tipo, aciertos, errores, notas) {
+      document.getElementById('sesionId').value  = id;
+      document.getElementById('modalTitle').textContent = 'Editar sesión';
+      document.getElementById('tipo').value      = tipo;
+      document.getElementById('aciertos').value  = aciertos;
+      document.getElementById('errores').value   = errores;
+      document.getElementById('notas').value     = notas;
+      document.getElementById('overlay').classList.add('open');
+    }
+
+    function cerrarModal() { document.getElementById('overlay').classList.remove('open'); }
+
+    // RUP CdU-05: guardarSesion / actualizarSesion
+    async function guardar() {
+      const pid   = document.getElementById('selPaciente').value;
+      const id    = document.getElementById('sesionId').value;
+      const body  = {
+        pacienteId: pid,
+        fecha:      document.getElementById('fecha').value,
+        tipo:       document.getElementById('tipo').value,
+        aciertos:   +document.getElementById('aciertos').value,
+        errores:    +document.getElementById('errores').value,
+        notas:      document.getElementById('notas').value
+      };
+      if (id) {
+        await api(`/api/logopeda/sesiones/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+      } else {
+        await api('/api/logopeda/sesiones', { method: 'POST', body: JSON.stringify(body) });
+      }
+      cerrarModal();
+      cargarSesiones();
+    }
+
+    // RUP diagrama eliminarSesion: deleteById
+    async function eliminar(id) {
+      if (!confirm('¿Eliminar esta sesión?')) return;
+      await api(`/api/logopeda/sesiones/${id}`, { method: 'DELETE' });
+      cargarSesiones();
+    }
+
+    init();
+  </script>
+</body>
+</html>

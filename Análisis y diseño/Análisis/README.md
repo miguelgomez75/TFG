@@ -1,6 +1,8 @@
 # Índice
 
 - [1. Diagramas MVC](#1-Diagramas-MVC)
+- [2. MVC Completo](#2-MVC-Completo)
+- [3. Solución en base al análisis](#3-Solución-en-base-al-análisis)
 
 ---
 
@@ -24,4 +26,9 @@ Diagrama con todas las vistas, modelos y controladores de la aplicación:
 |----------|--------|
 | ![d1](Diagramas%20MVC/MVC/MVC.svg) | [PUML](Diagramas%20MVC/MVC/MVC.puml) |
 
+# 3. Solución en base al análisis
+
+|  README  | Código | Vistas |
+|----------|--------|--------|
+| [rdmd](/An%C3%A1lisis%20y%20dise%C3%B1o/Dise%C3%B1o) | [Código](/src) | [Vistas](/views) |
 

@@ -13,24 +13,24 @@ Diagramas de ejemplo de los casos de uso más destacables
 
 | ID | Caso de uso | Diagrama | Código |
 |----|-------------|----------|--------|
-| CdU-01 | Asignar actividad | ![d1](Análisis/Diagramas%20MVC/CdU01%20AsignarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU01%20AsignarActividad.puml) |
-| CdU-02 | Publicar actividad | ![d2](Análisis/Diagramas%20MVC/CdU02%20PublicarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU02%20PublicarActividad.puml) |
-| CdU-03 | Realizar actividad | ![d3](Análisis/Diagramas%20MVC/CdU03%20RealizarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU03%20RealizarActividad.puml) |
-| CdU-04 | Recomendar actividad | ![d4](Análisis/Diagramas%20MVC/CdU04%20RecomendarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU04%20RecomendarActividad.puml) |
-| CdU-05 | Registrar sesión | ![d5](Análisis/Diagramas%20MVC/CdU05%20RegistrarSesion.svg) | [PUML](Análisis/Diagramas%20MVC/CdU05%20RegistrarSesion.puml) |
-| CdU-06 | Ver progreso paciente | ![d6](Análisis/Diagramas%20MVC/CdU06%20VerProgresoPaciente.svg) | [PUML](Análisis/Diagramas%20MVC/CdU06%20VerProgresoPaciente.puml)|
+| CdU-01 | Asignar actividad | ![d1](Análisis/Diagramas%20MVC/CdU01%20AsignarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU01%20AsignarActividad.puml) |
+| CdU-02 | Publicar actividad | ![d2](Análisis/Diagramas%20MVC/CdU02%20PublicarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU02%20PublicarActividad.puml) |
+| CdU-03 | Realizar actividad | ![d3](Análisis/Diagramas%20MVC/CdU03%20RealizarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU03%20RealizarActividad.puml) |
+| CdU-04 | Recomendar actividad | ![d4](Análisis/Diagramas%20MVC/CdU04%20RecomendarActividad.svg) | [PUML](Análisis/Diagramas%20MVC/CdU04%20RecomendarActividad.puml) |
+| CdU-05 | Registrar sesión | ![d5](Análisis/Diagramas%20MVC/CdU05%20RegistrarSesion.svg) | [PUML](Análisis/Diagramas%20MVC/CdU05%20RegistrarSesion.puml) |
+| CdU-06 | Ver progreso paciente | ![d6](Análisis/Diagramas%20MVC/CdU06%20VerProgresoPaciente.svg) | [PUML](Análisis/Diagramas%20MVC/CdU06%20VerProgresoPaciente.puml)|
 
 # 2. MVC Completo
 Diagrama con todas las vistas, modelos y controladores de la aplicación:
 | Diagrama | Código |
 |----------|--------|
-| ![d1](Análisis/Diagramas%20MVC/MVC/MVC.svg) | [PUML](Análisis/Diagramas%20MVC/MVC/MVC.puml) |
+| ![d1](Análisis/Diagramas%20MVC/MVC/MVC.svg) | [PUML](Análisis/Diagramas%20MVC/MVC/MVC.puml) |
 
 # 3. Solución en base al análisis
 
 |  README  | Código | Vistas |
 |----------|--------|--------|
-| [rdmd](/Diseño) | [Código](/src) | [Vistas](/views) |
+| [rdmd](Diseño) | [Código](/src) | [Vistas](/views) |
 
 # 4. Diagramas de Secuencia
 Análisis y diseño/Diseño/Diagramas Secuencia/CdU01 Asignar Actividad.svg

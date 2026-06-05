@@ -1,0 +1,49 @@
+@startuml CdU01-AsignarActividad
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam roundcorner 0
+skinparam sequenceArrowThickness 1
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceArrowColor #CC0000
+skinparam sequenceActorBorderColor #333333
+skinparam sequenceActivationBorderColor #333333
+skinparam sequenceActivationBackgroundColor #FFFFCC
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceParticipantFontSize 12
+skinparam sequenceMessageFontSize 11
+
+title CdU-01: Asignar Actividad
+
+actor ": Logopeda" as Logopeda
+
+participant "AsignarActividadView" as View
+participant "PacienteController"   as PC
+participant "ActividadController"  as AC
+participant "AsignacionController" as ASC
+
+Logopeda -> View : 1 : asignarActividad()
+
+activate View
+
+View -> PC : 2 : listarPacientesActivos()
+activate PC
+PC --> View : 3 : List<Paciente>
+deactivate PC
+
+View -> AC : 4 : listarDisponibles()
+activate AC
+AC --> View : 5 : List<Actividad>
+deactivate AC
+
+Logopeda -> View : 6 : seleccionarPacienteYActividad(pacienteId, actividadId)
+
+View -> ASC : 7 : crearAsignacion(pacienteId, actividadId)
+activate ASC
+ASC --> View : 8 : ok()
+deactivate ASC
+
+View --> Logopeda : 9 : ok()
+deactivate View
+
+@enduml

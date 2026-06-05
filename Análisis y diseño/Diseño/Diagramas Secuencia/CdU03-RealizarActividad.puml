@@ -1,0 +1,60 @@
+@startuml CdU03-RealizarActividad
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam roundcorner 0
+skinparam sequenceArrowThickness 1
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceArrowColor #CC0000
+skinparam sequenceActorBorderColor #333333
+skinparam sequenceActivationBorderColor #333333
+skinparam sequenceActivationBackgroundColor #FFFFCC
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceParticipantFontSize 12
+skinparam sequenceMessageFontSize 11
+
+title CdU-03: Realizar Actividad
+
+actor ": Familia" as Familia
+
+participant "RealizarActividadView"  as View
+participant "PracticaController"     as PC
+participant "AsignacionController"   as ASC
+
+Familia -> View : 1 : iniciarActividad(pacienteId, actividadId)
+
+activate View
+
+View -> PC : 2 : crearSesion(pacienteId, actividadId)
+activate PC
+PC --> View : 3 : Sesion
+deactivate PC
+
+View -> ASC : 4 : marcarEnProgreso(asignacionId)
+activate ASC
+ASC --> View : 5 : ok()
+deactivate ASC
+
+Familia -> View : 6 : registrarRespuesta(esAcierto)
+
+View -> PC : 7 : registrarRespuesta(sesionId, esAcierto)
+activate PC
+PC --> View : 8 : Sesion
+deactivate PC
+
+Familia -> View : 9 : finalizarSesion()
+
+View -> PC : 10 : finalizarSesion(sesionId)
+activate PC
+PC --> View : 11 : porcentajeAciertos
+deactivate PC
+
+View -> ASC : 12 : marcarCompletada(asignacionId)
+activate ASC
+ASC --> View : 13 : ok()
+deactivate ASC
+
+View --> Familia : 14 : mostrarResultado(porcentajeAciertos)
+deactivate View
+
+@enduml

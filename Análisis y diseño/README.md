@@ -3,6 +3,7 @@
 - [1. Diagramas MVC](#1-Diagramas-MVC)
 - [2. MVC Completo](#2-MVC-Completo)
 - [3. Solución en base al análisis](#3-Solución-en-base-al-análisis)
+- [4. Diagramas de Secuencia](#4-Diagramas-de-Secuencia)
 
 ---
 
@@ -36,10 +37,10 @@ Diagrama con todas las vistas, modelos y controladores de la aplicación:
 Análisis y diseño/Diseño/Diagramas Secuencia/CdU01 Asignar Actividad.svg
 | ID | Caso de uso | Diagrama | Código |
 |----|-------------|----------|--------|
-| CdU-01 | Asignar actividad | ![d1](Diseño/Diagramas%20Secuencia/CdU01%20AsignarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU01%20AsignarActividad.puml) |
-| CdU-02 | Publicar actividad | ![d2](Diseño/Diagramas%20Secuencia/CdU02%20PublicarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU02%20PublicarActividad.puml) |
-| CdU-03 | Realizar actividad | ![d3](Diseño/Diagramas%20Secuencia/CdU03%20RealizarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU03%20RealizarActividad.puml) |
-| CdU-04 | Recomendar actividad | ![d4](Diseño/Diagramas%20Secuencia/CdU04%20RecomendarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU04%20RecomendarActividad.puml) |
-| CdU-05 | Registrar sesión | ![d5](Diseño/Diagramas%20Secuencia/CdU05%20RegistrarSesion.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU05%20RegistrarSesion.puml) |
-| CdU-06 | Ver progreso paciente | ![d6](Diseño/Diagramas%20Secuencia/CdU06%20VerProgresoPaciente.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU06%20VerProgresoPaciente.puml)|
+| CdU-01 | Asignar actividad | ![d1](Diseño/Diagramas%20Secuencia/CdU01-AsignarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU01-AsignarActividad.puml) |
+| CdU-02 | Publicar actividad | ![d2](Diseño/Diagramas%20Secuencia/CdU02-PublicarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU02-PublicarActividad.puml) |
+| CdU-03 | Realizar actividad | ![d3](Diseño/Diagramas%20Secuencia/CdU03-RealizarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU03-RealizarActividad.puml) |
+| CdU-04 | Recomendar actividad | ![d4](Diseño/Diagramas%20Secuencia/CdU04-RecomendarActividad.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU04-RecomendarActividad.puml) |
+| CdU-05 | Registrar sesión | ![d5](Diseño/Diagramas%20Secuencia/CdU05-RegistrarSesion.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU05-RegistrarSesion.puml) |
+| CdU-06 | Ver progreso paciente | ![d6](Diseño/Diagramas%20Secuencia/CdU06-VerProgresoPaciente.svg) | [PUML](Diseño/Diagramas%20Secuencia/CdU06-VerProgresoPaciente.puml)|
 

@@ -1,0 +1,47 @@
+@startuml CdU06 VerProgresoPaciente
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam roundcorner 0
+skinparam sequenceArrowThickness 1
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceArrowColor #CC0000
+skinparam sequenceActorBorderColor #333333
+skinparam sequenceActivationBorderColor #333333
+skinparam sequenceActivationBackgroundColor #FFFFCC
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceParticipantFontSize 12
+skinparam sequenceMessageFontSize 11
+
+title CdU-06: Ver Progreso Paciente
+
+actor ": Logopeda / Familia" as Actor
+
+participant "VerProgreso"      as View
+participant "SesionController.js"     as SC
+participant "AsignacionController.js" as ASC
+participant "ProgresoController.js"   as PC
+
+Actor -> View : 1 : verProgreso(pacienteId)
+
+activate View
+
+View -> SC : 2 : getSesiones(pacienteId)
+activate SC
+SC --> View : 3 : List<Sesion>
+deactivate SC
+
+View -> ASC : 4 : getAsignaciones(pacienteId)
+activate ASC
+ASC --> View : 5 : List<AsignacionActividad>
+deactivate ASC
+
+View -> PC : 6 : calcularMetricas(sesiones, asignaciones)
+activate PC
+PC --> View : 7 : Metricas
+deactivate PC
+
+View --> Actor : 8 : mostrarProgreso(Metricas)
+deactivate View
+
+@enduml

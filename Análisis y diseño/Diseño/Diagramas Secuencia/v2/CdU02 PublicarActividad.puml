@@ -1,0 +1,50 @@
+@startuml CdU02-PublicarActividad
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam roundcorner 0
+skinparam sequenceArrowThickness 1
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceArrowColor #CC0000
+skinparam sequenceActorBorderColor #333333
+skinparam sequenceActivationBorderColor #333333
+skinparam sequenceActivationBackgroundColor #FFFFCC
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceParticipantFontSize 12
+skinparam sequenceMessageFontSize 11
+
+title CdU-02: Publicar Actividad
+
+actor ": Logopeda" as Logopeda
+
+participant "PublicarActividad"  as View
+participant "ActividadController.js"    as AC
+participant "EstrategiaContenido.js"    as EC
+
+Logopeda -> View : 1 : publicarActividad(actividadId)
+
+activate View
+
+View -> AC : 2 : cargarActividad(actividadId)
+activate AC
+AC --> View : 3 : Actividad
+deactivate AC
+
+View -> AC : 4 : validarCampos(actividad)
+activate AC
+AC -> EC : 5 : validar(actividad)
+activate EC
+EC --> AC : 6 : boolean
+deactivate EC
+AC --> View : 7 : boolean
+deactivate AC
+
+View -> AC : 8 : publicar(actividadId)
+activate AC
+AC --> View : 9 : ok()
+deactivate AC
+
+View --> Logopeda : 10 : ok()
+deactivate View
+
+@enduml

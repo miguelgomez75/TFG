@@ -1,0 +1,48 @@
+@startuml CdU04-RecomendarActividad
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam roundcorner 0
+skinparam sequenceArrowThickness 1
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceArrowColor #CC0000
+skinparam sequenceActorBorderColor #333333
+skinparam sequenceActivationBorderColor #333333
+skinparam sequenceActivationBackgroundColor #FFFFCC
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceParticipantFontSize 12
+skinparam sequenceMessageFontSize 11
+
+title CdU-04: Recomendar Actividad
+
+actor ": Logopeda" as Logopeda
+
+participant "RecomendarActividad"      as View
+participant "PacienteController.js"           as PC
+participant "RegistroClinicoController.js"    as RC
+
+Logopeda -> View : 1 : recomendarActividad(actividadId)
+
+activate View
+
+View -> PC : 2 : listarPacientesActivos()
+activate PC
+PC --> View : 3 : List<Paciente>
+deactivate PC
+
+View -> PC : 4 : verificarAccesoActivo(pacienteId)
+activate PC
+PC --> View : 5 : boolean
+deactivate PC
+
+Logopeda -> View : 6 : confirmarRecomendacion(pacienteId, instrucciones)
+
+View -> RC : 7 : crearRecomendacion(pacienteId, actividadId, instrucciones)
+activate RC
+RC --> View : 8 : ok()
+deactivate RC
+
+View --> Logopeda : 9 : ok()
+deactivate View
+
+@enduml

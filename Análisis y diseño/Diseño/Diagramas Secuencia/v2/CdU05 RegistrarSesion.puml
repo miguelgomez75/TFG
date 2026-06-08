@@ -1,0 +1,48 @@
+@startuml CdU05-RegistrarSesion
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam roundcorner 0
+skinparam sequenceArrowThickness 1
+skinparam sequenceParticipantBorderColor #333333
+skinparam sequenceLifeLineBorderColor #333333
+skinparam sequenceArrowColor #CC0000
+skinparam sequenceActorBorderColor #333333
+skinparam sequenceActivationBorderColor #333333
+skinparam sequenceActivationBackgroundColor #FFFFCC
+skinparam sequenceParticipantBackgroundColor #FFFFFF
+skinparam sequenceParticipantFontSize 12
+skinparam sequenceMessageFontSize 11
+
+title CdU-05: Registrar Sesión
+
+actor ": Logopeda" as Logopeda
+
+participant "RegistrarSesion"  as View
+participant "PacienteController.js"   as PC
+participant "SesionController.js"     as SC
+
+Logopeda -> View : 1 : registrarSesion()
+
+activate View
+
+View -> PC : 2 : listarPacientesActivos()
+activate PC
+PC --> View : 3 : List<Paciente>
+deactivate PC
+
+Logopeda -> View : 4 : rellenarDatos(pacienteId, fecha, tipo, aciertos, errores, notas)
+
+View -> SC : 5 : validarDatos(sesion)
+activate SC
+SC --> View : 6 : boolean
+deactivate SC
+
+View -> SC : 7 : guardarSesion(pacienteId, fecha, tipo, aciertos, errores, notas)
+activate SC
+SC --> View : 8 : ok()
+deactivate SC
+
+View --> Logopeda : 9 : ok()
+deactivate View
+
+@enduml

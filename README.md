@@ -26,7 +26,7 @@ El desarrollo se ha llevado a cabo en colaboración con Laura, logopeda del caso
 | [`Requisitos/`](Requisitos/README.md) | Cap. 2 | Modelo de dominio, casos de uso, diagramas de estados y requisitos no funcionales |
 | [`Análisis y diseño/`](Análisis%20y%20diseño/README.md) | Cap. 3 | Análisis de requisitos, Diseño de la solución |
 | [`Solución/`](doc/README%20DESCRIPCION%20SOLUCIÓN.md) | Cap. 4 | Descripción de la solución |
-| [`Conclusiones/`](doc/README%20COCLUSIONES.md) | Cap. 5 | Conclusiones |
+| [`Conclusiones/`](doc/README%20CONCLUSIONES.md) | Cap. 5 | Conclusiones |
 | [`Bibliografía/`](doc/README%20Bibliografia.md) | Cap. 6 | Bibliografía |
 
 ---

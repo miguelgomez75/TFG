@@ -6,7 +6,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8;--red:#dc2626}
     body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
     header{background:var(--accent);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
     .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
@@ -14,12 +14,14 @@
     .container{max-width:800px;margin:36px auto;padding:0 24px}
     h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
     .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
-    .field{margin-bottom:24px;max-width:320px}
-    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
-    .field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
-    .field input:focus{outline:none;border-color:var(--accent)}
-    .btn-primary{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
-    .btn-primary:hover{opacity:.9}
+    .search-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:28px}
+    .search-box label{display:block;font-size:.85rem;font-weight:500;margin-bottom:8px}
+    .search-row{display:flex;gap:10px}
+    .search-row input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.95rem;text-transform:uppercase;letter-spacing:.05em}
+    .search-row input:focus{outline:none;border-color:var(--accent)}
+    .btn-buscar{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer}
+    .paciente-ok{display:none;margin-top:10px;padding:8px 14px;background:var(--light);border-radius:8px;font-size:.87rem;color:var(--accent)}
+    .error-msg{display:none;color:var(--red);font-size:.85rem;margin-top:8px}
     .tabs{display:flex;gap:4px;margin-bottom:24px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
     .tab{padding:8px 18px;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);font-family:inherit}
     .tab.active{background:var(--accent);color:#fff}
@@ -31,8 +33,6 @@
     .badge.REGISTRO    {background:var(--light);color:var(--accent)}
     .badge.RECOMENDACION{background:#d1fae5;color:#065f46}
     .badge.NOTA        {background:#fef9c3;color:#854d0e}
-    .act-link{font-size:.8rem;color:var(--accent);font-weight:600;margin-top:6px;display:block}
-    #placeholder{color:var(--muted);font-style:italic}
   </style>
 </head>
 <body>
@@ -42,13 +42,19 @@
   </header>
   <div class="container">
     <h1>Registros del logopeda</h1>
-    <p class="subtitle">Notas clínicas y recomendaciones enviadas por el equipo terapéutico — verRegistros() RUP.</p>
+    <p class="subtitle">Notas clínicas y recomendaciones del equipo terapéutico.</p>
 
-    <div class="field">
-      <label>ID del paciente</label>
-      <input id="pacienteId" placeholder="Introduce el ID del paciente">
+    <div class="search-box">
+      <label>Código de acceso del paciente</label>
+      <div class="search-row">
+        <input id="codigoInput" placeholder="PAC-1234" maxlength="8"
+               oninput="this.value=this.value.toUpperCase()"
+               onkeydown="if(event.key==='Enter') buscar()">
+        <button class="btn-buscar" onclick="buscar()">Ver registros</button>
+      </div>
+      <div class="paciente-ok" id="pacienteOk"></div>
+      <div class="error-msg"  id="errorMsg">Código no encontrado.</div>
     </div>
-    <button class="btn-primary" onclick="cargar()" style="margin-bottom:28px">Ver registros</button>
 
     <div id="contenido" style="display:none">
       <div class="tabs">
@@ -59,64 +65,72 @@
       </div>
       <div id="lista"></div>
     </div>
-    <p id="placeholder">Introduce el ID del paciente para ver sus registros.</p>
   </div>
 
   <script>
     const token = localStorage.getItem('token');
     if (!token) window.location.href = '/compartida/login.html';
-    let todos = [];
-    let tabActual = 'todos';
+    let todos = [], tabActual = 'todos', pacienteId = null;
 
     async function api(url) {
-      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       return r.json();
     }
 
-    // RUP verRegistros: getRegistros(pacienteId) → findByPaciente
-    // RUP verActividadesRecomendadas: getRecomendaciones(pacienteId)
-    async function cargar() {
-      const pid = document.getElementById('pacienteId').value.trim();
-      if (!pid) { alert('Introduce un ID de paciente.'); return; }
+    async function buscar() {
+      const codigo = document.getElementById('codigoInput').value.trim();
+      if (!codigo) return;
+      document.getElementById('errorMsg').style.display   = 'none';
+      document.getElementById('pacienteOk').style.display = 'none';
+      document.getElementById('contenido').style.display  = 'none';
 
-      const [registros, recomendaciones] = await Promise.all([
-        api(`/api/familia/registros/${pid}`),
-        api(`/api/familia/registros/recomendaciones/${pid}`)
-      ]);
+      const res  = await fetch(`/api/pacientes/codigo/${codigo}`);
+      const data = await res.json();
+      if (!res.ok || data.error) { document.getElementById('errorMsg').style.display = 'block'; return; }
 
-      // Fusionar y deduplicar (las recomendaciones ya están en registros filtradas por tipo)
-      todos = registros;
-      document.getElementById('placeholder').style.display = 'none';
-      document.getElementById('contenido').style.display   = 'block';
+      pacienteId = data._id;
+      localStorage.setItem('practicaPacienteId', pacienteId);
+      localStorage.setItem('practicaPacienteNombre', data.nombre);
+      document.getElementById('pacienteOk').innerHTML = `✓ <strong>${data.nombre}</strong>`;
+      document.getElementById('pacienteOk').style.display = 'block';
+      cargarRegistros();
+    }
+
+    async function cargarRegistros() {
+      todos = await api(`/api/familia/registros/${pacienteId}`);
+      document.getElementById('contenido').style.display = 'block';
       renderLista();
     }
 
     function setTab(tipo, el) {
       tabActual = tipo;
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
       renderLista();
     }
 
     function renderLista() {
-      const lista = tabActual === 'todos'
-        ? todos
-        : todos.filter(r => r.tipo === tabActual);
-
+      const lista = tabActual === 'todos' ? todos : todos.filter(r => r.tipo === tabActual);
       document.getElementById('lista').innerHTML = lista.length
         ? lista.map(r => `
           <div class="reg-card">
             <h3>${r.titulo}<span class="badge ${r.tipo}">${r.tipo}</span></h3>
             <div class="body">${r.contenido || '<em style="color:var(--muted)">Sin contenido.</em>'}</div>
-            ${r.actividadId ? `<span class="act-link">📎 Actividad relacionada: ${r.actividadId.titulo || r.actividadId}</span>` : ''}
-            <div class="meta">${new Date(r.fecha).toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric'})}</div>
+            ${r.actividadId ? `<div style="font-size:.8rem;color:var(--accent);font-weight:600;margin-bottom:8px">📎 ${r.actividadId.titulo || ''}</div>` : ''}
+            <div class="meta">${new Date(r.fecha).toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'})}</div>
           </div>`).join('')
         : '<p style="color:var(--muted);font-style:italic">Sin registros en esta categoría.</p>';
     }
 
     // Pre-rellenar si viene de otra vista
-    const pidGuardado = localStorage.getItem('practicaPacienteId');
-    if (pidGuardado) document.getElementById('pacienteId').value = pidGuardado;
+    const pidG    = localStorage.getItem('practicaPacienteId');
+    const nombreG = localStorage.getItem('practicaPacienteNombre');
+    if (pidG && nombreG) {
+      pacienteId = pidG;
+      document.getElementById('pacienteOk').innerHTML = `✓ <strong>${nombreG}</strong>`;
+      document.getElementById('pacienteOk').style.display = 'block';
+      cargarRegistros();
+    }
   </script>
 </body>
 </html>

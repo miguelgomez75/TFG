@@ -1,8 +1,5 @@
 const Paciente = require('../../models/terapia/Paciente');
 
-// RUP: múltiples diagramas llaman a listarPacientesActivos().
-// Implementado como findActivos() en el repositorio (aquí = Mongoose).
-
 // CdU crearPaciente
 const crearPaciente = async (req, res) => {
   try {
@@ -25,7 +22,7 @@ const editarPaciente = async (req, res) => {
   }
 };
 
-// CdU eliminarPaciente — RUP: deleteById
+// CdU eliminarPaciente
 const eliminarPaciente = async (req, res) => {
   try {
     await Paciente.findByIdAndDelete(req.params.id);
@@ -45,7 +42,7 @@ const consultarPaciente = async (req, res) => {
   }
 };
 
-// RUP: findAll — lista todos los pacientes del logopeda autenticado
+// Todos los pacientes del logopeda autenticado
 const listarPacientes = async (req, res) => {
   try {
     const pacientes = await Paciente.find({ usuarioId: req.usuario.id });
@@ -56,11 +53,26 @@ const listarPacientes = async (req, res) => {
 };
 
 // RUP: findActivos — usado en crearRegistro, registrarSesion, asignarActividad…
-// Equivale a PacienteRepository.findActivos() de los diagramas.
 const listarPacientesActivos = async (req, res) => {
   try {
     const pacientes = await Paciente.find({ usuarioId: req.usuario.id, activo: true });
     res.json(pacientes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Endpoint para la familia: busca paciente por codigoAcceso (PAC-XXXX).
+// No requiere rol logopeda; solo devuelve nombre, código y nivel.
+const buscarPorCodigo = async (req, res) => {
+  try {
+    const codigo   = req.params.codigo.toUpperCase();
+    const paciente = await Paciente.findOne(
+      { codigoAcceso: codigo, activo: true },
+      'nombre codigoAcceso nivelActual _id'
+    );
+    if (!paciente) return res.status(404).json({ error: 'Código de paciente no encontrado' });
+    res.json(paciente);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -72,5 +84,6 @@ module.exports = {
   eliminarPaciente,
   consultarPaciente,
   listarPacientes,
-  listarPacientesActivos
+  listarPacientesActivos,
+  buscarPorCodigo
 };

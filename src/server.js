@@ -3,10 +3,11 @@ const express    = require('express');
 const mongoose   = require('mongoose');
 const path       = require('path');
 
-const AuthController          = require('./controllers/auth/AuthController');
-const AsignacionController    = require('./controllers/actividad/AsignacionController');
+const AuthController            = require('./controllers/auth/AuthController');
+const PacienteController        = require('./controllers/terapia/PacienteController');
+const AsignacionController      = require('./controllers/actividad/AsignacionController');
 const RegistroClinicoController = require('./controllers/comunicacion/RegistroClinicoController');
-const { verificarToken }      = require('./middleware/auth');
+const { verificarToken }        = require('./middleware/auth');
 
 // ── Rutas Logopeda ──────────────────────────────────────────────────────────
 const logopedaPaciente  = require('./routes/logopeda/pacienteRoutes');
@@ -26,9 +27,13 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../views')));
 
-// ── Auth (sin token) ────────────────────────────────────────────────────────
+// ── Auth y rutas públicas (sin token) ───────────────────────────────────────
 app.post('/api/auth/login',    AuthController.login);
 app.post('/api/auth/register', AuthController.register);
+
+// Búsqueda de paciente por código legible — usada por la familia para
+// identificar su paciente sin conocer el ObjectId de Mongo.
+app.get('/api/pacientes/codigo/:codigo', PacienteController.buscarPorCodigo);
 
 // ── Logopeda ────────────────────────────────────────────────────────────────
 app.use('/api/logopeda/pacientes',   verificarToken, logopedaPaciente);

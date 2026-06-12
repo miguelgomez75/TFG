@@ -6,7 +6,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8;--red:#dc2626}
     body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
     header{background:var(--accent);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
     .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
@@ -14,10 +14,18 @@
     .container{max-width:800px;margin:36px auto;padding:0 24px}
     h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
     .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
-    .field{margin-bottom:24px;max-width:320px}
-    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
-    .field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
-    .field select:focus{outline:none;border-color:var(--accent)}
+    /* Buscador por código */
+    .search-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:28px}
+    .search-box label{display:block;font-size:.85rem;font-weight:500;margin-bottom:8px;color:var(--ink)}
+    .search-row{display:flex;gap:10px}
+    .search-row input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.95rem;text-transform:uppercase;letter-spacing:.05em}
+    .search-row input:focus{outline:none;border-color:var(--accent)}
+    .btn-buscar{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+    .btn-buscar:hover{opacity:.9}
+    .paciente-encontrado{display:none;margin-top:12px;padding:10px 14px;background:var(--light);border-radius:8px;font-size:.88rem;color:var(--accent)}
+    .paciente-encontrado strong{font-size:1rem}
+    .error-msg{display:none;margin-top:10px;color:var(--red);font-size:.85rem}
+    /* Contenido */
     .section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:28px}
     .act-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:16px}
     .act-card h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
@@ -41,21 +49,24 @@
   </header>
   <div class="container">
     <h1>Actividades recomendadas</h1>
-    <p class="subtitle">Actividades asignadas por el logopeda para practicar en casa.</p>
+    <p class="subtitle">Introduce el código de acceso del paciente que te facilitó el logopeda.</p>
 
-    <div class="field">
-      <label>Paciente</label>
-      <select id="selPaciente" onchange="cargar()">
-        <option value="">— Selecciona —</option>
-      </select>
+    <div class="search-box">
+      <label>Código de acceso del paciente</label>
+      <div class="search-row">
+        <input id="codigoInput" placeholder="PAC-1234" maxlength="8"
+               oninput="this.value=this.value.toUpperCase()"
+               onkeydown="if(event.key==='Enter') buscar()">
+        <button class="btn-buscar" onclick="buscar()">Buscar</button>
+      </div>
+      <div class="paciente-encontrado" id="pacienteInfo"></div>
+      <div class="error-msg" id="errorMsg">Código no encontrado. Comprueba que el logopeda te lo haya facilitado correctamente.</div>
     </div>
 
-    <!-- RUP: getAsignacionesActivas(pacienteId) -->
-    <div id="secAsignaciones" style="display:none">
+    <div id="secContenido" style="display:none">
       <div class="section-title">Actividades asignadas activas</div>
       <div id="listaAsig"><p style="color:var(--muted);font-style:italic">Sin asignaciones activas.</p></div>
 
-      <!-- RUP: getRecomendaciones(pacienteId) -->
       <div class="section-title">Recomendaciones del logopeda</div>
       <div id="listaRec"><p style="color:var(--muted);font-style:italic">Sin recomendaciones.</p></div>
     </div>
@@ -64,81 +75,84 @@
   <script>
     const token = localStorage.getItem('token');
     if (!token) window.location.href = '/compartida/login.html';
+    let pacienteId = null;
 
     async function api(url) {
-      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       return r.json();
     }
 
-    async function init() {
-      // Para el selector de paciente la familia usa las actividades disponibles
-      // (no tiene endpoint de pacientes propios); cargamos asignaciones en blanco
-      // y el pacienteId lo guarda el logopeda en la asignación.
-      // En producción el usuario familia tendría su pacienteId en el token.
-      // Aquí permitimos seleccionarlo manualmente.
-      const acts = await api('/api/familia/actividades');
-      // Construir lista de pacienteIds únicos desde asignaciones (simplificado)
-      const sel  = document.getElementById('selPaciente');
-      // Añadimos opción manual: el usuario introduce el ID
-      sel.innerHTML = '<option value="">— Introduce el ID del paciente —</option>';
-      // En integración real, el token familia llevaría pacienteId.
+    // Busca el paciente por código legible y guarda su _id internamente
+    async function buscar() {
+      const codigo = document.getElementById('codigoInput').value.trim();
+      if (!codigo) return;
+      document.getElementById('errorMsg').style.display   = 'none';
+      document.getElementById('pacienteInfo').style.display = 'none';
+      document.getElementById('secContenido').style.display  = 'none';
+
+      const res = await fetch(`/api/pacientes/codigo/${codigo}`);
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        document.getElementById('errorMsg').style.display = 'block';
+        return;
+      }
+
+      pacienteId = data._id;
+      localStorage.setItem('practicaPacienteId', pacienteId);
+      localStorage.setItem('practicaPacienteNombre', data.nombre);
+
+      document.getElementById('pacienteInfo').innerHTML =
+        `✓ Paciente encontrado: <strong>${data.nombre}</strong> · ${data.nivelActual || 'Nivel no asignado'}`;
+      document.getElementById('pacienteInfo').style.display = 'block';
+
+      cargarDatos();
     }
 
-    async function cargar() {
-      const pid = document.getElementById('selPaciente').value;
-      if (!pid) return;
-      document.getElementById('secAsignaciones').style.display='block';
+    async function cargarDatos() {
+      document.getElementById('secContenido').style.display = 'block';
 
-      // RUP verActividadesRecomendadas: getAsignacionesActivas + getRecomendaciones
       const [asig, recs] = await Promise.all([
-        api(`/api/familia/actividades/recomendadas/${pid}`),
-        api(`/api/familia/registros/recomendaciones/${pid}`)
+        api(`/api/familia/actividades/recomendadas/${pacienteId}`),
+        api(`/api/familia/registros/recomendaciones/${pacienteId}`)
       ]);
 
       document.getElementById('listaAsig').innerHTML = asig.length
-        ? asig.map(a=>`
+        ? asig.map(a => `
           <div class="act-card">
             <div>
               <h3>${a.actividadId?.titulo || 'Actividad'}<span class="badge ${a.estado}">${a.estado}</span></h3>
               <p>${a.actividadId?.descripcion || ''}</p>
             </div>
-            <button class="btn-primary" onclick="practicar('${a.actividadId?._id}','${pid}')">Practicar</button>
+            <button class="btn-primary" onclick="practicar('${a.actividadId?._id}')">Practicar</button>
           </div>`).join('')
         : '<p style="color:var(--muted);font-style:italic">Sin asignaciones activas.</p>';
 
       document.getElementById('listaRec').innerHTML = recs.length
-        ? recs.map(r=>`
+        ? recs.map(r => `
           <div class="rec-card">
             <h4>${r.titulo}</h4>
-            <p>${r.contenido||''}</p>
+            <p>${r.contenido || ''}</p>
             <div class="fecha">${new Date(r.fecha).toLocaleDateString('es-ES')}</div>
           </div>`).join('')
         : '<p style="color:var(--muted);font-style:italic">Sin recomendaciones.</p>';
     }
 
-    function practicar(actId, pacienteId) {
+    function practicar(actId) {
       localStorage.setItem('practicaActId', actId);
-      localStorage.setItem('practicaPacienteId', pacienteId);
-      window.location.href='/familia/realizar-actividad.html';
+      window.location.href = '/familia/realizar-actividad.html';
     }
 
-    // Selector manual por ID (simplificado para demo)
-    document.getElementById('selPaciente').addEventListener('change', cargar);
-    // Permitir también introducir ID como option dinámica
-    const sel = document.getElementById('selPaciente');
-    const input = document.createElement('input');
-    input.placeholder='ID del paciente'; input.style.cssText='margin-top:8px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;width:100%;display:block';
-    sel.parentElement.appendChild(input);
-    input.addEventListener('change', () => {
-      const val = input.value.trim();
-      if (!val) return;
-      let opt = document.getElementById('dynOpt');
-      if (!opt) { opt=document.createElement('option'); opt.id='dynOpt'; sel.appendChild(opt); }
-      opt.value=val; opt.textContent=`ID: ${val}`;
-      sel.value=val; cargar();
-    });
-
-    init();
+    // Si ya hay paciente guardado de una sesión anterior, cargarlo directamente
+    const pidGuardado = localStorage.getItem('practicaPacienteId');
+    const nombreGuardado = localStorage.getItem('practicaPacienteNombre');
+    if (pidGuardado && nombreGuardado) {
+      pacienteId = pidGuardado;
+      document.getElementById('pacienteInfo').innerHTML =
+        `✓ Paciente: <strong>${nombreGuardado}</strong>`;
+      document.getElementById('pacienteInfo').style.display = 'block';
+      cargarDatos();
+    }
   </script>
 </body>
 </html>

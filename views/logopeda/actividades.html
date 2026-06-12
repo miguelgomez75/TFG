@@ -6,7 +6,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#3b5bdb;--light:#eef1ff;--surface:#f8f9ff;--border:#e5e7f0;--red:#dc2626}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#3b5bdb;--light:#eef1ff;--surface:#f8f9ff;--border:#e5e7f0;--red:#dc2626;--green:#059669}
     body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
     header{background:var(--ink);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
     .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
@@ -21,29 +21,58 @@
     .filters select{padding:8px 12px;border:1.5px solid var(--border);border-radius:7px;font-family:inherit;font-size:.85rem;background:#fff}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
     .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px}
-    .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+    .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
     .card h3{font-size:.95rem;font-weight:700;flex:1}
     .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:700;white-space:nowrap}
     .badge.BORRADOR  {background:#fef3c7;color:#92400e}
     .badge.DISPONIBLE{background:#d1fae5;color:#065f46}
     .badge.ARCHIVADA {background:#f3f4f6;color:#6b7280}
+    .tipo-tag{display:inline-block;font-size:.72rem;font-weight:600;color:var(--accent);background:var(--light);padding:2px 8px;border-radius:6px;margin-bottom:8px}
     .card p{font-size:.83rem;color:var(--muted);margin-bottom:14px;line-height:1.4}
     .card-actions{display:flex;gap:6px;flex-wrap:wrap}
     .btn-sm{padding:5px 12px;border-radius:6px;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff}
     .btn-sm.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .btn-sm.success{background:var(--green);color:#fff;border-color:var(--green)}
     .btn-sm.danger{border-color:var(--red);color:var(--red)}
-    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+
+    /* Modales */
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center;padding:20px}
     .overlay.open{display:flex}
-    .modal{background:#fff;border-radius:14px;padding:32px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+    .modal{background:#fff;border-radius:14px;padding:32px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto}
+    .modal.small{max-width:420px}
     .modal h2{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:24px}
     .field{margin-bottom:16px}
     .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
     .field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:var(--surface)}
     .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
     .field textarea{min-height:60px;resize:vertical}
-    .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
+    .field small{display:block;color:var(--muted);font-size:.75rem;margin-top:4px}
+    .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
     .btn-cancel{background:none;border:1.5px solid var(--border);color:var(--muted);padding:9px 18px;border-radius:7px;font-family:inherit;cursor:pointer}
     #empty{color:var(--muted);font-style:italic;margin-top:20px}
+
+    /* Editor de apartados */
+    .apartados-section{margin-top:8px;margin-bottom:16px}
+    .apartados-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+    .apartado-card{border:1.5px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;background:var(--surface);position:relative}
+    .apartado-card .num{position:absolute;top:-10px;left:14px;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:10px}
+    .apartado-card .field{margin-bottom:10px}
+    .apartado-card .field:last-child{margin-bottom:0}
+    .btn-remove-apartado{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--red);font-size:.85rem;cursor:pointer;font-weight:700;padding:2px 6px}
+    .btn-add-apartado{background:#fff;border:1.5px dashed var(--border);color:var(--accent);padding:10px;border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer;width:100%;font-size:.85rem;margin-top:4px}
+    .btn-add-apartado:hover{border-color:var(--accent);background:var(--light)}
+
+    /* Modal asignar */
+    .paciente-list{max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px}
+    .paciente-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)}
+    .paciente-item:last-child{border-bottom:none}
+    .paciente-item .nombre{font-size:.9rem;font-weight:600}
+    .paciente-item .codigo{font-size:.78rem;color:var(--muted);font-family:monospace}
+    .btn-asignar-item{background:var(--accent);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+    .btn-asignar-item:hover{opacity:.9}
+    .btn-asignar-item.asignado{background:var(--green);cursor:default}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 22px;border-radius:8px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s}
+    .toast.show{opacity:1}
   </style>
 </head>
 <body>
@@ -68,27 +97,40 @@
     <div class="grid" id="grid"><p id="empty">Cargando…</p></div>
   </div>
 
+  <!-- ══════════ MODAL: crear / editar actividad ══════════ -->
   <div class="overlay" id="overlay">
     <div class="modal">
       <h2 id="modalTitle">Nueva actividad</h2>
       <input type="hidden" id="actId">
+
       <div class="field"><label>Título</label><input id="titulo" placeholder="Nombre de la actividad"></div>
       <div class="field"><label>Descripción</label><textarea id="descripcion" placeholder="Descripción breve…"></textarea></div>
+
       <div class="field"><label>Tipo</label>
-        <select id="tipo">
-          <option value="PICTOGRAMA">Pictograma</option>
-          <option value="AUDIO">Audio</option>
+        <select id="tipo" onchange="cambiarTipo()">
+          <option value="PICTOGRAMA">Pictograma / Imagen</option>
           <option value="TEXTO">Texto</option>
+          <option value="AUDIO">Audio</option>
           <option value="VIDEO">Vídeo</option>
         </select>
       </div>
+
       <div class="field"><label>Categoría</label><select id="categoriaId"><option value="">— Sin categoría —</option></select></div>
+
       <div class="field"><label>Nivel de dificultad (1–5)</label>
         <input type="number" id="nivelDificultad" min="1" max="5" value="1">
       </div>
-      <div class="field"><label>Contenido (JSON)</label>
-        <textarea id="contenido" placeholder='{"urlImagen":"…","etiqueta":"…"}'></textarea>
+
+      <!-- Editor dinámico de apartados según el tipo -->
+      <div class="apartados-section">
+        <div class="apartados-title">
+          <span id="apartadosLabel">Apartados</span>
+          <span id="apartadosHint" style="font-weight:400;text-transform:none;font-size:.75rem"></span>
+        </div>
+        <div id="apartadosContainer"></div>
+        <button type="button" class="btn-add-apartado" onclick="añadirApartado()">+ Añadir apartado</button>
       </div>
+
       <div class="modal-footer">
         <button class="btn-cancel" onclick="cerrar()">Cancelar</button>
         <button class="btn-primary" onclick="guardar()">Guardar</button>
@@ -96,10 +138,26 @@
     </div>
   </div>
 
+  <!-- ══════════ MODAL: asignar a paciente ══════════ -->
+  <div class="overlay" id="overlayAsignar">
+    <div class="modal small">
+      <h2>Asignar actividad</h2>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:16px" id="asignarSubtitulo"></p>
+      <div class="paciente-list" id="listaPacientesAsignar"></div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="cerrarAsignar()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
   <script>
     const token = localStorage.getItem('token');
     if (!token) window.location.href = '/compartida/login.html';
     let actividades = [];
+    let pacientesActivos = [];
+    let actividadAsignarId = null;
 
     async function api(url,opts={}) {
       const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...opts});
@@ -107,13 +165,13 @@
     }
 
     async function cargar() {
-      // RUP: listarActividades + listarCategorias en paralelo
       const [acts, cats] = await Promise.all([
         api('/api/logopeda/actividades'),
         api('/api/logopeda/categorias')
       ]);
       actividades = acts;
       const sel = document.getElementById('categoriaId');
+      sel.innerHTML = '<option value="">— Sin categoría —</option>';
       cats.forEach(c => {
         const o = document.createElement('option');
         o.value=c._id; o.textContent=c.nombre; sel.appendChild(o);
@@ -126,30 +184,137 @@
       const lista  = filtro ? actividades.filter(a=>a.estado===filtro) : actividades;
       const grid   = document.getElementById('grid');
       if (!lista.length) { grid.innerHTML='<p id="empty">No hay actividades.</p>'; return; }
+      const tipoLabel = { PICTOGRAMA:'Pictograma', TEXTO:'Texto', AUDIO:'Audio', VIDEO:'Vídeo' };
       grid.innerHTML = lista.map(a => `
         <div class="card">
           <div class="card-header">
             <h3>${a.titulo}</h3>
             <span class="badge ${a.estado}">${a.estado}</span>
           </div>
+          <span class="tipo-tag">${tipoLabel[a.tipo]||a.tipo}${a.contenido?.apartados ? ` · ${a.contenido.apartados.length} apartado(s)` : ''}</span>
           <p>${a.descripcion||'Sin descripción'}</p>
           <div class="card-actions">
             <button class="btn-sm" onclick="abrirEditar('${a._id}')">Editar</button>
             ${a.estado==='BORRADOR' ?
               `<button class="btn-sm primary" onclick="publicar('${a._id}')">Publicar</button>` : ''}
             ${a.estado==='DISPONIBLE' ?
-              `<button class="btn-sm" onclick="archivar('${a._id}')">Archivar</button>` : ''}
+              `<button class="btn-sm success" onclick="abrirAsignar('${a._id}','${a.titulo.replace(/'/g,"\\'")}')">Asignar</button>
+               <button class="btn-sm" onclick="archivar('${a._id}')">Archivar</button>` : ''}
             <button class="btn-sm danger" onclick="eliminar('${a._id}')">Eliminar</button>
           </div>
         </div>`).join('');
     }
 
+    // ═══════════════════════════════════════════════════════
+    // EDITOR DE APARTADOS POR TIPO
+    // ═══════════════════════════════════════════════════════
+
+    const PLANTILLAS = {
+      PICTOGRAMA: {
+        label: 'Imágenes a comentar',
+        hint:  'Una o varias imágenes que el paciente describirá',
+        campos: [
+          { key:'imagenes',   tipo:'lista',  label:'URLs de las imágenes (una por línea)', placeholder:'https://.../imagen1.jpg\nhttps://.../imagen2.jpg' },
+          { key:'descripcion',tipo:'texto',  label:'¿Qué debe destacar el paciente?', placeholder:'Ej: un niño comiendo un helado' }
+        ],
+        vacio: { imagenes: [''], descripcion: '' }
+      },
+      TEXTO: {
+        label: 'Enunciados',
+        hint:  'Enunciado + palabras a trabajar (deletreo, comprensión…)',
+        campos: [
+          { key:'enunciado', tipo:'texto', label:'Enunciado', placeholder:'Ej: Deletrea las siguientes palabras' },
+          { key:'palabras',  tipo:'lista', label:'Palabras / textos (uno por línea)', placeholder:'casa\nperro\nventana' }
+        ],
+        vacio: { enunciado: '', palabras: [''] }
+      },
+      AUDIO: {
+        label: 'Audios',
+        hint:  'El paciente escucha el mp3 y repite lo que oye',
+        campos: [
+          { key:'urlAudio',     tipo:'texto', label:'URL del archivo .mp3', placeholder:'https://.../audio.mp3' },
+          { key:'transcripcion',tipo:'texto', label:'Transcripción / respuesta esperada', placeholder:'Lo que el paciente debe repetir' }
+        ],
+        vacio: { urlAudio: '', transcripcion: '' }
+      },
+      VIDEO: {
+        label: 'Vídeos',
+        hint:  'Placeholder — el paciente reproduce/repite lo visto',
+        campos: [
+          { key:'urlVideo',    tipo:'texto', label:'URL del archivo .mp4', placeholder:'https://.../video.mp4' },
+          { key:'descripcion', tipo:'texto', label:'Descripción / instrucción', placeholder:'Qué debe hacer el paciente' }
+        ],
+        vacio: { urlVideo: '', descripcion: '' }
+      }
+    };
+
+    let apartadosActuales = [];
+
+    function cambiarTipo(resetear = true) {
+      const tipo = document.getElementById('tipo').value;
+      const plantilla = PLANTILLAS[tipo];
+      document.getElementById('apartadosLabel').textContent = plantilla.label;
+      document.getElementById('apartadosHint').textContent  = plantilla.hint;
+      if (resetear) apartadosActuales = [ JSON.parse(JSON.stringify(plantilla.vacio)) ];
+      renderApartados();
+    }
+
+    function renderApartados() {
+      const tipo = document.getElementById('tipo').value;
+      const plantilla = PLANTILLAS[tipo];
+      const cont = document.getElementById('apartadosContainer');
+      cont.innerHTML = apartadosActuales.map((ap, i) => `
+        <div class="apartado-card">
+          <span class="num">Apartado ${i+1}</span>
+          ${apartadosActuales.length > 1 ? `<button type="button" class="btn-remove-apartado" onclick="eliminarApartado(${i})">✕ quitar</button>` : ''}
+          ${plantilla.campos.map(c => {
+            const val = ap[c.key];
+            if (c.tipo === 'lista') {
+              const texto = Array.isArray(val) ? val.join('\n') : '';
+              return `
+                <div class="field">
+                  <label>${c.label}</label>
+                  <textarea placeholder="${c.placeholder}" oninput="actualizarApartadoLista(${i},'${c.key}',this.value)">${texto}</textarea>
+                </div>`;
+            }
+            return `
+              <div class="field">
+                <label>${c.label}</label>
+                <input value="${(val||'').replace(/"/g,'&quot;')}" placeholder="${c.placeholder}" oninput="actualizarApartadoCampo(${i},'${c.key}',this.value)">
+              </div>`;
+          }).join('')}
+        </div>`).join('');
+    }
+
+    function actualizarApartadoCampo(i, campo, valor) {
+      apartadosActuales[i][campo] = valor;
+    }
+    function actualizarApartadoLista(i, campo, valor) {
+      apartadosActuales[i][campo] = valor.split('\n').map(s=>s.trim()).filter(s=>s!=='');
+      if (apartadosActuales[i][campo].length===0) apartadosActuales[i][campo] = [''];
+    }
+    function añadirApartado() {
+      const tipo = document.getElementById('tipo').value;
+      apartadosActuales.push(JSON.parse(JSON.stringify(PLANTILLAS[tipo].vacio)));
+      renderApartados();
+    }
+    function eliminarApartado(i) {
+      apartadosActuales.splice(i,1);
+      renderApartados();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // CRUD ACTIVIDAD
+    // ═══════════════════════════════════════════════════════
+
     function abrirNueva() {
       document.getElementById('actId').value='';
       document.getElementById('modalTitle').textContent='Nueva actividad';
-      ['titulo','descripcion','contenido'].forEach(id=>document.getElementById(id).value='');
+      ['titulo','descripcion'].forEach(id=>document.getElementById(id).value='');
       document.getElementById('tipo').value='PICTOGRAMA';
+      document.getElementById('categoriaId').value='';
       document.getElementById('nivelDificultad').value=1;
+      cambiarTipo(true);
       document.getElementById('overlay').classList.add('open');
     }
 
@@ -162,37 +327,144 @@
       document.getElementById('tipo').value=actividad.tipo;
       document.getElementById('nivelDificultad').value=actividad.nivelDificultad||1;
       document.getElementById('categoriaId').value=actividad.categoriaId?._id||actividad.categoriaId||'';
-      document.getElementById('contenido').value=actividad.contenido?JSON.stringify(actividad.contenido,null,2):'';
+
+      // Cargar apartados existentes (sin resetear) o plantilla vacía si no hay
+      const existentes = actividad.contenido?.apartados;
+      if (Array.isArray(existentes) && existentes.length) {
+        apartadosActuales = JSON.parse(JSON.stringify(existentes));
+        // Asegurar que los campos de lista son arrays
+        const plantilla = PLANTILLAS[actividad.tipo];
+        apartadosActuales.forEach(ap => {
+          plantilla.campos.forEach(c => {
+            if (c.tipo==='lista' && !Array.isArray(ap[c.key])) ap[c.key] = ap[c.key] ? [String(ap[c.key])] : [''];
+          });
+        });
+        cambiarTipo(false);
+      } else {
+        cambiarTipo(true);
+      }
+
       document.getElementById('overlay').classList.add('open');
     }
 
     function cerrar() { document.getElementById('overlay').classList.remove('open'); }
 
+    function limpiarApartados(tipo) {
+      // Quita apartados completamente vacíos y limpia listas vacías
+      const plantilla = PLANTILLAS[tipo];
+      return apartadosActuales
+        .map(ap => {
+          const limpio = {};
+          plantilla.campos.forEach(c => {
+            if (c.tipo==='lista') limpio[c.key] = (ap[c.key]||[]).filter(s=>s.trim()!=='');
+            else limpio[c.key] = (ap[c.key]||'').trim();
+          });
+          return limpio;
+        })
+        .filter(ap => plantilla.campos.some(c =>
+          c.tipo==='lista' ? ap[c.key].length>0 : ap[c.key]!==''
+        ));
+    }
+
     async function guardar() {
-      const id=document.getElementById('actId').value;
-      let contenido;
-      try { contenido=JSON.parse(document.getElementById('contenido').value||'{}'); } catch { contenido={}; }
-      const body={
-        titulo:document.getElementById('titulo').value,
-        descripcion:document.getElementById('descripcion').value,
-        tipo:document.getElementById('tipo').value,
-        nivelDificultad:+document.getElementById('nivelDificultad').value,
-        categoriaId:document.getElementById('categoriaId').value||undefined,
-        contenido
+      const id   = document.getElementById('actId').value;
+      const tipo = document.getElementById('tipo').value;
+      const apartados = limpiarApartados(tipo);
+
+      const body = {
+        titulo:          document.getElementById('titulo').value,
+        descripcion:     document.getElementById('descripcion').value,
+        tipo,
+        nivelDificultad: +document.getElementById('nivelDificultad').value,
+        categoriaId:     document.getElementById('categoriaId').value || undefined,
+        contenido:       { apartados }
       };
-      if(id) await api(`/api/logopeda/actividades/${id}`,{method:'PUT',body:JSON.stringify(body)});
-      else   await api('/api/logopeda/actividades',{method:'POST',body:JSON.stringify(body)});
+
+      let resp;
+      if (id) resp = await api(`/api/logopeda/actividades/${id}`,{method:'PUT',body:JSON.stringify(body)});
+      else    resp = await api('/api/logopeda/actividades',{method:'POST',body:JSON.stringify(body)});
+
+      if (resp.error) { alert(resp.error); return; }
       cerrar(); cargar();
     }
 
     async function publicar(id) {
       const r=await api(`/api/logopeda/actividades/${id}/publicar`,{method:'PUT'});
-      if(r.error) alert(r.error); else cargar();
+      if(r.error) alert('No se pudo publicar: '+r.error); else { cargar(); mostrarToast('Actividad publicada'); }
     }
     async function archivar(id) { await api(`/api/logopeda/actividades/${id}/archivar`,{method:'PUT'}); cargar(); }
     async function eliminar(id) {
       if(!confirm('¿Eliminar esta actividad?')) return;
       await api(`/api/logopeda/actividades/${id}`,{method:'DELETE'}); cargar();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // ASIGNAR A PACIENTE
+    // ═══════════════════════════════════════════════════════
+
+    async function abrirAsignar(actividadId, titulo) {
+      actividadAsignarId = actividadId;
+      document.getElementById('asignarSubtitulo').textContent = `Selecciona el paciente al que asignar "${titulo}"`;
+
+      if (!pacientesActivos.length) {
+        pacientesActivos = await api('/api/logopeda/pacientes/activos');
+      }
+
+      // Cargar asignaciones existentes para esta actividad (marcar ya asignados)
+      const yaAsignados = new Set();
+      for (const p of pacientesActivos) {
+        const asigs = await api(`/api/logopeda/asignaciones/${p._id}`);
+        if (Array.isArray(asigs) && asigs.some(a => (a.actividadId?._id || a.actividadId) === actividadId)) {
+          yaAsignados.add(p._id);
+        }
+      }
+
+      const lista = document.getElementById('listaPacientesAsignar');
+      if (!pacientesActivos.length) {
+        lista.innerHTML = '<p style="padding:14px;color:var(--muted);font-style:italic">No tienes pacientes activos. Crea uno primero.</p>';
+      } else {
+        lista.innerHTML = pacientesActivos.map(p => `
+          <div class="paciente-item">
+            <div>
+              <div class="nombre">${p.nombre}</div>
+              <div class="codigo">${p.codigoAcceso || ''}</div>
+            </div>
+            ${yaAsignados.has(p._id)
+              ? `<button class="btn-asignar-item asignado" disabled>✓ Asignada</button>`
+              : `<button class="btn-asignar-item" onclick="confirmarAsignar('${p._id}', this)">Asignar</button>`}
+          </div>`).join('');
+      }
+
+      document.getElementById('overlayAsignar').classList.add('open');
+    }
+
+    async function confirmarAsignar(pacienteId, btn) {
+      btn.disabled = true;
+      btn.textContent = '...';
+      const r = await api('/api/logopeda/asignaciones', {
+        method: 'POST',
+        body: JSON.stringify({ pacienteId, actividadId: actividadAsignarId })
+      });
+      if (r.error) {
+        alert(r.error);
+        btn.disabled = false;
+        btn.textContent = 'Asignar';
+        return;
+      }
+      btn.textContent = '✓ Asignada';
+      btn.classList.add('asignado');
+      mostrarToast('Actividad asignada correctamente');
+    }
+
+    function cerrarAsignar() {
+      document.getElementById('overlayAsignar').classList.remove('open');
+    }
+
+    function mostrarToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 2200);
     }
 
     cargar();

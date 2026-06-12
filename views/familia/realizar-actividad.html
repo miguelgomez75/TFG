@@ -14,32 +14,53 @@
     .container{max-width:700px;margin:40px auto;padding:0 24px}
     h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
     .subtitle{color:var(--muted);margin-bottom:32px;font-size:.9rem}
-
-    /* Selección de actividad */
+    /* Buscador */
+    .search-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:24px}
+    .search-box label{display:block;font-size:.85rem;font-weight:500;margin-bottom:8px}
+    .search-row{display:flex;gap:10px}
+    .search-row input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.95rem;text-transform:uppercase;letter-spacing:.05em}
+    .search-row input:focus{outline:none;border-color:var(--accent)}
+    .btn-buscar{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer}
+    .paciente-ok{display:none;margin-top:10px;padding:8px 14px;background:var(--light);border-radius:8px;font-size:.87rem;color:var(--accent)}
+    .error-msg{display:none;color:var(--red);font-size:.85rem;margin-top:8px}
+    /* Selector actividad */
     .field{margin-bottom:20px}
     .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
     .field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
-    .field select:focus{outline:none;border-color:var(--accent)}
     .btn-primary{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:9px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.95rem}
     .btn-primary:hover{opacity:.9}
-
-    /* Panel sesión activa */
+    /* Sesión activa */
     #panelSesion{display:none}
-    .sesion-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:20px;text-align:center}
-    .sesion-card h2{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:8px}
-    .sesion-card p{color:var(--muted);font-size:.88rem;margin-bottom:24px}
-    .marcador{display:flex;justify-content:center;gap:40px;margin-bottom:28px}
-    .marcador .item .num{font-size:2.5rem;font-weight:700}
+    .sesion-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:20px}
+    .sesion-card h2{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:4px;text-align:center}
+    .sesion-card .desc-act{color:var(--muted);font-size:.85rem;margin-bottom:18px;text-align:center}
+    .estado-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;background:var(--light);color:var(--accent)}
+    .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .progreso{font-size:.8rem;color:var(--muted);font-weight:600}
+
+    .marcador{display:flex;justify-content:center;gap:40px;margin-bottom:24px}
+    .marcador .item .num{font-size:2.2rem;font-weight:700}
     .marcador .item .lbl{font-size:.78rem;color:var(--muted);margin-top:2px}
     .marcador .item.acierto .num{color:var(--green)}
     .marcador .item.error   .num{color:var(--red)}
-    .respuesta-btns{display:flex;gap:14px;justify-content:center;margin-bottom:28px}
+
+    /* Contenido del apartado */
+    .apartado-content{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px;text-align:center}
+    .apartado-content h3{font-size:1rem;font-weight:700;margin-bottom:14px;color:var(--ink)}
+    .img-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:14px}
+    .img-grid img{max-width:200px;max-height:200px;border-radius:10px;border:1px solid var(--border);object-fit:cover}
+    .palabras-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .palabra-chip{background:var(--light);color:var(--accent);font-weight:700;font-size:1.05rem;padding:8px 18px;border-radius:10px}
+    audio,video{width:100%;max-width:420px;border-radius:10px}
+    .respuesta-esperada{margin-top:14px;font-size:.85rem;color:var(--muted);background:#fff;border:1px dashed var(--border);border-radius:8px;padding:10px 14px}
+    .respuesta-esperada strong{color:var(--ink)}
+
+    .respuesta-btns{display:flex;gap:14px;justify-content:center;margin-bottom:16px}
     .btn-acierto{background:var(--green);color:#fff;border:none;padding:14px 32px;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;font-size:1rem}
     .btn-error  {background:var(--red);  color:#fff;border:none;padding:14px 32px;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;font-size:1rem}
     .btn-acierto:hover,.btn-error:hover{opacity:.88}
-    .btn-finalizar{background:#fff;border:2px solid var(--accent);color:var(--accent);padding:11px 26px;border-radius:9px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
-    .btn-finalizar:hover{background:var(--light)}
-    .estado-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;background:var(--light);color:var(--accent);margin-bottom:16px}
+    .btn-acierto:disabled,.btn-error:disabled{opacity:.4;cursor:not-allowed}
+    .btn-finalizar{display:block;margin:0 auto;background:#fff;border:2px solid var(--accent);color:var(--accent);padding:11px 26px;border-radius:9px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
   </style>
 </head>
 <body>
@@ -49,36 +70,51 @@
   </header>
   <div class="container">
     <h1>Realizar actividad</h1>
-    <p class="subtitle">Selecciona una actividad disponible e inicia la sesión de práctica — CdU-03.</p>
+    <p class="subtitle">Introduce el código del paciente, selecciona la actividad y comienza.</p>
 
-    <!-- Paso 1: selección -->
     <div id="paso1">
+      <!-- Buscador por código -->
+      <div class="search-box">
+        <label>Código de acceso del paciente</label>
+        <div class="search-row">
+          <input id="codigoInput" placeholder="PAC-1234" maxlength="8"
+                 oninput="this.value=this.value.toUpperCase()"
+                 onkeydown="if(event.key==='Enter') buscar()">
+          <button class="btn-buscar" onclick="buscar()">Buscar</button>
+        </div>
+        <div class="paciente-ok" id="pacienteOk"></div>
+        <div class="error-msg"  id="errorMsg">Código no encontrado.</div>
+      </div>
+
       <div class="field">
         <label>Actividad disponible</label>
         <select id="selAct"><option value="">— Selecciona una actividad —</option></select>
       </div>
-      <div class="field">
-        <label>ID del paciente</label>
-        <input id="pacienteId" placeholder="ID del paciente" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff">
-      </div>
       <button class="btn-primary" onclick="iniciar()">Iniciar sesión</button>
     </div>
 
-    <!-- Paso 2: sesión activa -->
     <div id="panelSesion">
       <div class="sesion-card">
-        <div class="estado-badge">Sesión en curso</div>
+        <div class="top-row">
+          <span class="estado-badge">Sesión en curso</span>
+          <span class="progreso" id="progreso"></span>
+        </div>
         <h2 id="actTitulo">Actividad</h2>
-        <p id="actDesc"></p>
+        <p class="desc-act" id="actDesc"></p>
+
         <div class="marcador">
           <div class="item acierto"><div class="num" id="numAciertos">0</div><div class="lbl">Aciertos</div></div>
           <div class="item error">  <div class="num" id="numErrores">0</div> <div class="lbl">Errores</div></div>
         </div>
+
+        <!-- Contenido del apartado actual, generado dinámicamente -->
+        <div class="apartado-content" id="apartadoContent"></div>
+
         <div class="respuesta-btns">
-          <button class="btn-acierto" onclick="responder(true)">✓ Acierto</button>
-          <button class="btn-error"   onclick="responder(false)">✗ Error</button>
+          <button class="btn-acierto" id="btnAcierto" onclick="responder(true)">✓ Acierto</button>
+          <button class="btn-error"   id="btnError"   onclick="responder(false)">✗ Error</button>
         </div>
-        <button class="btn-finalizar" onclick="finalizar()">Finalizar sesión</button>
+        <button class="btn-finalizar" id="btnFinalizar" onclick="finalizar()" style="display:none">Finalizar sesión</button>
       </div>
     </div>
   </div>
@@ -86,68 +122,149 @@
   <script>
     const token = localStorage.getItem('token');
     if (!token) window.location.href = '/compartida/login.html';
-    let sesionId = null;
-    let aciertos = 0, errores = 0;
+    let pacienteId = null, sesionId = null, aciertos = 0, errores = 0;
+    let apartados = [], indiceActual = 0, tipoActividad = null;
 
     async function api(url, opts={}) {
-      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...opts});
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, ...opts });
       return r.json();
     }
 
-    async function init() {
-      // Pre-rellenar desde localStorage si viene de actividades-recomendadas
-      const actId  = localStorage.getItem('practicaActId');
-      const pacId  = localStorage.getItem('practicaPacienteId');
-      if (pacId) document.getElementById('pacienteId').value = pacId;
+    async function buscar() {
+      const codigo = document.getElementById('codigoInput').value.trim();
+      if (!codigo) return;
+      document.getElementById('errorMsg').style.display   = 'none';
+      document.getElementById('pacienteOk').style.display = 'none';
 
+      const res  = await fetch(`/api/pacientes/codigo/${codigo}`);
+      const data = await res.json();
+      if (!res.ok || data.error) { document.getElementById('errorMsg').style.display = 'block'; return; }
+
+      pacienteId = data._id;
+      localStorage.setItem('practicaPacienteId', pacienteId);
+      localStorage.setItem('practicaPacienteNombre', data.nombre);
+      document.getElementById('pacienteOk').innerHTML = `✓ <strong>${data.nombre}</strong>`;
+      document.getElementById('pacienteOk').style.display = 'block';
+    }
+
+    async function init() {
+      const actId   = localStorage.getItem('practicaActId');
+      const pidG    = localStorage.getItem('practicaPacienteId');
+      const nombreG = localStorage.getItem('practicaPacienteNombre');
+      if (pidG) {
+        pacienteId = pidG;
+        document.getElementById('pacienteOk').innerHTML = `✓ <strong>${nombreG || 'Paciente'}</strong>`;
+        document.getElementById('pacienteOk').style.display = 'block';
+      }
       const acts = await api('/api/familia/actividades');
       const sel  = document.getElementById('selAct');
       acts.forEach(a => {
-        const o=document.createElement('option'); o.value=a._id; o.textContent=a.titulo; sel.appendChild(o);
+        const o = document.createElement('option'); o.value = a._id; o.textContent = a.titulo; sel.appendChild(o);
       });
       if (actId) sel.value = actId;
     }
 
-    // RUP CdU-03: crearSesion(asignacionId) → iniciarSesion
     async function iniciar() {
       const actividadId = document.getElementById('selAct').value;
-      const pacienteId  = document.getElementById('pacienteId').value.trim();
-      if (!actividadId || !pacienteId) { alert('Selecciona actividad e introduce el ID del paciente.'); return; }
+      if (!pacienteId)  { alert('Primero busca el paciente por su código de acceso.'); return; }
+      if (!actividadId) { alert('Selecciona una actividad.'); return; }
 
-      const sesion = await api('/api/familia/practica', {
-        method:'POST', body:JSON.stringify({ pacienteId, actividadId })
-      });
+      const sesion = await api('/api/familia/practica', { method: 'POST', body: JSON.stringify({ pacienteId, actividadId }) });
       if (sesion.error) { alert(sesion.error); return; }
-      sesionId = sesion._id;
-      aciertos = 0; errores = 0;
+      sesionId = sesion._id; aciertos = 0; errores = 0;
       document.getElementById('numAciertos').textContent = 0;
       document.getElementById('numErrores').textContent  = 0;
 
-      // Cargar info de la actividad seleccionada
       const actData = await api(`/api/familia/actividades/${actividadId}`);
-      document.getElementById('actTitulo').textContent = actData.actividad?.titulo || 'Actividad';
-      document.getElementById('actDesc').textContent   = actData.actividad?.descripcion || '';
+      const actividad = actData.actividad || {};
+      document.getElementById('actTitulo').textContent = actividad.titulo || 'Actividad';
+      document.getElementById('actDesc').textContent   = actividad.descripcion || '';
 
-      document.getElementById('paso1').style.display     = 'none';
+      tipoActividad = actividad.tipo;
+      apartados = actData.contenido?.apartados || actividad.contenido?.apartados || [];
+      indiceActual = 0;
+
+      document.getElementById('paso1').style.display      = 'none';
       document.getElementById('panelSesion').style.display = 'block';
       localStorage.removeItem('practicaActId');
-      localStorage.removeItem('practicaPacienteId');
+
+      renderApartado();
     }
 
-    // RUP CdU-03: registrarRespuesta(sesionId, ejercicioId, respuesta)
+    function renderApartado() {
+      const cont = document.getElementById('apartadoContent');
+      document.getElementById('progreso').textContent = `Apartado ${indiceActual+1} de ${apartados.length || 1}`;
+
+      if (!apartados.length) {
+        cont.innerHTML = '<p style="color:var(--muted);font-style:italic">Esta actividad no tiene apartados configurados.</p>';
+        document.getElementById('btnAcierto').disabled = true;
+        document.getElementById('btnError').disabled   = true;
+        return;
+      }
+
+      const ap = apartados[indiceActual];
+
+      switch (tipoActividad) {
+        case 'PICTOGRAMA':
+          cont.innerHTML = `
+            <h3>¿Qué ves en la imagen? Coméntalo en voz alta.</h3>
+            <div class="img-grid">
+              ${(ap.imagenes||[]).map(url => `<img src="${url}" alt="pictograma" onerror="this.style.display='none'">`).join('')}
+            </div>
+            <div class="respuesta-esperada"><strong>Pista para el adulto:</strong> ${ap.descripcion || ''}</div>`;
+          break;
+
+        case 'TEXTO':
+          cont.innerHTML = `
+            <h3>${ap.enunciado || ''}</h3>
+            <div class="palabras-list">
+              ${(ap.palabras||[]).map(p => `<span class="palabra-chip">${p}</span>`).join('')}
+            </div>`;
+          break;
+
+        case 'AUDIO':
+          cont.innerHTML = `
+            <h3>Escucha y repite lo que oigas</h3>
+            <audio controls src="${ap.urlAudio || ''}"></audio>
+            <div class="respuesta-esperada"><strong>Respuesta esperada:</strong> ${ap.transcripcion || ''}</div>`;
+          break;
+
+        case 'VIDEO':
+          cont.innerHTML = `
+            <h3>${ap.descripcion || 'Observa el vídeo'}</h3>
+            <video controls src="${ap.urlVideo || ''}"></video>`;
+          break;
+
+        default:
+          cont.innerHTML = '<p style="color:var(--muted);font-style:italic">Tipo de actividad no soportado.</p>';
+      }
+
+      const esUltimo = indiceActual === apartados.length - 1;
+      document.getElementById('btnAcierto').disabled = false;
+      document.getElementById('btnError').disabled   = false;
+      document.getElementById('btnAcierto').style.display = 'inline-block';
+      document.getElementById('btnError').style.display   = 'inline-block';
+      document.getElementById('btnFinalizar').style.display = esUltimo ? 'none' : 'none';
+    }
+
     async function responder(esAcierto) {
       if (!sesionId) return;
-      await api(`/api/familia/practica/${sesionId}/respuesta`, {
-        method:'PUT', body:JSON.stringify({ esAcierto })
-      });
+      await api(`/api/familia/practica/${sesionId}/respuesta`, { method: 'PUT', body: JSON.stringify({ esAcierto }) });
       if (esAcierto) { aciertos++; document.getElementById('numAciertos').textContent = aciertos; }
-      else           { errores++;  document.getElementById('numErrores').textContent  = errores;  }
+      else           { errores++;  document.getElementById('numErrores').textContent  = errores; }
+
+      // Avanzar al siguiente apartado o finalizar si era el último
+      if (indiceActual < apartados.length - 1) {
+        indiceActual++;
+        renderApartado();
+      } else {
+        await finalizar();
+      }
     }
 
-    // RUP CdU-03: finalizarSesion + marcarCompletada → ResultadoActividad
     async function finalizar() {
       if (!sesionId) return;
-      const resultado = await api(`/api/familia/practica/${sesionId}/finalizar`, { method:'PUT' });
+      const resultado = await api(`/api/familia/practica/${sesionId}/finalizar`, { method: 'PUT' });
       localStorage.setItem('resultado', JSON.stringify(resultado));
       window.location.href = '/familia/resultado-actividad.html';
     }

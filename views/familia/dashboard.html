@@ -13,14 +13,31 @@
     .btn-logout{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
     .container{max-width:900px;margin:40px auto;padding:0 24px}
     .welcome{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:6px}
-    .subtitle{color:var(--muted);margin-bottom:36px;font-size:.9rem}
+    .subtitle{color:var(--muted);margin-bottom:20px;font-size:.9rem}
+    /* Banner código activo */
+    .codigo-banner{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .codigo-banner .left{font-size:.88rem;color:var(--muted)}
+    .codigo-banner .left strong{display:block;font-size:1.1rem;color:var(--ink);margin-top:2px}
+    .codigo-badge{font-family:monospace;font-size:1.15rem;font-weight:700;color:var(--accent);background:var(--light);padding:6px 16px;border-radius:8px;letter-spacing:.06em}
+    .btn-cambiar{background:none;border:1.5px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:7px;font-family:inherit;font-size:.82rem;cursor:pointer}
+    .btn-cambiar:hover{border-color:var(--accent);color:var(--accent)}
+    /* Buscador inline */
+    .search-inline{background:var(--light);border-radius:12px;padding:16px 20px;margin-bottom:32px}
+    .search-inline label{font-size:.85rem;font-weight:500;display:block;margin-bottom:8px;color:var(--accent)}
+    .search-row{display:flex;gap:10px}
+    .search-row input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.95rem;text-transform:uppercase;letter-spacing:.05em}
+    .search-row input:focus{outline:none;border-color:var(--accent)}
+    .btn-buscar{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer}
+    .error-search{display:none;color:#dc2626;font-size:.83rem;margin-top:6px}
+    /* Grid de navegación */
+    .section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;margin-top:32px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
     .nav-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;cursor:pointer;text-decoration:none;color:inherit;display:block;transition:box-shadow .2s,transform .2s}
     .nav-card:hover{box-shadow:0 8px 28px rgba(124,58,237,.13);transform:translateY(-2px)}
     .icon{width:46px;height:46px;border-radius:12px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px}
     .nav-card h3{font-size:.95rem;font-weight:700;margin-bottom:6px}
     .nav-card p{font-size:.82rem;color:var(--muted);line-height:1.4}
-    .section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;margin-top:32px}
+    .nav-card.disabled{opacity:.45;pointer-events:none}
   </style>
 </head>
 <body>
@@ -29,17 +46,38 @@
     <button class="btn-logout" onclick="logout()">Salir</button>
   </header>
   <div class="container">
-    <div class="welcome">Hola, <span id="nombre">familiar</span></div>
-    <p class="subtitle">Accede a las actividades y registros de seguimiento de tu hijo/a.</p>
+    <div class="welcome">Hola, <span id="nombreUsuario">familiar</span></div>
+    <p class="subtitle">Accede a las actividades y seguimiento de tu paciente.</p>
+
+    <!-- Si hay paciente guardado, muestra el banner; si no, muestra el buscador -->
+    <div id="bannerPaciente" style="display:none" class="codigo-banner">
+      <div class="left">
+        Paciente activo
+        <strong id="bannerNombre"></strong>
+      </div>
+      <span class="codigo-badge" id="bannerCodigo"></span>
+      <button class="btn-cambiar" onclick="cambiarPaciente()">Cambiar paciente</button>
+    </div>
+
+    <div id="buscadorWrap" class="search-inline">
+      <label>Introduce el código de acceso del paciente para comenzar</label>
+      <div class="search-row">
+        <input id="codigoInput" placeholder="PAC-1234" maxlength="8"
+               oninput="this.value=this.value.toUpperCase()"
+               onkeydown="if(event.key==='Enter') buscar()">
+        <button class="btn-buscar" onclick="buscar()">Confirmar</button>
+      </div>
+      <div class="error-search" id="errorSearch">Código no encontrado. Pídelo al logopeda.</div>
+    </div>
 
     <div class="section-title">Actividades</div>
     <div class="grid">
-      <a class="nav-card" href="/familia/actividades-recomendadas.html">
+      <a class="nav-card" id="cardRecomendadas" href="/familia/actividades-recomendadas.html">
         <div class="icon">⭐</div>
         <h3>Actividades recomendadas</h3>
         <p>Las actividades que el logopeda ha asignado para practicar en casa.</p>
       </a>
-      <a class="nav-card" href="/familia/realizar-actividad.html">
+      <a class="nav-card" id="cardRealizar" href="/familia/realizar-actividad.html">
         <div class="icon">▶️</div>
         <h3>Realizar actividad</h3>
         <p>Practica una actividad disponible y registra los resultados.</p>
@@ -48,12 +86,12 @@
 
     <div class="section-title">Seguimiento</div>
     <div class="grid">
-      <a class="nav-card" href="/familia/registros.html">
+      <a class="nav-card" id="cardRegistros" href="/familia/registros.html">
         <div class="icon">📋</div>
         <h3>Registros del logopeda</h3>
         <p>Notas clínicas y recomendaciones enviadas por el equipo terapéutico.</p>
       </a>
-      <a class="nav-card" href="/familia/progreso.html">
+      <a class="nav-card" id="cardProgreso" href="/familia/progreso.html">
         <div class="icon">📊</div>
         <h3>Progreso</h3>
         <p>Consulta la evolución de aciertos y actividades completadas.</p>
@@ -65,8 +103,51 @@
     const token  = localStorage.getItem('token');
     const nombre = localStorage.getItem('nombre');
     if (!token) window.location.href = '/compartida/login.html';
-    document.getElementById('nombre').textContent = nombre || 'familiar';
+    document.getElementById('nombreUsuario').textContent = nombre || 'familiar';
+
+    function mostrarBanner(nombrePaciente, codigo) {
+      document.getElementById('bannerNombre').textContent  = nombrePaciente;
+      document.getElementById('bannerCodigo').textContent  = codigo;
+      document.getElementById('bannerPaciente').style.display = 'flex';
+      document.getElementById('buscadorWrap').style.display   = 'none';
+    }
+
+    function cambiarPaciente() {
+      localStorage.removeItem('practicaPacienteId');
+      localStorage.removeItem('practicaPacienteNombre');
+      localStorage.removeItem('practicaPacienteCodigo');
+      document.getElementById('bannerPaciente').style.display = 'none';
+      document.getElementById('buscadorWrap').style.display   = 'block';
+      document.getElementById('codigoInput').value = '';
+      document.getElementById('errorSearch').style.display = 'none';
+    }
+
+    async function buscar() {
+      const codigo = document.getElementById('codigoInput').value.trim();
+      if (!codigo) return;
+      document.getElementById('errorSearch').style.display = 'none';
+
+      const res  = await fetch(`/api/pacientes/codigo/${codigo}`);
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        document.getElementById('errorSearch').style.display = 'block';
+        return;
+      }
+      localStorage.setItem('practicaPacienteId',     data._id);
+      localStorage.setItem('practicaPacienteNombre', data.nombre);
+      localStorage.setItem('practicaPacienteCodigo', data.codigoAcceso);
+      mostrarBanner(data.nombre, data.codigoAcceso);
+    }
+
     function logout() { localStorage.clear(); window.location.href = '/compartida/login.html'; }
+
+    // Al cargar: si ya hay paciente guardado, mostrar banner directamente
+    const pidG    = localStorage.getItem('practicaPacienteId');
+    const nombreG = localStorage.getItem('practicaPacienteNombre');
+    const codigoG = localStorage.getItem('practicaPacienteCodigo');
+    if (pidG && nombreG) {
+      mostrarBanner(nombreG, codigoG || '');
+    }
   </script>
 </body>
 </html>

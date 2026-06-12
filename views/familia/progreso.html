@@ -6,7 +6,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8;--green:#059669}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#7c3aed;--light:#f5f3ff;--surface:#faf9ff;--border:#e5e0f8;--green:#059669;--red:#dc2626}
     body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
     header{background:var(--accent);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
     .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
@@ -14,16 +14,28 @@
     .container{max-width:800px;margin:36px auto;padding:0 24px}
     h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
     .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
-    .field{margin-bottom:24px;max-width:320px}
-    .field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
-    .field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fff}
-    .field input:focus{outline:none;border-color:var(--accent)}
-    .btn-primary{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.9rem}
-    .btn-primary:hover{opacity:.9}
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:32px}
+    /* Buscador */
+    .search-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:28px}
+    .search-box label{display:block;font-size:.85rem;font-weight:500;margin-bottom:8px}
+    .search-row{display:flex;gap:10px}
+    .search-row input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.95rem;text-transform:uppercase;letter-spacing:.05em}
+    .search-row input:focus{outline:none;border-color:var(--accent)}
+    .btn-buscar{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer}
+    .paciente-ok{display:none;margin-top:10px;padding:8px 14px;background:var(--light);border-radius:8px;font-size:.87rem;color:var(--accent)}
+    .error-msg{display:none;color:var(--red);font-size:.85rem;margin-top:8px}
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:28px}
     .stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 22px}
     .stat .val{font-size:2.2rem;font-weight:700;color:var(--accent)}
     .stat .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
+    /* Asignaciones */
+    .asig-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+    .asig-block{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 22px;flex:1;min-width:120px;text-align:center}
+    .asig-block .num{font-size:2rem;font-weight:700}
+    .asig-block .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
+    .asig-block.completadas .num{color:var(--green)}
+    .asig-block.pendientes  .num{color:#f59e0b}
+    /* Chart */
     .section-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
     .chart-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px}
     .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
@@ -31,15 +43,6 @@
     .bar-track{flex:1;background:var(--surface);border-radius:20px;height:16px;overflow:hidden}
     .bar-fill{height:100%;border-radius:20px;background:var(--accent);transition:width .5s ease}
     .bar-val{width:38px;font-size:.8rem;font-weight:700;color:var(--ink)}
-    .progress-ring-wrap{text-align:center;margin-bottom:28px}
-    .ring-lbl{font-size:.85rem;color:var(--muted);margin-top:8px}
-    .asig-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px}
-    .asig-block{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 22px;flex:1;min-width:120px;text-align:center}
-    .asig-block .num{font-size:2rem;font-weight:700}
-    .asig-block .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
-    .asig-block.completadas .num{color:var(--green)}
-    .asig-block.pendientes  .num{color:#f59e0b}
-    #placeholder{color:var(--muted);font-style:italic}
   </style>
 </head>
 <body>
@@ -49,13 +52,19 @@
   </header>
   <div class="container">
     <h1>Progreso</h1>
-    <p class="subtitle">Consulta la evolución de las sesiones y actividades completadas — CdU-06 RUP.</p>
+    <p class="subtitle">Consulta la evolución de las sesiones y actividades completadas.</p>
 
-    <div class="field">
-      <label>ID del paciente</label>
-      <input id="pacienteId" placeholder="Introduce el ID del paciente">
+    <div class="search-box">
+      <label>Código de acceso del paciente</label>
+      <div class="search-row">
+        <input id="codigoInput" placeholder="PAC-1234" maxlength="8"
+               oninput="this.value=this.value.toUpperCase()"
+               onkeydown="if(event.key==='Enter') buscar()">
+        <button class="btn-buscar" onclick="buscar()">Ver progreso</button>
+      </div>
+      <div class="paciente-ok" id="pacienteOk"></div>
+      <div class="error-msg"  id="errorMsg">Código no encontrado.</div>
     </div>
-    <button class="btn-primary" onclick="cargar()" style="margin-bottom:32px">Ver progreso</button>
 
     <div id="contenido" style="display:none">
       <div class="stats-grid">
@@ -75,30 +84,43 @@
         <p style="color:var(--muted);font-style:italic">Sin sesiones finalizadas aún.</p>
       </div>
     </div>
-    <p id="placeholder">Introduce el ID del paciente para ver el progreso.</p>
   </div>
 
   <script>
     const token = localStorage.getItem('token');
     if (!token) window.location.href = '/compartida/login.html';
+    let pacienteId = null;
 
     async function api(url) {
-      const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       return r.json();
     }
 
-    // RUP CdU-06: ProgresoController.getProgreso → calcularMetricas
-    async function cargar() {
-      const pid = document.getElementById('pacienteId').value.trim();
-      if (!pid) { alert('Introduce un ID de paciente.'); return; }
+    async function buscar() {
+      const codigo = document.getElementById('codigoInput').value.trim();
+      if (!codigo) return;
+      document.getElementById('errorMsg').style.display   = 'none';
+      document.getElementById('pacienteOk').style.display = 'none';
+      document.getElementById('contenido').style.display  = 'none';
 
-      const data = await api(`/api/familia/progreso/${pid}`);
+      const res  = await fetch(`/api/pacientes/codigo/${codigo}`);
+      const data = await res.json();
+      if (!res.ok || data.error) { document.getElementById('errorMsg').style.display = 'block'; return; }
+
+      pacienteId = data._id;
+      localStorage.setItem('practicaPacienteId', pacienteId);
+      localStorage.setItem('practicaPacienteNombre', data.nombre);
+      document.getElementById('pacienteOk').innerHTML = `✓ <strong>${data.nombre}</strong>`;
+      document.getElementById('pacienteOk').style.display = 'block';
+      cargarProgreso();
+    }
+
+    async function cargarProgreso() {
+      const data = await api(`/api/familia/progreso/${pacienteId}`);
       if (data.error) { alert(data.error); return; }
-
       const m = data.metricas;
-      document.getElementById('placeholder').style.display = 'none';
-      document.getElementById('contenido').style.display   = 'block';
 
+      document.getElementById('contenido').style.display  = 'block';
       document.getElementById('totalSesiones').textContent = m.totalSesiones;
       document.getElementById('promedio').textContent      = m.promedioAciertos + '%';
       document.getElementById('totalAsig').textContent     = m.totalAsignaciones;
@@ -118,8 +140,15 @@
         </div>`).join('');
     }
 
-    const pidGuardado = localStorage.getItem('practicaPacienteId');
-    if (pidGuardado) document.getElementById('pacienteId').value = pidGuardado;
+    // Pre-rellenar si hay sesión guardada
+    const pidG    = localStorage.getItem('practicaPacienteId');
+    const nombreG = localStorage.getItem('practicaPacienteNombre');
+    if (pidG && nombreG) {
+      pacienteId = pidG;
+      document.getElementById('pacienteOk').innerHTML = `✓ <strong>${nombreG}</strong>`;
+      document.getElementById('pacienteOk').style.display = 'block';
+      cargarProgreso();
+    }
   </script>
 </body>
 </html>

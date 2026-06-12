@@ -3,11 +3,13 @@
 const EstrategiaPictograma = require('./EstrategiaPictograma');
 const EstrategiaAudio      = require('./EstrategiaAudio');
 const EstrategiaTexto      = require('./EstrategiaTexto');
+const EstrategiaVideo      = require('./EstrategiaVideo');
 
 const estrategias = {
   PICTOGRAMA: EstrategiaPictograma,
   AUDIO:      EstrategiaAudio,
-  TEXTO:      EstrategiaTexto
+  TEXTO:      EstrategiaTexto,
+  VIDEO:      EstrategiaVideo
 };
 
 const getEstrategia = (tipo) => {

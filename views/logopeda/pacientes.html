@@ -6,12 +6,12 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#3b5bdb;--light:#eef1ff;--surface:#f8f9ff;--border:#e5e7f0;--red:#dc2626}
+    :root{--ink:#1a1f2e;--muted:#6b7280;--accent:#3b5bdb;--light:#eef1ff;--surface:#f8f9ff;--border:#e5e7f0;--red:#dc2626;--green:#059669}
     body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink)}
     header{background:var(--ink);color:#fff;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
     .logo{font-family:'DM Serif Display',serif;font-size:1.1rem}
     .btn-back{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:.85rem}
-    .container{max-width:900px;margin:36px auto;padding:0 24px}
+    .container{max-width:960px;margin:36px auto;padding:0 24px}
     h1{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px}
     .subtitle{color:var(--muted);margin-bottom:28px;font-size:.9rem}
     .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
@@ -19,12 +19,20 @@
     .btn-primary:hover{opacity:.9}
     table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
     th{background:var(--surface);padding:12px 16px;text-align:left;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border)}
-    td{padding:12px 16px;font-size:.9rem;border-bottom:1px solid var(--border)}
+    td{padding:12px 16px;font-size:.9rem;border-bottom:1px solid var(--border);vertical-align:middle}
     tr:last-child td{border-bottom:none}
-    .badge-activo{background:#d1fae5;color:#065f46;padding:2px 9px;border-radius:20px;font-size:.75rem;font-weight:700}
+    .badge-activo  {background:#d1fae5;color:#065f46;padding:2px 9px;border-radius:20px;font-size:.75rem;font-weight:700}
     .badge-inactivo{background:#f3f4f6;color:#6b7280;padding:2px 9px;border-radius:20px;font-size:.75rem;font-weight:700}
+    /* Código de acceso */
+    .codigo-wrap{display:flex;align-items:center;gap:8px}
+    .codigo{font-family:monospace;font-size:.95rem;font-weight:700;color:var(--accent);background:var(--light);padding:3px 10px;border-radius:6px;letter-spacing:.05em}
+    .btn-copiar{background:none;border:1.5px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:6px;font-family:inherit;font-size:.75rem;cursor:pointer;transition:all .2s}
+    .btn-copiar:hover{border-color:var(--accent);color:var(--accent)}
+    .btn-copiar.copiado{border-color:var(--green);color:var(--green)}
+    /* Acciones */
     .btn-sm{padding:5px 12px;border-radius:6px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;margin-left:6px}
     .btn-sm.danger{border-color:var(--red);color:var(--red)}
+    /* Modal */
     .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
     .overlay.open{display:flex}
     .modal{background:#fff;border-radius:14px;padding:32px;width:100%;max-width:460px}
@@ -35,6 +43,9 @@
     .field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
     .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
     .btn-cancel{background:none;border:1.5px solid var(--border);color:var(--muted);padding:9px 18px;border-radius:7px;font-family:inherit;cursor:pointer}
+    /* Info código en modal de edición */
+    .codigo-info{background:var(--light);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:.85rem;color:var(--accent)}
+    .codigo-info strong{font-size:1.1rem;letter-spacing:.05em}
   </style>
 </head>
 <body>
@@ -44,13 +55,22 @@
   </header>
   <div class="container">
     <h1>Gestión de pacientes</h1>
-    <p class="subtitle">Crea y administra los pacientes asignados a tu consulta.</p>
+    <p class="subtitle">El <strong>código de acceso</strong> es el que debes compartir con la familia para que puedan acceder a los datos del paciente.</p>
     <div class="toolbar">
       <span id="countLabel" style="font-size:.85rem;color:var(--muted)"></span>
       <button class="btn-primary" onclick="abrirNuevo()">+ Nuevo paciente</button>
     </div>
     <table>
-      <thead><tr><th>Nombre</th><th>Fecha nacimiento</th><th>Nivel</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Código de acceso</th>
+          <th>Fecha nacimiento</th>
+          <th>Nivel</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
@@ -59,6 +79,10 @@
     <div class="modal">
       <h2 id="modalTitle">Nuevo paciente</h2>
       <input type="hidden" id="pacienteId">
+      <!-- Código visible al editar -->
+      <div id="codigoInfoWrap" style="display:none" class="codigo-info">
+        Código de acceso para la familia: <strong id="codigoInfoVal"></strong>
+      </div>
       <div class="field"><label>Nombre completo</label><input id="nombre" placeholder="Nombre del paciente"></div>
       <div class="field"><label>Fecha de nacimiento</label><input type="date" id="fechaNacimiento"></div>
       <div class="field"><label>Nivel actual</label>
@@ -85,7 +109,7 @@
     if (!token) window.location.href = '/compartida/login.html';
 
     async function api(url, opts={}) {
-      const r = await fetch(url,{headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},...opts});
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, ...opts });
       return r.json();
     }
 
@@ -94,53 +118,78 @@
       document.getElementById('countLabel').textContent = `${ps.length} paciente(s)`;
       document.getElementById('tbody').innerHTML = ps.map(p => `
         <tr>
-          <td>${p.nombre}</td>
+          <td><strong>${p.nombre}</strong></td>
+          <td>
+            <div class="codigo-wrap">
+              <span class="codigo">${p.codigoAcceso || '—'}</span>
+              ${p.codigoAcceso ? `<button class="btn-copiar" id="btn-${p._id}" onclick="copiar('${p.codigoAcceso}','${p._id}')">Copiar</button>` : ''}
+            </div>
+          </td>
           <td>${p.fechaNacimiento ? new Date(p.fechaNacimiento).toLocaleDateString('es-ES') : '—'}</td>
           <td>${p.nivelActual || '—'}</td>
           <td><span class="${p.activo !== false ? 'badge-activo' : 'badge-inactivo'}">${p.activo !== false ? 'Activo' : 'Inactivo'}</span></td>
           <td>
-            <button class="btn-sm" onclick="abrirEditar('${p._id}','${p.nombre}','${p.fechaNacimiento ? p.fechaNacimiento.split('T')[0] : ''}','${p.nivelActual||''}','${p.activo}')">Editar</button>
+            <button class="btn-sm" onclick="abrirEditar('${p._id}','${p.nombre}','${p.fechaNacimiento ? p.fechaNacimiento.split('T')[0] : ''}','${p.nivelActual||''}','${p.activo}','${p.codigoAcceso||''}')">Editar</button>
             <button class="btn-sm danger" onclick="eliminar('${p._id}')">Eliminar</button>
           </td>
         </tr>`).join('');
     }
 
+    function copiar(codigo, id) {
+      navigator.clipboard.writeText(codigo).then(() => {
+        const btn = document.getElementById(`btn-${id}`);
+        btn.textContent = '✓ Copiado';
+        btn.classList.add('copiado');
+        setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copiado'); }, 2000);
+      });
+    }
+
     function abrirNuevo() {
-      document.getElementById('pacienteId').value='';
-      document.getElementById('modalTitle').textContent='Nuevo paciente';
-      ['nombre','fechaNacimiento','nivelActual'].forEach(id=>document.getElementById(id).value='');
-      document.getElementById('activo').value='true';
+      document.getElementById('pacienteId').value = '';
+      document.getElementById('modalTitle').textContent = 'Nuevo paciente';
+      document.getElementById('codigoInfoWrap').style.display = 'none';
+      ['nombre','fechaNacimiento','nivelActual'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('activo').value = 'true';
       document.getElementById('overlay').classList.add('open');
     }
 
-    function abrirEditar(id,nombre,fecha,nivel,activo) {
-      document.getElementById('pacienteId').value=id;
-      document.getElementById('modalTitle').textContent='Editar paciente';
-      document.getElementById('nombre').value=nombre;
-      document.getElementById('fechaNacimiento').value=fecha;
-      document.getElementById('nivelActual').value=nivel;
-      document.getElementById('activo').value=activo;
+    function abrirEditar(id, nombre, fecha, nivel, activo, codigo) {
+      document.getElementById('pacienteId').value = id;
+      document.getElementById('modalTitle').textContent = 'Editar paciente';
+      document.getElementById('nombre').value = nombre;
+      document.getElementById('fechaNacimiento').value = fecha;
+      document.getElementById('nivelActual').value = nivel;
+      document.getElementById('activo').value = activo;
+      // Mostrar código al editar para que el logopeda pueda copiarlo fácilmente
+      if (codigo) {
+        document.getElementById('codigoInfoVal').textContent = codigo;
+        document.getElementById('codigoInfoWrap').style.display = 'block';
+      }
       document.getElementById('overlay').classList.add('open');
     }
 
-    function cerrar() { document.getElementById('overlay').classList.remove('open'); }
+    function cerrar() {
+      document.getElementById('overlay').classList.remove('open');
+      document.getElementById('codigoInfoWrap').style.display = 'none';
+    }
 
     async function guardar() {
-      const id=document.getElementById('pacienteId').value;
-      const body={
-        nombre:document.getElementById('nombre').value,
-        fechaNacimiento:document.getElementById('fechaNacimiento').value||undefined,
-        nivelActual:document.getElementById('nivelActual').value||undefined,
-        activo:document.getElementById('activo').value==='true'
+      const id = document.getElementById('pacienteId').value;
+      const body = {
+        nombre:          document.getElementById('nombre').value,
+        fechaNacimiento: document.getElementById('fechaNacimiento').value || undefined,
+        nivelActual:     document.getElementById('nivelActual').value || undefined,
+        activo:          document.getElementById('activo').value === 'true'
       };
-      if(id) await api(`/api/logopeda/pacientes/${id}`,{method:'PUT',body:JSON.stringify(body)});
-      else   await api('/api/logopeda/pacientes',{method:'POST',body:JSON.stringify(body)});
-      cerrar(); cargar();
+      if (id) await api(`/api/logopeda/pacientes/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+      else    await api('/api/logopeda/pacientes', { method: 'POST', body: JSON.stringify(body) });
+      cerrar();
+      cargar();
     }
 
     async function eliminar(id) {
-      if(!confirm('¿Eliminar este paciente?')) return;
-      await api(`/api/logopeda/pacientes/${id}`,{method:'DELETE'});
+      if (!confirm('¿Eliminar este paciente?')) return;
+      await api(`/api/logopeda/pacientes/${id}`, { method: 'DELETE' });
       cargar();
     }
 

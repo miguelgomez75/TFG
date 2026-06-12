@@ -185,7 +185,7 @@ Desde el panel de actividades, el logopeda puede asignar una actividad disponibl
 PENDIENTE  ──iniciar()──▶  EN_PROGRESO  ──completar()──▶  COMPLETADA
 ```
 
-![Actividad Asignación](Capturas/Actividad%20Asignación.png)
+![Actividad Asignación](/Capturas/Actividad%20Asignación.png)
 
 ---
 
@@ -214,7 +214,7 @@ El logopeda registra las sesiones clínicas presenciales con el paciente. Cada s
 
 ---
 
-![Sesión crud](/Capturas/Sesión%20crud.png)
+![Sesión crud](/Capturas/Sesión%20crud.png)
 
 ---
 

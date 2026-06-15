@@ -1,0 +1,27 @@
+@startuml arquitectura_mvc_caa
+
+title Arquitectura del sistema\nMVC con segregación de interfaces (ISP)
+
+actor "Cliente\n(navegador)" as Cliente
+
+package "Rutas segregadas por actor (ISP)" {
+  component "/api/logopeda\n<<JWT middleware>>" as RutaLogopeda
+  component "/api/familia\n<<JWT middleware>>" as RutaFamilia
+}
+
+component "Views (HTML)\nCapa de presentación" as Views
+component "Controllers\nLógica de aplicación por caso de uso" as Controllers
+component "Models (Mongoose)\nDominio y acceso a datos" as Models
+database "MongoDB Atlas\nBase de datos en la nube" as MongoDB
+
+Cliente --> RutaLogopeda
+Cliente --> RutaFamilia
+
+RutaLogopeda --> Views
+RutaFamilia --> Views
+
+Views --> Controllers
+Controllers --> Models
+Models --> MongoDB
+
+@enduml

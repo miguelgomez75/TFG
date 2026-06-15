@@ -43,21 +43,7 @@ La solución está desarrollada con **Node.js + Express** en el backend, **Mongo
 
 El sistema sigue el patrón **MVC (Modelo-Vista-Controlador)** con segregación de interfaces por actor:
 
-```
-Cliente (navegador)
-       │
-       ▼
-   Views (HTML)          ← Capa de presentación
-       │
-       ▼
-   Controllers           ← Lógica de aplicación por caso de uso
-       │
-       ▼
-   Models (Mongoose)     ← Dominio y acceso a datos
-       │
-       ▼
-  MongoDB Atlas          ← Base de datos en la nube
-```
+![Diagrama arquitectura MVC](/Análisis%20y%20diseño/Análisis/Arquitectura/Arquitectura_mvc_solución.svg)
 
 Las rutas están separadas por actor (`/api/logopeda/...` y `/api/familia/...`), cada una protegida con su propio middleware de autenticación JWT, aplicando el principio de **Segregación de Interfaces (ISP)**.
 

@@ -1,0 +1,27 @@
+@startuml
+
+node "Dispositivo del usuario\n(navegador web)" {
+  component "Vistas HTML\n(MPA)" as SPA
+}
+
+node "Servidor de aplicación\n(Railway / Render)" {
+  component "Node.js + Express" as API
+  component "Middleware Auth (JWT)" as JWT
+  component "Ficheros estáticos\n(views/)" as Static
+  API --> JWT
+  API --> Static
+}
+
+node "Servidor de base de datos" {
+  database "MongoDB Atlas" as DB
+}
+
+SPA --> API : HTTPS / REST
+API --> DB : Mongoose (TLS)
+
+note right of JWT
+  Control de acceso por rol:
+  LOGOPEDA / FAMILIA
+end note
+
+@enduml

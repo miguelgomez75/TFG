@@ -35,7 +35,7 @@ El desarrollo se ha llevado a cabo en colaboración con Laura, logopeda del caso
 
 | Capa | Tecnología |
 |------|------------|
-| Frontend | React 18 + Tailwind CSS 3 |
+| Frontend | HTML5 + CSS3 + JavaScript |
 | Backend | Node.js 18 + Express 4 |
 | Base de datos | MongoDB 7 + Mongoose 7 |
 | Autenticación | JWT (RFC 7519) |

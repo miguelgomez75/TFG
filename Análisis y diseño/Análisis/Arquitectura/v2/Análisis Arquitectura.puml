@@ -1,0 +1,45 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+package "Capa de Presentación" {
+  [Views (HTML)] as UI
+  [views/logopeda/] as VL
+  [views/familia/] as VF
+  UI --> VL
+  UI --> VF
+}
+
+package "Capa de Lógica de Negocio" {
+  [API REST Express] as API
+  [AuthController] as AUTH
+  [PacienteController] as PC
+  [ActividadController] as AC
+  [SesionController] as SC
+  [RegistroClinicoController] as RC
+  API --> AUTH
+  API --> PC
+  API --> AC
+  API --> SC
+  API --> RC
+}
+
+package "Capa de Persistencia" {
+  [MongoDB Atlas] as DB
+  [Paciente] as MPa
+  [Actividad] as MAc
+  [Sesion] as MSe
+  [RegistroClinico] as MRe
+  [Usuario] as MUs
+  DB --> MPa
+  DB --> MAc
+  DB --> MSe
+  DB --> MRe
+  DB --> MUs
+}
+
+UI --> API : HTTP/REST (JSON) + fetch
+API --> DB : Mongoose ODM
+
+@enduml

@@ -97,6 +97,9 @@ Los casos de uso están agrupados por actor y por paquete funcional.
 | ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4/DDCdU%20Familia1.svg) | ![cuL](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4/DDCdU%20Familia2.svg) | [PUML](Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/v4) |
 
 ### Usuario no Autenticado
+
+ ![cuUnA](../Requisitos/Disciplina%20de%20requisitos/Actores%20y%20casos%20de%20uso/DDCdU%20UsuarioNoAutenticado.svg)
+
 ## 2.3. Diagramas de Contexto
 
 Los diagramas de contexto modelan la navegación del sistema como una máquina de estados. Los nombres de estado siguen la convención `ENTIDAD_ESTADO` (p. ej. `PACIENTES_ABIERTO`, `PACIENTE_ABIERTO`). Las transiciones corresponden a los casos de uso.
@@ -105,7 +108,7 @@ Los diagramas de contexto modelan la navegación del sistema como una máquina d
 |-------|----------|--------|
 | Logopeda | ![ctx1](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Logopeda.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Logopeda.puml) |
 | Familia | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Familia.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/v3/DDCtx%20Familia.puml) |
-| Usuario no Autenticado | ![ctx2](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.puml) |
+| Usuario no Autenticado | ![ctx3](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.svg) | [PUML](Disciplina%20de%20requisitos/Diagrama%20de%20contexto/DDCtx%20Usuario%20no%20Autenticado.puml) |
 
 ---
 

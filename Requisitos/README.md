@@ -36,7 +36,7 @@ El sistema define cuatro máquinas de estado independientes.
 
 | Diagrama | Código |
 |----------|--------|
-| ![actividadc](Modelo%20de%20dominio/DDEs%20Actividad(Contenido).png) | [PUML](Modelo%20de%20dominio/DDEs%20Actividad(Contenido).puml) |
+| ![actividadc](Modelo%20de%20dominio/v2/DDEs%20Actividad(Contenido).svg) | [PUML](Modelo%20de%20dominio/DDEs%20Actividad(Contenido).puml) |
 
 **Actividad (progreso del paciente):** gestiona si el paciente ha completado, abandonado o no iniciado la actividad asignada.
 
@@ -54,7 +54,7 @@ El sistema define cuatro máquinas de estado independientes.
 
 | Diagrama | Código |
 |----------|--------|
-| ![nota](Modelo%20de%20dominio/DDEs%20Registro.png) | [PUML](Modelo%20de%20dominio/DDEs%20Registro.puml) |
+| ![nota](Modelo%20de%20dominio/v2/DDEs%20Registro.svg) | [PUML](Modelo%20de%20dominio/DDEs%20Registro.puml) |
 
 > **Nota sobre nomenclatura:** la *Sesión de práctica* (ejecución de una actividad) y el *Registro de sesión clínica* (anotación del logopeda sobre una consulta presencial) son entidades distintas con ciclos de vida propios.
 

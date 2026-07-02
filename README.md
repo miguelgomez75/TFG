@@ -28,6 +28,8 @@ El desarrollo se ha llevado a cabo en colaboración con Laura, logopeda del caso
 | [`Solución/`](doc/README%20DESCRIPCION%20SOLUCIÓN.md) | Cap. 4 | Descripción de la solución |
 | [`Conclusiones/`](doc/README%20CONCLUSIONES.md) | Cap. 5 | Conclusiones |
 | [`Bibliografía/`](doc/README%20Bibliografia.md) | Cap. 6 | Bibliografía |
+| [`Anexos/`](doc/README%20Anexos.md)             | Cap. 7 | Anexos |
+| [`Defensa/`](Defensa/README.md)                 | Cap. 8 | Defensa |
 
 ---
 

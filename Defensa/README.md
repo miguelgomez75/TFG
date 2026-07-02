@@ -32,7 +32,7 @@
 
 | Actividad | Actividad en curso | Sesión | Registro Clínico |
 |--------------|--------------|--------|------------------|
-| ![actividadc](../Requisitos/Modelo%20de%20dominio/v2/DDEs%20Actividad(Contenido).png) | ![actividadp](../Requisitos/Modelo%20de%20dominio/v3/DDEs%20AsignacionActividad.svg) | ![sesion](../Requisitos/Modelo%20de%20dominio/v3/DDEs%20Sesion.svg) | ![nota](../Requisitos/Modelo%20de%20dominio/v2/DDEs%20Registro.svg) |
+| ![actividadc](../Requisitos/Modelo%20de%20dominio/v2/DDEs%20Actividad(Contenido).svg) | ![actividadp](../Requisitos/Modelo%20de%20dominio/v3/DDEs%20AsignacionActividad.svg) | ![sesion](../Requisitos/Modelo%20de%20dominio/v3/DDEs%20Sesion.svg) | ![nota](../Requisitos/Modelo%20de%20dominio/v2/DDEs%20Registro.svg) |
 
 <p align="right"><a href="#top">⬆ Volver arriba</a></p>
 

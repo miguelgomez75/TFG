@@ -5,6 +5,45 @@ Esta guía está pensada para poder explicar cualquier fichero del sistema en un
 
 ---
 
+## Índice
+
+1. [Punto de entrada — `src/server.js`](#punto-de-entrada)
+2. [Modelos](#modelos)
+   - 2.1 [`models/usuario/Usuario.js`](#modelo-usuario)
+   - 2.2 [`models/terapia/Paciente.js`](#modelo-paciente)
+   - 2.3 [`models/terapia/Sesion.js`](#modelo-sesion)
+   - 2.4 [`models/actividad/Actividad.js`](#modelo-actividad)
+   - 2.5 [`models/actividad/AsignacionActividad.js`](#modelo-asignacionactividad)
+   - 2.6 [`models/actividad/Categoria.js`](#modelo-categoria)
+   - 2.7 [`models/actividad/TipoActividad.js` y `models/actividad/Pictograma.js`](#modelo-tipoactividad-pictograma)
+   - 2.8 [`models/comunicacion/RegistroClinico.js`](#modelo-registroclinico)
+3. [Estrategias de contenido](#estrategias-de-contenido)
+   - 3.1 [`models/actividad/estrategias/EstrategiaContenido.js`](#estrategiacontenido)
+   - 3.2 [`EstrategiaPictograma.js`, `EstrategiaTexto.js`, `EstrategiaAudio.js`, `EstrategiaVideo.js`](#estrategias-concretas)
+   - 3.3 [`models/actividad/estrategias/RegistroEstrategias.js`](#registroestrategias)
+4. [Servicios de notificación](#servicios-de-notificacion)
+   - 4.1 [`services/notificacion/INotificador.js`](#inotificador)
+   - 4.2 [`NotificadorConsola.js` y `NotificadorEmail.js`](#notificadores-concretos)
+   - 4.3 [`config/dependencias.js`](#config-dependencias)
+5. [Middleware](#middleware)
+   - 5.1 [`middleware/auth.js`](#middleware-auth)
+6. [Controladores](#controladores)
+   - 6.1 [`controllers/auth/AuthController.js`](#authcontroller)
+   - 6.2 [`controllers/terapia/PacienteController.js`](#pacientecontroller)
+   - 6.3 [`controllers/terapia/SesionController.js`](#sesioncontroller)
+   - 6.4 [`controllers/terapia/PracticaController.js`](#practicacontroller)
+   - 6.5 [`controllers/terapia/ProgresoController.js`](#progresocontroller)
+   - 6.6 [`controllers/actividad/ActividadController.js`](#actividadcontroller)
+   - 6.7 [`controllers/actividad/AsignacionController.js`](#asignacioncontroller)
+   - 6.8 [`controllers/actividad/CategoriaController.js`](#categoriacontroller)
+   - 6.9 [`controllers/actividad/RecomendacionController.js`](#recomendacioncontroller)
+   - 6.10 [`controllers/comunicacion/RegistroClinicoController.js`](#registroclinicocontroller)
+7. [Rutas](#rutas)
+8. [Resumen de tecnologías y su justificación en una tabla](#resumen-tecnologias)
+
+---
+
+<a id="punto-de-entrada"></a>
 ## 1. Punto de entrada — `src/server.js`
 
 **Qué hace:**
@@ -21,6 +60,7 @@ Express es el estándar de facto para APIs REST en Node.js por su sencillez y su
 
 ---
 
+<a id="modelos"></a>
 ## 2. Modelos
 
 Los modelos representan las entidades del dominio. Cada uno define la estructura de los documentos que se guardarán en MongoDB y, en algunos casos, la lógica de negocio que les pertenece. Todos usan **Mongoose**, que actúa como puente entre el código JavaScript y MongoDB.
@@ -29,6 +69,7 @@ Los modelos representan las entidades del dominio. Cada uno define la estructura
 
 ---
 
+<a id="modelo-usuario"></a>
 ### 2.1 `models/usuario/Usuario.js`
 
 **Qué hace:**
@@ -40,6 +81,7 @@ Define la estructura de un usuario del sistema. Almacena nombre, email, contrase
 
 ---
 
+<a id="modelo-paciente"></a>
 ### 2.2 `models/terapia/Paciente.js`
 
 **Qué hace:**
@@ -53,6 +95,7 @@ El hook `pre('save')` es la forma correcta de implementar lógica de inicializac
 
 ---
 
+<a id="modelo-sesion"></a>
 ### 2.3 `models/terapia/Sesion.js`
 
 **Qué hace:**
@@ -66,6 +109,7 @@ Poner los métodos en el modelo, y no en el controlador, es la aplicación del P
 
 ---
 
+<a id="modelo-actividad"></a>
 ### 2.4 `models/actividad/Actividad.js`
 
 **Qué hace:**
@@ -79,6 +123,7 @@ En una base de datos relacional, los cuatro tipos de actividad obligarían a ten
 
 ---
 
+<a id="modelo-asignacionactividad"></a>
 ### 2.5 `models/actividad/AsignacionActividad.js`
 
 **Qué hace:**
@@ -86,6 +131,7 @@ Representa la relación entre un paciente y una actividad asignada por el logope
 
 ---
 
+<a id="modelo-categoria"></a>
 ### 2.6 `models/actividad/Categoria.js`
 
 **Qué hace:**
@@ -93,6 +139,7 @@ Representa una categoría temática (por ejemplo, "Vida cotidiana", "Emociones")
 
 ---
 
+<a id="modelo-tipoactividad-pictograma"></a>
 ### 2.7 `models/actividad/TipoActividad.js` y `models/actividad/Pictograma.js`
 
 **Qué hacen:**
@@ -100,6 +147,7 @@ Son modelos definidos en el diagrama MVC del análisis RUP que representan, resp
 
 ---
 
+<a id="modelo-registroclinico"></a>
 ### 2.8 `models/comunicacion/RegistroClinico.js`
 
 **Qué hace:**
@@ -107,12 +155,14 @@ Representa cualquier anotación que el logopeda asocia a un paciente. El campo `
 
 ---
 
+<a id="estrategias-de-contenido"></a>
 ## 3. Estrategias de contenido
 
 El patrón Estrategia es la pieza técnica más importante del sistema. Permite que el sistema soporte múltiples tipos de actividad sin un único bloque de `if/else` que habría que modificar cada vez que se añade un tipo nuevo. Esto es la aplicación directa del principio OCP.
 
 ---
 
+<a id="estrategiacontenido"></a>
 ### 3.1 `models/actividad/estrategias/EstrategiaContenido.js`
 
 **Qué hace:**
@@ -123,6 +173,7 @@ Es la clase base abstracta que define el contrato que todas las estrategias debe
 
 ---
 
+<a id="estrategias-concretas"></a>
 ### 3.2 `EstrategiaPictograma.js`, `EstrategiaTexto.js`, `EstrategiaAudio.js`, `EstrategiaVideo.js`
 
 **Qué hacen:**
@@ -138,6 +189,7 @@ Cada estrategia es un fichero independiente. Añadir un tipo nuevo (por ejemplo,
 
 ---
 
+<a id="registroestrategias"></a>
 ### 3.3 `models/actividad/estrategias/RegistroEstrategias.js`
 
 **Qué hace:**
@@ -148,8 +200,10 @@ Centralizar el registro en un único fichero significa que `ActividadController`
 
 ---
 
+<a id="servicios-de-notificacion"></a>
 ## 4. Servicios de notificación
 
+<a id="inotificador"></a>
 ### 4.1 `services/notificacion/INotificador.js`
 
 **Qué hace:**
@@ -160,6 +214,7 @@ Esto es la aplicación del principio DIP: `RegistroClinicoController` depende de
 
 ---
 
+<a id="notificadores-concretos"></a>
 ### 4.2 `NotificadorConsola.js` y `NotificadorEmail.js`
 
 **Qué hacen:**
@@ -167,6 +222,7 @@ Son las dos implementaciones concretas. `NotificadorConsola` imprime la notifica
 
 ---
 
+<a id="config-dependencias"></a>
 ### 4.3 `config/dependencias.js`
 
 **Qué hace:**
@@ -177,8 +233,10 @@ Cambiar el canal de notificación en todo el sistema es una modificación de una
 
 ---
 
+<a id="middleware"></a>
 ## 5. Middleware
 
+<a id="middleware-auth"></a>
 ### 5.1 `middleware/auth.js`
 
 **Qué hace:**
@@ -200,12 +258,14 @@ JWT (JSON Web Token) es un estándar para transmitir información de forma segur
 
 ---
 
+<a id="controladores"></a>
 ## 6. Controladores
 
 Los controladores son la capa intermedia entre las rutas (que reciben las peticiones HTTP) y los modelos (que acceden a los datos). Cada controlador gestiona un conjunto de operaciones relacionadas con una entidad o caso de uso. Todos siguen el mismo patrón: reciben `req` (la petición) y `res` (la respuesta), ejecutan la operación y devuelven JSON.
 
 ---
 
+<a id="authcontroller"></a>
 ### 6.1 `controllers/auth/AuthController.js`
 
 **Qué hace:**
@@ -220,6 +280,7 @@ Gestiona el login y el registro de usuarios.
 
 ---
 
+<a id="pacientecontroller"></a>
 ### 6.2 `controllers/terapia/PacienteController.js`
 
 **Qué hace:**
@@ -232,6 +293,7 @@ Gestiona el CRUD completo de pacientes para el logopeda, más un endpoint especi
 
 ---
 
+<a id="sesioncontroller"></a>
 ### 6.3 `controllers/terapia/SesionController.js`
 
 **Qué hace:**
@@ -241,6 +303,7 @@ Gestiona las sesiones clínicas registradas por el logopeda (CdU-05). Permite cr
 
 ---
 
+<a id="practicacontroller"></a>
 ### 6.4 `controllers/terapia/PracticaController.js`
 
 **Qué hace:**
@@ -252,6 +315,7 @@ Gestiona el flujo de práctica en tiempo real de la familia (CdU-03). Tiene tres
 
 ---
 
+<a id="progresocontroller"></a>
 ### 6.5 `controllers/terapia/ProgresoController.js`
 
 **Qué hace:**
@@ -259,6 +323,7 @@ Calcula y devuelve las métricas de evolución terapéutica de un paciente (CdU-
 
 ---
 
+<a id="actividadcontroller"></a>
 ### 6.6 `controllers/actividad/ActividadController.js`
 
 **Qué hace:**
@@ -266,6 +331,7 @@ Gestiona el ciclo de vida completo de las actividades. La operación más releva
 
 ---
 
+<a id="asignacioncontroller"></a>
 ### 6.7 `controllers/actividad/AsignacionController.js`
 
 **Qué hace:**
@@ -273,6 +339,7 @@ Gestiona las asignaciones de actividades a pacientes (CdU-01). Expone tres opera
 
 ---
 
+<a id="categoriacontroller"></a>
 ### 6.8 `controllers/actividad/CategoriaController.js`
 
 **Qué hace:**
@@ -280,6 +347,7 @@ Gestiona el CRUD de categorías. Simple: listar, crear y editar. Las categorías
 
 ---
 
+<a id="recomendacioncontroller"></a>
 ### 6.9 `controllers/actividad/RecomendacionController.js`
 
 **Qué hace:**
@@ -287,6 +355,7 @@ Es un alias de compatibilidad que reexporta `RegistroClinicoController`. En el a
 
 ---
 
+<a id="registroclinicocontroller"></a>
 ### 6.10 `controllers/comunicacion/RegistroClinicoController.js`
 
 **Qué hace:**
@@ -296,6 +365,7 @@ Gestiona todos los registros clínicos del logopeda. La operación más destacad
 
 ---
 
+<a id="rutas"></a>
 ## 7. Rutas
 
 Las rutas conectan las URLs del sistema con los controladores. Están organizadas en dos grupos completamente independientes: `routes/logopeda/` y `routes/familia/`. Cada fichero de rutas aplica el middleware de autenticación correspondiente a todas sus rutas antes de que lleguen al controlador.
@@ -308,6 +378,7 @@ Las rutas conectan las URLs del sistema con los controladores. Están organizada
 
 ---
 
+<a id="resumen-tecnologias"></a>
 ## 8. Resumen de tecnologías y su justificación en una tabla
 
 | Tecnología | Dónde se usa | Por qué se eligió |
